@@ -33,6 +33,8 @@ spring:
     username: melit-market
     password: '1234'
     driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      auto-commit: false
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
