@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IProducto } from './productos.model';
 import { ProductosService } from './productos.service';
+import { ItemListaService } from './item-lista.service';
 
 @Component({
   selector: 'jhi-productos',
@@ -17,6 +18,7 @@ export class ProductosComponent implements OnInit {
   editando = false;
 
   private productosService = inject(ProductosService);
+  private itemListaService = inject(ItemListaService);
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
@@ -96,5 +98,41 @@ export class ProductosComponent implements OnInit {
         console.error('ERROR ELIMINANDO PRODUCTO:', error);
       },
     });
+  }
+
+  anadirADespensa(producto: IProducto): void {
+    this.itemListaService
+      .createItemLista({
+        cantidad: 1,
+        tipoLista: 'DESPENSA',
+        producto: { id: producto.id },
+      })
+      .subscribe({
+        next: respuesta => {
+          console.log('Añadido a despensa:', respuesta);
+          alert(`"${producto.nombre}" añadido a despensa`);
+        },
+        error: error => {
+          console.error('ERROR AÑADIENDO A DESPENSA:', error);
+        },
+      });
+  }
+
+  anadirACompra(producto: IProducto): void {
+    this.itemListaService
+      .createItemLista({
+        cantidad: 1,
+        tipoLista: 'COMPRA',
+        producto: { id: producto.id },
+      })
+      .subscribe({
+        next: respuesta => {
+          console.log('Añadido a compra:', respuesta);
+          alert(`"${producto.nombre}" añadido a compra`);
+        },
+        error: error => {
+          console.error('ERROR AÑADIENDO A COMPRA:', error);
+        },
+      });
   }
 }

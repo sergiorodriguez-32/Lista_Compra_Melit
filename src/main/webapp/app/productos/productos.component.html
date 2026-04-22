@@ -55,6 +55,8 @@
       <p><strong>Letra saludable:</strong> {{ producto.letraSaludable }}</p>
       <p><strong>Fecha caducidad:</strong> {{ producto.fechaCaducidad }}</p>
 
+      <button class="btn btn-success me-2" (click)="anadirADespensa(producto)">Añadir a despensa</button>
+      <button class="btn btn-info me-2" (click)="anadirACompra(producto)">Añadir a compra</button>
       <button class="btn btn-warning me-2" (click)="editarProducto(producto)">Editar</button>
       <button class="btn btn-danger" (click)="eliminarProducto(producto.id!)">Eliminar</button>
     </div>
