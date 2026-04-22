@@ -2,7 +2,7 @@
   <h2>Productos</h2>
 
   <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px">
-    <h3>Crear producto</h3>
+    <h3>{{ editando ? 'Editar producto' : 'Crear producto' }}</h3>
 
     <div class="mb-2">
       <label>Nombre</label>
@@ -34,7 +34,13 @@
       <input type="date" class="form-control" [(ngModel)]="nuevoProducto.fechaCaducidad" />
     </div>
 
-    <button class="btn btn-primary" (click)="crearProducto()">Guardar producto</button>
+    <button class="btn btn-primary me-2" (click)="guardarProducto()">
+      {{ editando ? 'Actualizar producto' : 'Guardar producto' }}
+    </button>
+
+    @if (editando) {
+      <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+    }
   </div>
 
   <p>Total productos: {{ productos.length }}</p>
@@ -48,6 +54,8 @@
       <p><strong>Ubicación:</strong> {{ producto.ubicacion }}</p>
       <p><strong>Letra saludable:</strong> {{ producto.letraSaludable }}</p>
       <p><strong>Fecha caducidad:</strong> {{ producto.fechaCaducidad }}</p>
+
+      <button class="btn btn-warning me-2" (click)="editarProducto(producto)">Editar</button>
       <button class="btn btn-danger" (click)="eliminarProducto(producto.id!)">Eliminar</button>
     </div>
   }

@@ -13,20 +13,25 @@ import { ProductosService } from './productos.service';
 export class ProductosComponent implements OnInit {
   productos: IProducto[] = [];
 
-  nuevoProducto: IProducto = {
-    nombre: '',
-    descripcion: '',
-    precio: 0,
-    ubicacion: '',
-    letraSaludable: '',
-    fechaCaducidad: '',
-  };
+  nuevoProducto: IProducto = this.crearProductoVacio();
+  editando = false;
 
   private productosService = inject(ProductosService);
   private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.cargarProductos();
+  }
+
+  crearProductoVacio(): IProducto {
+    return {
+      nombre: '',
+      descripcion: '',
+      precio: 0,
+      ubicacion: '',
+      letraSaludable: '',
+      fechaCaducidad: '',
+    };
   }
 
   cargarProductos(): void {
@@ -41,26 +46,48 @@ export class ProductosComponent implements OnInit {
     });
   }
 
-  crearProducto(): void {
-    this.productosService.createProducto(this.nuevoProducto).subscribe({
-      next: () => {
-        this.nuevoProducto = {
-          nombre: '',
-          descripcion: '',
-          precio: 0,
-          ubicacion: '',
-          letraSaludable: '',
-          fechaCaducidad: '',
-        };
-        this.cargarProductos();
-      },
-      error: error => {
-        console.error('ERROR CREANDO PRODUCTO:', error);
-      },
-    });
+  guardarProducto(): void {
+    if (this.editando && this.nuevoProducto.id) {
+      this.productosService.updateProducto(this.nuevoProducto).subscribe({
+        next: () => {
+          this.nuevoProducto = this.crearProductoVacio();
+          this.editando = false;
+          this.cargarProductos();
+        },
+        error: error => {
+          console.error('ERROR ACTUALIZANDO PRODUCTO:', error);
+        },
+      });
+    } else {
+      this.productosService.createProducto(this.nuevoProducto).subscribe({
+        next: () => {
+          this.nuevoProducto = this.crearProductoVacio();
+          this.cargarProductos();
+        },
+        error: error => {
+          console.error('ERROR CREANDO PRODUCTO:', error);
+        },
+      });
+    }
+  }
+
+  editarProducto(producto: IProducto): void {
+    this.nuevoProducto = { ...producto };
+    this.editando = true;
+  }
+
+  cancelarEdicion(): void {
+    this.nuevoProducto = this.crearProductoVacio();
+    this.editando = false;
   }
 
   eliminarProducto(id: number): void {
+    const confirmado = window.confirm('¿Seguro que quieres eliminar este producto?');
+
+    if (!confirmado) {
+      return;
+    }
+
     this.productosService.deleteProducto(id).subscribe({
       next: () => {
         this.cargarProductos();

@@ -18,6 +18,10 @@ export class ProductosService {
     return this.http.post<IProducto>(this.resourceUrl, producto);
   }
 
+  updateProducto(producto: IProducto): Observable<IProducto> {
+    return this.http.put<IProducto>(`${this.resourceUrl}/${producto.id}`, producto);
+  }
+
   deleteProducto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.resourceUrl}/${id}`);
   }
