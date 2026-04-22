@@ -4,6 +4,7 @@ import { UserRouteAccessService } from 'app/core/auth/user-route-access.service'
 import { Authority } from 'app/shared/jhipster/constants';
 import { ProductosComponent } from './productos/productos.component';
 import { DespensaComponent } from './despensa/despensa.component';
+import { CompraComponent } from './compra/compra.component';
 
 import { errorRoute } from './layouts/error/error.route';
 
@@ -12,6 +13,11 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import('./home/home'),
     title: 'home.title',
+  },
+  {
+    path: 'compra',
+    component: CompraComponent,
+    title: 'compra.title',
   },
   {
     path: 'productos',

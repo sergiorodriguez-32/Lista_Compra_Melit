@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { DespensaService } from './despensa.service';
 import { IDespensaItem } from './despensa.model';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'jhi-despensa',
@@ -28,6 +28,23 @@ export class DespensaComponent implements OnInit {
       },
       error: error => {
         console.error('ERROR CARGANDO DESPENSA:', error);
+      },
+    });
+  }
+
+  quitarDeDespensa(id: number): void {
+    const confirmado = window.confirm('¿Seguro que quieres quitar este producto de la despensa?');
+
+    if (!confirmado) {
+      return;
+    }
+
+    this.despensaService.deleteItem(id).subscribe({
+      next: () => {
+        this.cargarDespensa();
+      },
+      error: error => {
+        console.error('ERROR QUITANDO DE DESPENSA:', error);
       },
     });
   }

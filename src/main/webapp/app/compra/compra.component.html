@@ -1,10 +1,12 @@
 <div class="container mt-4">
-  <h2>Despensa</h2>
+  <h2>Lista de compra</h2>
+
   <div class="mb-3">
     <a routerLink="/productos" class="btn btn-primary me-2">Productos</a>
-    <a routerLink="/compra" class="btn btn-info">Compra</a>
+    <a routerLink="/despensa" class="btn btn-success">Despensa</a>
   </div>
-  <p>Total productos en despensa: {{ items.length }}</p>
+
+  <p>Total productos en compra: {{ items.length }}</p>
 
   @for (item of items; track item.id) {
     <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
@@ -17,11 +19,11 @@
       <p><strong>Letra saludable:</strong> {{ item.producto?.letraSaludable }}</p>
       <p><strong>Fecha caducidad:</strong> {{ item.producto?.fechaCaducidad }}</p>
 
-      <button class="btn btn-danger" (click)="quitarDeDespensa(item.id!)">Quitar de despensa</button>
+      <button class="btn btn-danger" (click)="quitarDeCompra(item.id!)">Quitar de compra</button>
     </div>
   }
 
   @if (items.length === 0) {
-    <p>No hay productos en despensa.</p>
+    <p>No hay productos en la lista de compra.</p>
   }
 </div>
