@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { Authority } from 'app/shared/jhipster/constants';
+import { ProductosComponent } from './productos/productos.component';
 
 import { errorRoute } from './layouts/error/error.route';
 
@@ -10,6 +11,11 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import('./home/home'),
     title: 'home.title',
+  },
+  {
+    path: 'productos',
+    component: ProductosComponent,
+    title: 'Productos',
   },
   {
     path: '',

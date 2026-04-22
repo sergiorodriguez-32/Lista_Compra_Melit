@@ -1,0 +1,21 @@
+<div class="container mt-4">
+  <h2>Productos</h2>
+
+  <p>Total productos: {{ productos.length }}</p>
+
+  @for (producto of productos; track producto.id) {
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
+      <p><strong>ID:</strong> {{ producto.id }}</p>
+      <p><strong>Nombre:</strong> {{ producto.nombre }}</p>
+      <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
+      <p><strong>Precio:</strong> {{ producto.precio }}</p>
+      <p><strong>Ubicación:</strong> {{ producto.ubicacion }}</p>
+      <p><strong>Letra saludable:</strong> {{ producto.letraSaludable }}</p>
+      <p><strong>Fecha caducidad:</strong> {{ producto.fechaCaducidad }}</p>
+    </div>
+  }
+
+  @if (productos.length === 0) {
+    <p>No hay productos.</p>
+  }
+</div>
