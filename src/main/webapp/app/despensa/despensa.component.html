@@ -1,0 +1,25 @@
+<div class="container mt-4">
+  <h2>Despensa</h2>
+  <div class="mb-3">
+    <a routerLink="/productos" class="btn btn-primary me-2">Productos</a>
+    <a routerLink="/compra" class="btn btn-info">Compra</a>
+  </div>
+  <p>Total productos en despensa: {{ items.length }}</p>
+
+  @for (item of items; track item.id) {
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
+      <p><strong>ID item:</strong> {{ item.id }}</p>
+      <p><strong>Cantidad:</strong> {{ item.cantidad }}</p>
+      <p><strong>Nombre:</strong> {{ item.producto?.nombre }}</p>
+      <p><strong>Descripción:</strong> {{ item.producto?.descripcion }}</p>
+      <p><strong>Precio:</strong> {{ item.producto?.precio }}</p>
+      <p><strong>Ubicación:</strong> {{ item.producto?.ubicacion }}</p>
+      <p><strong>Letra saludable:</strong> {{ item.producto?.letraSaludable }}</p>
+      <p><strong>Fecha caducidad:</strong> {{ item.producto?.fechaCaducidad }}</p>
+    </div>
+  }
+
+  @if (items.length === 0) {
+    <p>No hay productos en despensa.</p>
+  }
+</div>

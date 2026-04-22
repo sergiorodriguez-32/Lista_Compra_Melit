@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { Authority } from 'app/shared/jhipster/constants';
 import { ProductosComponent } from './productos/productos.component';
+import { DespensaComponent } from './despensa/despensa.component';
 
 import { errorRoute } from './layouts/error/error.route';
 
@@ -16,6 +17,11 @@ const routes: Routes = [
     path: 'productos',
     component: ProductosComponent,
     title: 'productos.title',
+  },
+  {
+    path: 'despensa',
+    component: DespensaComponent,
+    title: 'despensa.title',
   },
   {
     path: '',

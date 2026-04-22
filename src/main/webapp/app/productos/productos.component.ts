@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { IProducto } from './productos.model';
 import { ProductosService } from './productos.service';
 import { ItemListaService } from './item-lista.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'jhi-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './productos.component.html',
 })
 export class ProductosComponent implements OnInit {
