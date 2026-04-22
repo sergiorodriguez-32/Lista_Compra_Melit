@@ -13,4 +13,12 @@ export class ProductosService {
   getProductos(): Observable<IProducto[]> {
     return this.http.get<IProducto[]>(this.resourceUrl);
   }
+
+  createProducto(producto: IProducto): Observable<IProducto> {
+    return this.http.post<IProducto>(this.resourceUrl, producto);
+  }
+
+  deleteProducto(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.resourceUrl}/${id}`);
+  }
 }
