@@ -32,6 +32,10 @@ public class ItemLista implements Serializable {
     @Column(name = "unidad_medida", nullable = false)
     private UnidadMedida unidadMedida;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Long getId() {
         return id;
     }
@@ -70,5 +74,13 @@ public class ItemLista implements Serializable {
 
     public void setUnidadMedida(UnidadMedida unidadMedida) {
         this.unidadMedida = unidadMedida;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

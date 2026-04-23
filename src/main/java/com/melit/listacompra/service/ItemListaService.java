@@ -1,7 +1,10 @@
 package com.melit.listacompra.service;
 
 import com.melit.listacompra.domain.ItemLista;
+import com.melit.listacompra.domain.User;
 import com.melit.listacompra.repository.ItemListaRepository;
+import com.melit.listacompra.repository.UserRepository;
+import com.melit.listacompra.security.SecurityUtils;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Service;
@@ -10,16 +13,25 @@ import org.springframework.stereotype.Service;
 public class ItemListaService {
 
     private final ItemListaRepository itemListaRepository;
+    private final UserRepository userRepository;
 
-    public ItemListaService(ItemListaRepository itemListaRepository) {
+    public ItemListaService(ItemListaRepository itemListaRepository, UserRepository userRepository) {
         this.itemListaRepository = itemListaRepository;
+        this.userRepository = userRepository;
     }
 
     public ItemLista save(ItemLista itemLista) {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+
+        User user = userRepository.findOneByLogin(login).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        itemLista.setUser(user);
+
         if (itemLista.getProducto() != null && itemLista.getProducto().getId() != null && itemLista.getTipoLista() != null) {
-            Optional<ItemLista> existente = itemListaRepository.findByProductoIdAndTipoLista(
+            Optional<ItemLista> existente = itemListaRepository.findByProductoIdAndTipoListaAndUserLogin(
                 itemLista.getProducto().getId(),
-                itemLista.getTipoLista()
+                itemLista.getTipoLista(),
+                login
             );
 
             if (existente.isPresent()) {
@@ -38,6 +50,20 @@ public class ItemListaService {
         }
 
         return itemListaRepository.save(itemLista);
+    }
+
+    public List<ItemLista> findAll() {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+
+        return itemListaRepository.findByUserLogin(login);
+    }
+
+    public Optional<ItemLista> findOne(Long id) {
+        return itemListaRepository.findById(id);
+    }
+
+    public void delete(Long id) {
+        itemListaRepository.deleteById(id);
     }
 
     public ItemLista restarCantidad(Long id, Integer cantidadARestar) {
@@ -64,17 +90,5 @@ public class ItemListaService {
 
         item.setCantidad(cantidadActual + suma);
         return itemListaRepository.save(item);
-    }
-
-    public List<ItemLista> findAll() {
-        return itemListaRepository.findAll();
-    }
-
-    public Optional<ItemLista> findOne(Long id) {
-        return itemListaRepository.findById(id);
-    }
-
-    public void delete(Long id) {
-        itemListaRepository.deleteById(id);
     }
 }
