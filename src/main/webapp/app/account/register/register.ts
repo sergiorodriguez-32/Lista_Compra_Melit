@@ -15,6 +15,7 @@ import { RegisterService } from './register.service';
   selector: 'jhi-register',
   imports: [TranslateDirective, TranslateModule, RouterLink, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './register.html',
+  styleUrl: './register.scss',
 })
 export default class Register implements AfterViewInit {
   login = viewChild.required<ElementRef>('login');
