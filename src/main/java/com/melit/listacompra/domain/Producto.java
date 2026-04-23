@@ -36,6 +36,10 @@ public class Producto implements Serializable {
     @Column(name = "fecha_caducidad")
     private LocalDate fechaCaducidad;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
     public Long getId() {
         return id;
     }
@@ -90,5 +94,13 @@ public class Producto implements Serializable {
 
     public void setFechaCaducidad(LocalDate fechaCaducidad) {
         this.fechaCaducidad = fechaCaducidad;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
