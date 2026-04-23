@@ -12,6 +12,7 @@ import { TranslateDirective } from 'app/shared/language';
   selector: 'jhi-login',
   imports: [TranslateDirective, TranslateModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
+  styleUrl: './login.scss',
 })
 export default class Login implements OnInit, AfterViewInit {
   username = viewChild.required<ElementRef>('username');
