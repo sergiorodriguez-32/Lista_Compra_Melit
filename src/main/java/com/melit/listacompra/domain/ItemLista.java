@@ -27,6 +27,11 @@ public class ItemLista implements Serializable {
     @JoinColumn(name = "producto_id", nullable = false)
     private Producto producto;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "unidad_medida", nullable = false)
+    private UnidadMedida unidadMedida;
+
     public Long getId() {
         return id;
     }
@@ -57,5 +62,13 @@ public class ItemLista implements Serializable {
 
     public void setProducto(Producto producto) {
         this.producto = producto;
+    }
+
+    public UnidadMedida getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(UnidadMedida unidadMedida) {
+        this.unidadMedida = unidadMedida;
     }
 }

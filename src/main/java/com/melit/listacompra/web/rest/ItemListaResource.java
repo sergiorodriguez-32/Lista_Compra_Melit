@@ -2,6 +2,7 @@ package com.melit.listacompra.web.rest;
 
 import com.melit.listacompra.domain.ItemLista;
 import com.melit.listacompra.service.ItemListaService;
+import com.melit.listacompra.web.rest.RestarCantidadRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -47,5 +48,16 @@ public class ItemListaResource {
     public ResponseEntity<Void> deleteItemLista(@PathVariable Long id) {
         itemListaService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/restar")
+    public ResponseEntity<ItemLista> restarCantidad(@PathVariable Long id, @RequestBody RestarCantidadRequest request) {
+        ItemLista result = itemListaService.restarCantidad(id, request.getCantidad());
+
+        if (result == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(result);
     }
 }
