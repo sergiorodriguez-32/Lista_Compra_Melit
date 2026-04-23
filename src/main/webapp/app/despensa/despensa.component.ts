@@ -27,6 +27,8 @@ export class DespensaComponent implements OnInit {
         this.items = items.map(item => ({
           ...item,
           cantidadARestar: 1,
+          cantidadASumar: 1,
+          mostrarEdicion: false,
         }));
         this.cdr.detectChanges();
       },
@@ -34,6 +36,10 @@ export class DespensaComponent implements OnInit {
         console.error('ERROR CARGANDO DESPENSA:', error);
       },
     });
+  }
+
+  toggleEdicion(item: IDespensaItem): void {
+    item.mostrarEdicion = !item.mostrarEdicion;
   }
 
   quitarDeDespensa(id: number): void {
@@ -67,6 +73,24 @@ export class DespensaComponent implements OnInit {
       },
       error: error => {
         console.error('ERROR RESTANDO EN DESPENSA:', error);
+      },
+    });
+  }
+
+  sumarCantidad(item: IDespensaItem): void {
+    const cantidad = item.cantidadASumar ?? 1;
+
+    if (!item.id || cantidad <= 0) {
+      return;
+    }
+
+    this.despensaService.sumarCantidad(item.id, cantidad).subscribe({
+      next: () => {
+        alert(`Se han añadido ${cantidad} ${item.unidadMedida ?? ''} a ${item.producto?.nombre}`);
+        this.cargarDespensa();
+      },
+      error: error => {
+        console.error('ERROR SUMANDO EN DESPENSA:', error);
       },
     });
   }

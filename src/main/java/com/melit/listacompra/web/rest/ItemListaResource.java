@@ -60,4 +60,10 @@ public class ItemListaResource {
 
         return ResponseEntity.ok(result);
     }
+
+    @PutMapping("/{id}/sumar")
+    public ResponseEntity<ItemLista> sumarCantidad(@PathVariable Long id, @RequestBody RestarCantidadRequest request) {
+        ItemLista result = itemListaService.sumarCantidad(id, request.getCantidad());
+        return ResponseEntity.ok(result);
+    }
 }

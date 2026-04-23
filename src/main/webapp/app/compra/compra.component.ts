@@ -27,6 +27,8 @@ export class CompraComponent implements OnInit {
         this.items = items.map(item => ({
           ...item,
           cantidadARestar: 1,
+          cantidadASumar: 1,
+          mostrarEdicion: false,
         }));
         this.cdr.detectChanges();
       },
@@ -34,6 +36,10 @@ export class CompraComponent implements OnInit {
         console.error('ERROR CARGANDO COMPRA:', error);
       },
     });
+  }
+
+  toggleEdicion(item: ICompraItem): void {
+    item.mostrarEdicion = !item.mostrarEdicion;
   }
 
   quitarDeCompra(id: number): void {
@@ -67,6 +73,24 @@ export class CompraComponent implements OnInit {
       },
       error: error => {
         console.error('ERROR RESTANDO EN COMPRA:', error);
+      },
+    });
+  }
+
+  sumarCantidad(item: ICompraItem): void {
+    const cantidad = item.cantidadASumar ?? 1;
+
+    if (!item.id || cantidad <= 0) {
+      return;
+    }
+
+    this.compraService.sumarCantidad(item.id, cantidad).subscribe({
+      next: () => {
+        alert(`Se han añadido ${cantidad} ${item.unidadMedida ?? ''} a ${item.producto?.nombre}`);
+        this.cargarCompra();
+      },
+      error: error => {
+        console.error('ERROR SUMANDO EN COMPRA:', error);
       },
     });
   }

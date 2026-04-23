@@ -19,17 +19,28 @@
       <p><strong>Letra saludable:</strong> {{ item.producto?.letraSaludable }}</p>
       <p><strong>Fecha caducidad:</strong> {{ item.producto?.fechaCaducidad }}</p>
 
-      <div class="mb-2">
-        <label><strong>Cantidad a quitar</strong></label>
-        <input type="number" class="form-control" [(ngModel)]="item.cantidadARestar" min="1" />
-      </div>
-
-      <button class="btn btn-warning me-2" (click)="restarCantidad(item)">Restar cantidad</button>
+      <button class="btn btn-secondary me-2" (click)="toggleEdicion(item)">
+        {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+      </button>
       <button class="btn btn-danger" (click)="quitarDeDespensa(item.id!)">Quitar de despensa</button>
-    </div>
-  }
 
-  @if (items.length === 0) {
-    <p>No hay productos en despensa.</p>
+      @if (item.mostrarEdicion) {
+        <div style="margin-top: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 8px">
+          <div class="mb-2">
+            <label><strong>Cantidad a añadir</strong></label>
+            <input type="number" class="form-control" [(ngModel)]="item.cantidadASumar" min="1" />
+          </div>
+
+          <button class="btn btn-success me-3" (click)="sumarCantidad(item)">Sumar cantidad</button>
+
+          <div class="mb-2 mt-3">
+            <label><strong>Cantidad a quitar</strong></label>
+            <input type="number" class="form-control" [(ngModel)]="item.cantidadARestar" min="1" />
+          </div>
+
+          <button class="btn btn-warning" (click)="restarCantidad(item)">Restar cantidad</button>
+        </div>
+      }
+    </div>
   }
 </div>

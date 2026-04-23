@@ -56,6 +56,16 @@ public class ItemListaService {
         return itemListaRepository.save(item);
     }
 
+    public ItemLista sumarCantidad(Long id, Integer cantidadASumar) {
+        ItemLista item = itemListaRepository.findById(id).orElseThrow(() -> new RuntimeException("ItemLista no encontrado con id: " + id));
+
+        int cantidadActual = item.getCantidad() != null ? item.getCantidad() : 0;
+        int suma = cantidadASumar != null ? cantidadASumar : 0;
+
+        item.setCantidad(cantidadActual + suma);
+        return itemListaRepository.save(item);
+    }
+
     public List<ItemLista> findAll() {
         return itemListaRepository.findAll();
     }

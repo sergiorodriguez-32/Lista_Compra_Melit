@@ -4,6 +4,8 @@ export interface IDespensaItem {
   unidadMedida?: string;
   tipoLista?: string;
   cantidadARestar?: number;
+  cantidadASumar?: number;
+  mostrarEdicion?: boolean;
   producto?: {
     id?: number;
     nombre?: string;

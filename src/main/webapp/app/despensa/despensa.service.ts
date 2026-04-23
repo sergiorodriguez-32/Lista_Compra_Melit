@@ -21,4 +21,8 @@ export class DespensaService {
   restarCantidad(id: number, cantidad: number) {
     return this.http.put(`${this.resourceUrl}/${id}/restar`, { cantidad });
   }
+
+  sumarCantidad(id: number, cantidad: number) {
+    return this.http.put(`${this.resourceUrl}/${id}/sumar`, { cantidad });
+  }
 }

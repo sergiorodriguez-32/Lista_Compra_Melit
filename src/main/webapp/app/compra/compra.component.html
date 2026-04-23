@@ -11,7 +11,7 @@
   @for (item of items; track item.id) {
     <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
       <p><strong>ID item:</strong> {{ item.id }}</p>
-      <p><strong>Cantidad:</strong> {{ item.cantidad }}</p>
+      <p><strong>Cantidad:</strong> {{ item.cantidad }} {{ item.unidadMedida }}</p>
       <p><strong>Nombre:</strong> {{ item.producto?.nombre }}</p>
       <p><strong>Descripción:</strong> {{ item.producto?.descripcion }}</p>
       <p><strong>Precio:</strong> {{ item.producto?.precio }}</p>
@@ -19,13 +19,28 @@
       <p><strong>Letra saludable:</strong> {{ item.producto?.letraSaludable }}</p>
       <p><strong>Fecha caducidad:</strong> {{ item.producto?.fechaCaducidad }}</p>
 
-      <div class="mb-2">
-        <label><strong>Cantidad a quitar</strong></label>
-        <input type="number" class="form-control" [(ngModel)]="item.cantidadARestar" min="1" />
-      </div>
-
-      <button class="btn btn-warning me-2" (click)="restarCantidad(item)">Restar cantidad</button>
+      <button class="btn btn-secondary me-2" (click)="toggleEdicion(item)">
+        {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+      </button>
       <button class="btn btn-danger" (click)="quitarDeCompra(item.id!)">Quitar de compra</button>
+
+      @if (item.mostrarEdicion) {
+        <div style="margin-top: 15px; padding: 12px; border: 1px solid #ddd; border-radius: 8px">
+          <div class="mb-2">
+            <label><strong>Cantidad a añadir</strong></label>
+            <input type="number" class="form-control" [(ngModel)]="item.cantidadASumar" min="1" />
+          </div>
+
+          <button class="btn btn-success me-3" (click)="sumarCantidad(item)">Sumar cantidad</button>
+
+          <div class="mb-2 mt-3">
+            <label><strong>Cantidad a quitar</strong></label>
+            <input type="number" class="form-control" [(ngModel)]="item.cantidadARestar" min="1" />
+          </div>
+
+          <button class="btn btn-warning" (click)="restarCantidad(item)">Restar cantidad</button>
+        </div>
+      }
     </div>
   }
 
