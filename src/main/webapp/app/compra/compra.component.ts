@@ -11,6 +11,7 @@ import { ICompraItem } from './compra.model';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './compra.component.html',
+  styleUrl: './compra.component.scss',
 })
 export class CompraComponent implements OnInit {
   items: ICompraItem[] = [];

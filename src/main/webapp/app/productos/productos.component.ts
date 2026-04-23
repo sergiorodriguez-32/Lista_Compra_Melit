@@ -12,6 +12,7 @@ import { LoginService } from 'app/login/login.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './productos.component.html',
+  styleUrl: './productos.component.scss',
 })
 export class ProductosComponent implements OnInit {
   productos: IProducto[] = [];

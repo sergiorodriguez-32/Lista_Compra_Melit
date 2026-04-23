@@ -1,90 +1,121 @@
-<div class="container mt-4">
-  <h2>Productos</h2>
+<div class="productos-page">
+  <div class="productos-overlay">
+    <div class="productos-wrapper">
+      <div class="productos-header">
+        <div>
+          <span class="productos-badge">ListaCompra Melit</span>
+          <h1>Productos</h1>
+          <p class="productos-subtitle">Crea, edita y organiza tu catálogo base de productos.</p>
+        </div>
 
-  <div class="mb-3">
-    <a routerLink="/despensa" class="btn btn-success me-2">Despensa</a>
-    <a routerLink="/compra" class="btn btn-info me-2">Compra</a>
-    <button class="btn btn-danger" (click)="cerrarSesion()">Cerrar sesión</button>
-  </div>
-
-  <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px">
-    <h3>{{ editando ? 'Editar producto' : 'Crear producto' }}</h3>
-
-    <div class="mb-2">
-      <label>Nombre</label>
-      <input type="text" class="form-control" [(ngModel)]="nuevoProducto.nombre" />
-    </div>
-
-    <div class="mb-2">
-      <label>Descripción</label>
-      <input type="text" class="form-control" [(ngModel)]="nuevoProducto.descripcion" />
-    </div>
-
-    <div class="mb-2">
-      <label>Precio</label>
-      <input type="number" class="form-control" [(ngModel)]="nuevoProducto.precio" />
-    </div>
-
-    <div class="mb-2">
-      <label>Ubicación</label>
-      <input type="text" class="form-control" [(ngModel)]="nuevoProducto.ubicacion" />
-    </div>
-
-    <div class="mb-2">
-      <label>Letra saludable</label>
-      <input type="text" class="form-control" [(ngModel)]="nuevoProducto.letraSaludable" />
-    </div>
-
-    <div class="mb-3">
-      <label>Fecha caducidad</label>
-      <input type="date" class="form-control" [(ngModel)]="nuevoProducto.fechaCaducidad" />
-    </div>
-
-    <button class="btn btn-primary me-2" (click)="guardarProducto()">
-      {{ editando ? 'Actualizar producto' : 'Guardar producto' }}
-    </button>
-
-    @if (editando) {
-      <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
-    }
-  </div>
-
-  <p>Total productos: {{ productos.length }}</p>
-
-  @for (producto of productos; track producto.id) {
-    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px">
-      <p><strong>ID:</strong> {{ producto.id }}</p>
-      <p><strong>Nombre:</strong> {{ producto.nombre }}</p>
-      <p><strong>Descripción:</strong> {{ producto.descripcion }}</p>
-      <p><strong>Precio:</strong> {{ producto.precio }}</p>
-      <p><strong>Ubicación:</strong> {{ producto.ubicacion }}</p>
-      <p><strong>Letra saludable:</strong> {{ producto.letraSaludable }}</p>
-      <p><strong>Fecha caducidad:</strong> {{ producto.fechaCaducidad }}</p>
-
-      <div class="mb-2">
-        <label><strong>Cantidad</strong></label>
-        <input type="number" class="form-control" [(ngModel)]="producto.cantidadSeleccionada" min="1" />
+        <div class="productos-nav">
+          <a routerLink="/despensa" class="btn btn-success me-2">Despensa</a>
+          <a routerLink="/compra" class="btn btn-info me-2">Compra</a>
+          <button class="btn btn-danger" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
       </div>
 
-      <div class="mb-2">
-        <label><strong>Unidad</strong></label>
-        <select class="form-control" [(ngModel)]="producto.unidadSeleccionada">
-          <option value="UNIDAD">UNIDAD</option>
-          <option value="KG">KG</option>
-          <option value="G">G</option>
-          <option value="L">L</option>
-          <option value="ML">ML</option>
-        </select>
+      <div class="productos-form-card">
+        <h2>{{ editando ? 'Editar producto' : 'Crear producto' }}</h2>
+
+        <div class="productos-form-grid">
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.nombre" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Descripción</label>
+            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.descripcion" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Precio</label>
+            <input type="number" class="form-control custom-input" [(ngModel)]="nuevoProducto.precio" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Ubicación</label>
+            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.ubicacion" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Letra saludable</label>
+            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.letraSaludable" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Fecha caducidad</label>
+            <input type="date" class="form-control custom-input" [(ngModel)]="nuevoProducto.fechaCaducidad" />
+          </div>
+        </div>
+
+        <div class="productos-form-actions">
+          <button class="btn btn-primary me-2" (click)="guardarProducto()">
+            {{ editando ? 'Actualizar producto' : 'Guardar producto' }}
+          </button>
+
+          @if (editando) {
+            <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+          }
+        </div>
       </div>
 
-      <button class="btn btn-success me-2" (click)="anadirADespensa(producto)">Añadir a despensa</button>
-      <button class="btn btn-info me-2" (click)="anadirACompra(producto)">Añadir a compra</button>
-      <button class="btn btn-warning me-2" (click)="editarProducto(producto)">Editar</button>
-      <button class="btn btn-danger" (click)="eliminarProducto(producto.id!)">Eliminar</button>
-    </div>
-  }
+      <div class="productos-summary">
+        <span>Total productos: {{ productos.length }}</span>
+      </div>
 
-  @if (productos.length === 0) {
-    <p>No hay productos.</p>
-  }
+      <div class="productos-grid">
+        @for (producto of productos; track producto.id) {
+          <div class="producto-card">
+            <div class="producto-card-top">
+              <div>
+                <h3>{{ producto.nombre }}</h3>
+                <p class="producto-desc">{{ producto.descripcion || 'Sin descripción' }}</p>
+              </div>
+              <span class="producto-id">#{{ producto.id }}</span>
+            </div>
+
+            <div class="producto-info">
+              <p><strong>Precio:</strong> {{ producto.precio }}</p>
+              <p><strong>Ubicación:</strong> {{ producto.ubicacion }}</p>
+              <p><strong>Letra saludable:</strong> {{ producto.letraSaludable }}</p>
+              <p><strong>Fecha caducidad:</strong> {{ producto.fechaCaducidad }}</p>
+            </div>
+
+            <div class="producto-actions-box">
+              <div class="mb-3">
+                <label class="form-label"><strong>Cantidad</strong></label>
+                <input type="number" class="form-control custom-input" [(ngModel)]="producto.cantidadSeleccionada" min="1" />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label"><strong>Unidad</strong></label>
+                <select class="form-control custom-input" [(ngModel)]="producto.unidadSeleccionada">
+                  <option value="UNIDAD">UNIDAD</option>
+                  <option value="KG">KG</option>
+                  <option value="G">G</option>
+                  <option value="L">L</option>
+                  <option value="ML">ML</option>
+                </select>
+              </div>
+
+              <div class="producto-buttons">
+                <button class="btn btn-success me-2 mb-2" (click)="anadirADespensa(producto)">Añadir a despensa</button>
+                <button class="btn btn-info me-2 mb-2" (click)="anadirACompra(producto)">Añadir a compra</button>
+                <button class="btn btn-warning me-2 mb-2" (click)="editarProducto(producto)">Editar</button>
+                <button class="btn btn-danger mb-2" (click)="eliminarProducto(producto.id!)">Eliminar</button>
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (productos.length === 0) {
+        <div class="empty-state">
+          <p>No hay productos todavía.</p>
+        </div>
+      }
+    </div>
+  </div>
 </div>

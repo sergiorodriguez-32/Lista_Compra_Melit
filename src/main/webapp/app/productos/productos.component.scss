@@ -1,0 +1,190 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.productos-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1d4ed8, #22c55e);
+}
+
+.productos-overlay {
+  min-height: 100vh;
+  background: rgba(15, 23, 42, 0.18);
+  padding: 2rem;
+}
+
+.productos-wrapper {
+  max-width: 1250px;
+  margin: 0 auto;
+}
+
+.productos-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.productos-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.16);
+  color: white;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+.productos-header h1 {
+  font-size: 2.6rem;
+  font-weight: 800;
+  margin-bottom: 0.4rem;
+}
+
+.productos-subtitle {
+  font-size: 1rem;
+  opacity: 0.95;
+  max-width: 650px;
+}
+
+.productos-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.productos-form-card,
+.producto-card,
+.productos-summary,
+.empty-state {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+}
+
+.productos-form-card {
+  padding: 1.5rem;
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.productos-form-card h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.productos-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.productos-form-actions {
+  margin-top: 0.5rem;
+}
+
+.productos-summary {
+  color: white;
+  padding: 0.9rem 1.2rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.producto-card {
+  padding: 1.3rem;
+  color: white;
+}
+
+.producto-card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.producto-card-top h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.producto-desc {
+  margin: 0;
+  opacity: 0.9;
+}
+
+.producto-id {
+  background: rgba(255, 255, 255, 0.16);
+  padding: 0.35rem 0.7rem;
+  border-radius: 999px;
+  height: fit-content;
+  font-weight: 700;
+}
+
+.producto-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.producto-info p {
+  margin: 0;
+}
+
+.producto-actions-box {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 1rem;
+}
+
+.producto-buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.custom-input {
+  border-radius: 12px;
+  min-height: 42px;
+  border: none;
+}
+
+.custom-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.22);
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.empty-state {
+  color: white;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+@media (max-width: 992px) {
+  .productos-header {
+    flex-direction: column;
+  }
+
+  .productos-form-grid,
+  .productos-grid,
+  .producto-info {
+    grid-template-columns: 1fr;
+  }
+}

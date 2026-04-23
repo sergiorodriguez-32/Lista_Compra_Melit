@@ -11,6 +11,7 @@ import { IDespensaItem } from './despensa.model';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './despensa.component.html',
+  styleUrl: './despensa.component.scss',
 })
 export class DespensaComponent implements OnInit {
   items: IDespensaItem[] = [];
