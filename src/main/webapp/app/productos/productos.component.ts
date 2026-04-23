@@ -40,7 +40,11 @@ export class ProductosComponent implements OnInit {
   cargarProductos(): void {
     this.productosService.getProductos().subscribe({
       next: productos => {
-        this.productos = productos;
+        this.productos = productos.map(producto => ({
+          ...producto,
+          cantidadSeleccionada: producto.cantidadSeleccionada ?? 1,
+          unidadSeleccionada: producto.unidadSeleccionada ?? 'UNIDAD',
+        }));
         this.cdr.detectChanges();
       },
       error: error => {
@@ -104,7 +108,8 @@ export class ProductosComponent implements OnInit {
   anadirADespensa(producto: IProducto): void {
     this.itemListaService
       .createItemLista({
-        cantidad: 1,
+        cantidad: producto.cantidadSeleccionada ?? 1,
+        unidadMedida: producto.unidadSeleccionada ?? 'UNIDAD',
         tipoLista: 'DESPENSA',
         producto: { id: producto.id },
       })
@@ -122,7 +127,8 @@ export class ProductosComponent implements OnInit {
   anadirACompra(producto: IProducto): void {
     this.itemListaService
       .createItemLista({
-        cantidad: 1,
+        cantidad: producto.cantidadSeleccionada ?? 1,
+        unidadMedida: producto.unidadSeleccionada ?? 'UNIDAD',
         tipoLista: 'COMPRA',
         producto: { id: producto.id },
       })

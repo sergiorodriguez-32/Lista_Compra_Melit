@@ -1,7 +1,9 @@
 export interface IDespensaItem {
   id?: number;
   cantidad?: number;
+  unidadMedida?: string;
   tipoLista?: string;
+  cantidadARestar?: number;
   producto?: {
     id?: number;
     nombre?: string;

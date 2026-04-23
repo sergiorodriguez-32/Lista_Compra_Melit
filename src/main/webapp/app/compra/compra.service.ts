@@ -17,4 +17,8 @@ export class CompraService {
   deleteItem(id: number): Observable<void> {
     return this.http.delete<void>(`${this.resourceUrl}/${id}`);
   }
+
+  restarCantidad(id: number, cantidad: number) {
+    return this.http.put(`${this.resourceUrl}/${id}/restar`, { cantidad });
+  }
 }
