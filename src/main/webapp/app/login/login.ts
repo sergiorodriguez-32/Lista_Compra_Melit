@@ -46,10 +46,7 @@ export default class Login implements OnInit, AfterViewInit {
     this.loginService.login(this.loginForm.getRawValue()).subscribe({
       next: () => {
         this.authenticationError.set(false);
-        if (!this.router.currentNavigation()) {
-          // There were no routing during login (eg from navigationToStoredUrl)
-          this.router.navigate(['']);
-        }
+        this.router.navigate(['/panel']);
       },
       error: () => this.authenticationError.set(true),
     });

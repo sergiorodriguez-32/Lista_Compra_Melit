@@ -1,0 +1,35 @@
+<div class="panel-page">
+  <div class="panel-overlay">
+    <div class="panel-wrapper">
+      <div class="panel-header">
+        <div>
+          <span class="panel-badge">ListaCompra Melit</span>
+          <h1>Bienvenido</h1>
+          <p class="panel-subtitle">Gestiona tus productos, tu despensa y tu lista de compra desde un solo lugar.</p>
+        </div>
+
+        <button class="btn btn-danger panel-logout-btn" (click)="cerrarSesion()">Cerrar sesión</button>
+      </div>
+
+      <div class="panel-cards">
+        <a routerLink="/productos" class="panel-card productos-card">
+          <h2>Productos</h2>
+          <p>Gestiona tu catálogo base, crea productos y edítalos.</p>
+          <span>Ir a productos</span>
+        </a>
+
+        <a routerLink="/despensa" class="panel-card despensa-card">
+          <h2>Despensa</h2>
+          <p>Controla lo que tienes en casa y ajusta cantidades.</p>
+          <span>Ir a despensa</span>
+        </a>
+
+        <a routerLink="/compra" class="panel-card compra-card">
+          <h2>Compra</h2>
+          <p>Organiza lo que necesitas comprar y actualiza tu lista.</p>
+          <span>Ir a compra</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

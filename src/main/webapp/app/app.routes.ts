@@ -5,6 +5,7 @@ import { Authority } from 'app/shared/jhipster/constants';
 import { ProductosComponent } from './productos/productos.component';
 import { DespensaComponent } from './despensa/despensa.component';
 import { CompraComponent } from './compra/compra.component';
+import { PanelComponent } from './panel/panel.component';
 
 import { errorRoute } from './layouts/error/error.route';
 
@@ -50,6 +51,11 @@ const routes: Routes = [
     path: 'login',
     loadComponent: () => import('./login/login'),
     title: 'login.title',
+  },
+  {
+    path: 'panel',
+    component: PanelComponent,
+    title: 'panel.title',
   },
   {
     path: '',

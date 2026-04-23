@@ -1,0 +1,135 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.panel-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1d4ed8, #22c55e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel-overlay {
+  width: 100%;
+  min-height: 100vh;
+  background: rgba(15, 23, 42, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.panel-wrapper {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.panel-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.16);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  backdrop-filter: blur(8px);
+}
+
+.panel-header h1 {
+  font-size: 2.7rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.panel-subtitle {
+  font-size: 1.05rem;
+  opacity: 0.95;
+  max-width: 650px;
+}
+
+.panel-logout-btn {
+  border-radius: 14px;
+  font-weight: 600;
+  padding: 0.75rem 1rem;
+}
+
+.panel-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.panel-card {
+  text-decoration: none;
+  color: white;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 24px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.panel-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 22px 45px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.panel-card h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+}
+
+.panel-card p {
+  min-height: 70px;
+  opacity: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+.panel-card span {
+  font-weight: 700;
+}
+
+.productos-card {
+  background: rgba(37, 99, 235, 0.22);
+}
+
+.despensa-card {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.compra-card {
+  background: rgba(249, 115, 22, 0.2);
+}
+
+@media (max-width: 992px) {
+  .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .panel-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-header h1 {
+    font-size: 2.2rem;
+  }
+}
