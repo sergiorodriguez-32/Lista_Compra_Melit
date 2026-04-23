@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { LoginService } from 'app/login/login.service';
 import { FormsModule } from '@angular/forms';
 import { CompraService } from './compra.service';
 import { ICompraItem } from './compra.model';
@@ -14,8 +15,10 @@ import { ICompraItem } from './compra.model';
 export class CompraComponent implements OnInit {
   items: ICompraItem[] = [];
 
-  private compraService = inject(CompraService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly compraService = inject(CompraService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly loginService = inject(LoginService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.cargarCompra();
@@ -93,5 +96,10 @@ export class CompraComponent implements OnInit {
         console.error('ERROR SUMANDO EN COMPRA:', error);
       },
     });
+  }
+
+  cerrarSesion(): void {
+    this.loginService.logout();
+    this.router.navigate(['/']);
   }
 }

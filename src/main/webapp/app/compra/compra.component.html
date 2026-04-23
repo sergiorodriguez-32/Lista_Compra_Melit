@@ -3,7 +3,8 @@
 
   <div class="mb-3">
     <a routerLink="/productos" class="btn btn-primary me-2">Productos</a>
-    <a routerLink="/despensa" class="btn btn-success">Despensa</a>
+    <a routerLink="/despensa" class="btn btn-success me-2">Despensa</a>
+    <button class="btn btn-danger" (click)="cerrarSesion()">Cerrar sesión</button>
   </div>
 
   <p>Total productos en compra: {{ items.length }}</p>

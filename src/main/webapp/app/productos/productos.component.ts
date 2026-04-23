@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { IProducto } from './productos.model';
 import { ProductosService } from './productos.service';
 import { ItemListaService } from './item-lista.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { LoginService } from 'app/login/login.service';
 
 @Component({
   selector: 'jhi-productos',
@@ -18,9 +19,11 @@ export class ProductosComponent implements OnInit {
   nuevoProducto: IProducto = this.crearProductoVacio();
   editando = false;
 
-  private productosService = inject(ProductosService);
-  private itemListaService = inject(ItemListaService);
-  private cdr = inject(ChangeDetectorRef);
+  private readonly productosService = inject(ProductosService);
+  private readonly itemListaService = inject(ItemListaService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly loginService = inject(LoginService);
+  private readonly router = inject(Router);
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -141,5 +144,10 @@ export class ProductosComponent implements OnInit {
           console.error('ERROR AÑADIENDO A COMPRA:', error);
         },
       });
+  }
+
+  cerrarSesion(): void {
+    this.loginService.logout();
+    this.router.navigate(['/']);
   }
 }
