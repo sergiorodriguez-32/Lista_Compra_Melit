@@ -6,6 +6,7 @@ export interface IProducto {
   ubicacion?: string;
   letraSaludable?: string;
   fechaCaducidad?: string;
+  categoria?: string;
 
   cantidadSeleccionada?: number;
   unidadSeleccionada?: string;

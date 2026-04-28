@@ -30,11 +30,12 @@
             </div>
 
             <div class="compra-info">
-              <p><strong>Cantidad:</strong> {{ item.cantidad }} {{ item.unidadMedida }}</p>
-              <p><strong>Precio:</strong> {{ item.producto?.precio }}</p>
+              <p><strong>Cantidad:</strong> {{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</p>
+              <p><strong>Precio:</strong> {{ item.producto?.precio }} €</p>
               <p><strong>Ubicación:</strong> {{ item.producto?.ubicacion }}</p>
               <p><strong>Letra saludable:</strong> {{ item.producto?.letraSaludable }}</p>
               <p><strong>Fecha caducidad:</strong> {{ item.producto?.fechaCaducidad }}</p>
+              <p><strong>Categoría:</strong> {{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</p>
             </div>
 
             <div class="compra-actions-box">

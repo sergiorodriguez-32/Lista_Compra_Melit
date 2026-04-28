@@ -14,5 +14,6 @@ export interface ICompraItem {
     ubicacion?: string;
     letraSaludable?: string;
     fechaCaducidad?: string;
+    categoria?: string;
   };
 }

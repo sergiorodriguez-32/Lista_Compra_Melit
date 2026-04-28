@@ -14,5 +14,6 @@ export interface IDespensaItem {
     ubicacion?: string;
     letraSaludable?: string;
     fechaCaducidad?: string;
+    categoria?: string;
   };
 }

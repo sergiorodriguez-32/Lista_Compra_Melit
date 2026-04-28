@@ -99,6 +99,23 @@ export class CompraComponent implements OnInit {
     });
   }
 
+  formatearUnidad(unidad?: string): string {
+    switch (unidad) {
+      case 'UNIDAD':
+        return 'Unidad';
+      case 'KG':
+        return 'Kg';
+      case 'G':
+        return 'g';
+      case 'L':
+        return 'L';
+      case 'ML':
+        return 'ml';
+      default:
+        return unidad ?? '';
+    }
+  }
+
   cerrarSesion(): void {
     this.loginService.logout();
     this.router.navigate(['/']);

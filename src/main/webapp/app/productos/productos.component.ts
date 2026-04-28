@@ -38,6 +38,7 @@ export class ProductosComponent implements OnInit {
       ubicacion: '',
       letraSaludable: '',
       fechaCaducidad: '',
+      categoria: 'ALIMENTACION',
     };
   }
 

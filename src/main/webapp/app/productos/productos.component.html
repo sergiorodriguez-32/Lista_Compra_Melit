@@ -31,7 +31,10 @@
 
           <div class="mb-3">
             <label class="form-label">Precio</label>
-            <input type="number" class="form-control custom-input" [(ngModel)]="nuevoProducto.precio" />
+            <div class="input-group">
+              <input type="number" class="form-control custom-input" [(ngModel)]="nuevoProducto.precio" />
+              <span class="input-group-text">€</span>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -42,6 +45,14 @@
           <div class="mb-3">
             <label class="form-label">Letra saludable</label>
             <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.letraSaludable" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Categoría</label>
+            <select class="form-control custom-input" [(ngModel)]="nuevoProducto.categoria">
+              <option value="ALIMENTACION">Alimentación</option>
+              <option value="DROGUERIA">Droguería</option>
+            </select>
           </div>
 
           <div class="mb-3">
@@ -76,10 +87,11 @@
             </div>
 
             <div class="producto-info">
-              <p><strong>Precio:</strong> {{ producto.precio }}</p>
+              <p><strong>Precio:</strong> {{ producto.precio }} €</p>
               <p><strong>Ubicación:</strong> {{ producto.ubicacion }}</p>
               <p><strong>Letra saludable:</strong> {{ producto.letraSaludable }}</p>
               <p><strong>Fecha caducidad:</strong> {{ producto.fechaCaducidad }}</p>
+              <p><strong>Categoría:</strong> {{ producto.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</p>
             </div>
 
             <div class="producto-actions-box">
@@ -91,11 +103,11 @@
               <div class="mb-3">
                 <label class="form-label"><strong>Unidad</strong></label>
                 <select class="form-control custom-input" [(ngModel)]="producto.unidadSeleccionada">
-                  <option value="UNIDAD">UNIDAD</option>
-                  <option value="KG">KG</option>
-                  <option value="G">G</option>
+                  <option value="UNIDAD">Unidad</option>
+                  <option value="KG">Kg</option>
+                  <option value="G">g</option>
                   <option value="L">L</option>
-                  <option value="ML">ML</option>
+                  <option value="ML">ml</option>
                 </select>
               </div>
 

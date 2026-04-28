@@ -36,6 +36,11 @@ public class Producto implements Serializable {
     @Column(name = "fecha_caducidad")
     private LocalDate fechaCaducidad;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categoria", nullable = false)
+    private CategoriaProducto categoria;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -102,5 +107,13 @@ public class Producto implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public CategoriaProducto getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(CategoriaProducto categoria) {
+        this.categoria = categoria;
     }
 }
