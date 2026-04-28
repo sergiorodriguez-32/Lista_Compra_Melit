@@ -1,1 +1,59 @@
-<router-outlet />
+@if (showAppShell) {
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="header-left">
+        <div class="logo-circle">LM</div>
+        <a routerLink="/panel" class="brand-name">ListaCompraMelit</a>
+      </div>
+
+      <nav class="header-nav">
+        <a routerLink="/productos" class="nav-link">Productos</a>
+        <a routerLink="/despensa" class="nav-link">Despensa</a>
+        <a routerLink="/compra" class="nav-link">Compra</a>
+      </nav>
+
+      <div class="header-right">
+        <div class="language-switch">
+          <button class="lang-btn" [class.active]="currentLang === 'es'" (click)="cambiarIdioma('es')">ES</button>
+          <button class="lang-btn" [class.active]="currentLang === 'en'" (click)="cambiarIdioma('en')">EN</button>
+        </div>
+
+        <div class="user-menu-wrapper">
+          <button class="user-menu-btn" (click)="toggleMenuUsuario()">Mi cuenta</button>
+
+          @if (mostrarMenuUsuario) {
+            <div class="user-dropdown">
+              <a routerLink="/perfil" class="dropdown-item">Perfil</a>
+
+              @if (isAdmin) {
+                <div class="dropdown-divider"></div>
+                <a routerLink="/admin/configuration" class="dropdown-item">Administración</a>
+              }
+
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item logout-item" (click)="cerrarSesion()">Cerrar sesión</button>
+            </div>
+          }
+        </div>
+      </div>
+    </header>
+
+    <main class="app-content">
+      <router-outlet />
+    </main>
+
+    <footer class="app-footer">
+      <div class="footer-content">
+        <span>© ListaCompraMelit</span>
+        <div class="footer-links">
+          <a href="#">Aviso legal</a>
+          <a href="#">Política de privacidad</a>
+          <a href="#">Protección de datos</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+} @else {
+  <router-outlet />
+}

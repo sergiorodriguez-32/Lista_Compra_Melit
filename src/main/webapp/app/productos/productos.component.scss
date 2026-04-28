@@ -3,6 +3,22 @@
   min-height: 100vh;
 }
 
+.page-title-block {
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.page-title-block h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.page-title-block p {
+  margin: 0;
+  opacity: 0.95;
+}
+
 .productos-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #0f172a, #1d4ed8, #22c55e);
@@ -178,10 +194,6 @@
 }
 
 @media (max-width: 992px) {
-  .productos-header {
-    flex-direction: column;
-  }
-
   .productos-form-grid,
   .productos-grid,
   .producto-info {

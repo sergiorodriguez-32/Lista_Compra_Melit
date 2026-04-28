@@ -3,6 +3,22 @@
   min-height: 100vh;
 }
 
+.page-title-block {
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.page-title-block h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.page-title-block p {
+  margin: 0;
+  opacity: 0.95;
+}
+
 .compra-page {
   min-height: 100vh;
   background: linear-gradient(135deg, #0f172a, #1d4ed8, #22c55e);
@@ -17,44 +33,6 @@
 .compra-wrapper {
   max-width: 1250px;
   margin: 0 auto;
-}
-
-.compra-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-  color: white;
-}
-
-.compra-badge {
-  display: inline-block;
-  background: rgba(255, 255, 255, 0.16);
-  color: white;
-  padding: 0.45rem 0.95rem;
-  border-radius: 999px;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  backdrop-filter: blur(8px);
-}
-
-.compra-header h1 {
-  font-size: 2.6rem;
-  font-weight: 800;
-  margin-bottom: 0.4rem;
-}
-
-.compra-subtitle {
-  font-size: 1rem;
-  opacity: 0.95;
-  max-width: 650px;
-}
-
-.compra-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
 }
 
 .compra-summary,
@@ -101,14 +79,6 @@
 .compra-desc {
   margin: 0;
   opacity: 0.9;
-}
-
-.compra-id {
-  background: rgba(255, 255, 255, 0.16);
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  height: fit-content;
-  font-weight: 700;
 }
 
 .compra-info {
@@ -161,10 +131,6 @@
 }
 
 @media (max-width: 992px) {
-  .compra-header {
-    flex-direction: column;
-  }
-
   .compra-grid,
   .compra-info {
     grid-template-columns: 1fr;
