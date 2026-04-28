@@ -1,0 +1,72 @@
+<div class="administrar-page">
+  <div class="administrar-overlay">
+    <div class="administrar-wrapper">
+      <div class="page-title-block">
+        <h1>Administrar usuarios</h1>
+        <p>Gestiona los permisos y roles de los usuarios de la aplicación.</p>
+      </div>
+
+      @if (mensaje) {
+        <div class="alert alert-success admin-alert">
+          {{ mensaje }}
+        </div>
+      }
+
+      <div class="usuarios-grid">
+        @for (usuario of usuarios; track usuario.id) {
+          <div class="usuario-card">
+            <div class="usuario-header">
+              <div>
+                <h2>{{ usuario.login }}</h2>
+                <p class="usuario-email">{{ usuario.email || 'Sin email' }}</p>
+              </div>
+
+              <span class="estado-badge" [class.inactivo]="!usuario.activated">
+                {{ usuario.activated ? 'Activo' : 'Inactivo' }}
+              </span>
+            </div>
+
+            <div class="usuario-info">
+              <p><strong>Nombre:</strong> {{ usuario.firstName || '—' }}</p>
+              <p><strong>Apellidos:</strong> {{ usuario.lastName || '—' }}</p>
+              <p><strong>Idioma:</strong> {{ usuario.langKey || '—' }}</p>
+            </div>
+
+            <div class="roles-box">
+              <h3>Roles</h3>
+
+              <label class="role-item">
+                <input
+                  type="checkbox"
+                  [checked]="tieneRol(usuario, 'ROLE_USER')"
+                  (change)="toggleRol(usuario, 'ROLE_USER', $any($event.target).checked)"
+                />
+                ROLE_USER
+              </label>
+
+              <label class="role-item">
+                <input
+                  type="checkbox"
+                  [checked]="tieneRol(usuario, 'ROLE_ADMIN')"
+                  (change)="toggleRol(usuario, 'ROLE_ADMIN', $any($event.target).checked)"
+                />
+                ROLE_ADMIN
+              </label>
+            </div>
+
+            <div class="usuario-actions">
+              <button class="btn btn-primary" (click)="guardarCambios(usuario)">Guardar cambios</button>
+              <button class="btn btn-danger" (click)="eliminarUsuario(usuario)">Eliminar usuario</button>
+            </div>
+          </div>
+        }
+      </div>
+
+      @if (usuarios.length === 0) {
+        <div class="empty-state">
+          <p>No hay usuarios para mostrar.</p>
+        </div>
+      }
+    </div>
+  </div>
+</div>

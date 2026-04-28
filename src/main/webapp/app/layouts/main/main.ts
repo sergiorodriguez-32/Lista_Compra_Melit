@@ -63,7 +63,7 @@ export default class Main implements OnInit {
       this.currentAccount = account;
 
       const authorities = account?.authorities ?? [];
-      this.isAdmin = authorities.includes('ROLE_ADMIN') || authorities.includes('ADMIN');
+      this.isAdmin = authorities.includes('ROLE_ADMIN');
     });
   }
 

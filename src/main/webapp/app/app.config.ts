@@ -27,6 +27,7 @@ import { TranslationModule } from 'app/shared/language/translation.module';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 import routes from './app.routes';
 import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
+import { AdministrarComponent } from './administrar/administrar.component';
 
 const routerFeatures: RouterFeatures[] = [
   withComponentInputBinding(),

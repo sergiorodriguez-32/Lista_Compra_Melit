@@ -6,6 +6,7 @@ import { ProductosComponent } from './productos/productos.component';
 import { DespensaComponent } from './despensa/despensa.component';
 import { CompraComponent } from './compra/compra.component';
 import { PanelComponent } from './panel/panel.component';
+import { AdministrarComponent } from './administrar/administrar.component';
 
 import { errorRoute } from './layouts/error/error.route';
 
@@ -34,6 +35,15 @@ const routes: Routes = [
     path: '',
     loadComponent: () => import('./layouts/navbar/navbar'),
     outlet: 'navbar',
+  },
+  {
+    path: 'administrar',
+    component: AdministrarComponent,
+    title: 'administrar.title',
+    data: {
+      authorities: [Authority.ADMIN],
+    },
+    canActivate: [UserRouteAccessService],
   },
   {
     path: 'admin',
