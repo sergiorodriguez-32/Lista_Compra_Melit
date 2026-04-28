@@ -1,0 +1,136 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
+.account-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1d4ed8, #22c55e);
+}
+
+.account-overlay {
+  min-height: 100vh;
+  background: rgba(15, 23, 42, 0.18);
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-wrapper {
+  width: 100%;
+  max-width: 1200px;
+}
+
+.page-title-block {
+  color: white;
+  margin-bottom: 1.5rem;
+}
+
+.centered-title {
+  text-align: center;
+}
+
+.page-title-block h1 {
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin-bottom: 0.35rem;
+}
+
+.page-title-block p {
+  margin: 0;
+  opacity: 0.95;
+}
+
+.account-layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 1.5rem;
+}
+
+.account-info-card,
+.account-card {
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 24px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+  padding: 1.5rem;
+  color: white;
+}
+
+.account-info-card h2,
+.account-card h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 0.95rem;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.info-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.account-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.account-full-width {
+  grid-column: 1 / -1;
+}
+
+.custom-input {
+  border-radius: 12px;
+  min-height: 42px;
+  border: none;
+}
+
+.custom-input:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.22);
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.account-actions {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.account-alert {
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 992px) {
+  .account-layout,
+  .account-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .account-full-width {
+    grid-column: auto;
+  }
+}

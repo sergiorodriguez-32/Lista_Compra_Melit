@@ -13,6 +13,7 @@ import { PasswordService } from './password.service';
   selector: 'jhi-password',
   imports: [TranslateDirective, TranslateModule, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './password.html',
+  styleUrl: './password.scss',
 })
 export default class Password {
   readonly doNotMatch = signal(false);

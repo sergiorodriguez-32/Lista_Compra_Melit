@@ -15,6 +15,7 @@ const initialAccount: Account = {} as Account;
   selector: 'jhi-settings',
   imports: [TranslateDirective, TranslateModule, FindLanguageFromKeyPipe, AlertError, ReactiveFormsModule],
   templateUrl: './settings.html',
+  styleUrl: './settings.scss',
 })
 export default class Settings implements OnInit {
   readonly success = signal(false);

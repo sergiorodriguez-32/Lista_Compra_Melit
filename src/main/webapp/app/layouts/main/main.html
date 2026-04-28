@@ -23,7 +23,8 @@
 
           @if (mostrarMenuUsuario) {
             <div class="user-dropdown">
-              <a routerLink="/perfil" class="dropdown-item">Perfil</a>
+              <a routerLink="/account/settings" class="dropdown-item">Mi perfil</a>
+              <a routerLink="/account/password" class="dropdown-item">Cambiar contraseña</a>
 
               @if (isAdmin) {
                 <div class="dropdown-divider"></div>
