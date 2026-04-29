@@ -6,6 +6,7 @@ export interface ICompraItem {
   cantidadARestar?: number;
   cantidadASumar?: number;
   mostrarEdicion?: boolean;
+  marcadoComoComprado?: boolean;
   producto?: {
     id?: number;
     nombre?: string;

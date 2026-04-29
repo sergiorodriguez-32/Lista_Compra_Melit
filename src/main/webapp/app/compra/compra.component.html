@@ -3,63 +3,74 @@
     <div class="compra-wrapper">
       <div class="page-title-block">
         <h1>Lista de compra</h1>
-        <p>Organiza lo que necesitas comprar y gestiona cantidades.</p>
+        <p>Organiza lo que necesitas comprar y márcalo cuando ya lo tengas.</p>
       </div>
+
+      @if (mensaje) {
+        <div class="alert alert-success admin-alert">
+          {{ mensaje }}
+        </div>
+      }
 
       <div class="compra-summary">
         <span>Total productos en compra: {{ items.length }}</span>
       </div>
 
-      <div class="compra-grid">
-        @for (item of items; track item.id) {
-          <div class="compra-card">
-            <div class="compra-card-top">
-              <div>
-                <h3>{{ item.producto?.nombre }}</h3>
-                <p class="compra-desc">{{ item.producto?.descripcion || 'Sin descripción' }}</p>
-              </div>
-            </div>
+      @if (items.length > 0) {
+        <div class="tabla-card">
+          <table class="tabla-compra">
+            <thead>
+              <tr>
+                <th>Comprado</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of items; track item.id) {
+                <tr [class.tachado]="item.marcadoComoComprado">
+                  <td>
+                    <input type="checkbox" class="check-comprado" [checked]="false" (change)="marcarComoComprado(item)" />
+                  </td>
+                  <td>{{ item.producto?.nombre }}</td>
+                  <td>{{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</td>
+                  <td>{{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
+                  <td>{{ item.producto?.precio }} €</td>
+                  <td>{{ item.producto?.ubicacion }}</td>
+                  <td>
+                    <button class="btn btn-secondary btn-sm me-2" (click)="toggleEdicion(item)">
+                      {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+                    </button>
+                    <button class="btn btn-danger btn-sm" (click)="quitarDeCompra(item.id!)">Quitar</button>
 
-            <div class="compra-info">
-              <p><strong>Cantidad:</strong> {{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</p>
-              <p><strong>Precio:</strong> {{ item.producto?.precio }} €</p>
-              <p><strong>Ubicación:</strong> {{ item.producto?.ubicacion }}</p>
-              <p><strong>Letra saludable:</strong> {{ item.producto?.letraSaludable }}</p>
-              <p><strong>Fecha caducidad:</strong> {{ item.producto?.fechaCaducidad }}</p>
-              <p><strong>Categoría:</strong> {{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</p>
-            </div>
+                    @if (item.mostrarEdicion) {
+                      <div class="edit-inline-box">
+                        <div class="mb-2">
+                          <label class="form-label"><strong>Cantidad a añadir</strong></label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
+                        </div>
 
-            <div class="compra-actions-box">
-              <div class="compra-buttons-top">
-                <button class="btn btn-secondary me-2 mb-2" (click)="toggleEdicion(item)">
-                  {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
-                </button>
-                <button class="btn btn-danger mb-2" (click)="quitarDeCompra(item.id!)">Quitar de compra</button>
-              </div>
+                        <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">Sumar</button>
 
-              @if (item.mostrarEdicion) {
-                <div class="compra-edit-panel">
-                  <div class="mb-3">
-                    <label class="form-label"><strong>Cantidad a añadir</strong></label>
-                    <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
-                  </div>
+                        <div class="mb-2">
+                          <label class="form-label"><strong>Cantidad a quitar</strong></label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
+                        </div>
 
-                  <button class="btn btn-success me-3 mb-3" (click)="sumarCantidad(item)">Sumar cantidad</button>
-
-                  <div class="mb-3">
-                    <label class="form-label"><strong>Cantidad a quitar</strong></label>
-                    <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
-                  </div>
-
-                  <button class="btn btn-warning" (click)="restarCantidad(item)">Restar cantidad</button>
-                </div>
+                        <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">Restar</button>
+                      </div>
+                    }
+                  </td>
+                </tr>
               }
-            </div>
-          </div>
-        }
-      </div>
-
-      @if (items.length === 0) {
+            </tbody>
+          </table>
+        </div>
+      } @else {
         <div class="empty-state">
           <p>No hay productos en la lista de compra.</p>
         </div>

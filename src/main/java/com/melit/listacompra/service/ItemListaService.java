@@ -52,6 +52,44 @@ public class ItemListaService {
         return itemListaRepository.save(itemLista);
     }
 
+    public void comprarItem(Long id) {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+
+        ItemLista itemCompra = itemListaRepository
+            .findById(id)
+            .orElseThrow(() -> new RuntimeException("ItemLista no encontrado con id: " + id));
+
+        if (itemCompra.getProducto() == null || itemCompra.getProducto().getId() == null) {
+            throw new RuntimeException("El item de compra no tiene producto válido");
+        }
+
+        Optional<ItemLista> itemDespensaExistente = itemListaRepository.findByProductoIdAndTipoListaAndUserLogin(
+            itemCompra.getProducto().getId(),
+            com.melit.listacompra.domain.TipoLista.DESPENSA,
+            login
+        );
+
+        if (itemDespensaExistente.isPresent()) {
+            ItemLista itemDespensa = itemDespensaExistente.get();
+            int cantidadActual = itemDespensa.getCantidad() != null ? itemDespensa.getCantidad() : 0;
+            int cantidadNueva = itemCompra.getCantidad() != null ? itemCompra.getCantidad() : 0;
+
+            itemDespensa.setCantidad(cantidadActual + cantidadNueva);
+            itemListaRepository.save(itemDespensa);
+        } else {
+            ItemLista nuevoItemDespensa = new ItemLista();
+            nuevoItemDespensa.setCantidad(itemCompra.getCantidad());
+            nuevoItemDespensa.setUnidadMedida(itemCompra.getUnidadMedida());
+            nuevoItemDespensa.setTipoLista(com.melit.listacompra.domain.TipoLista.DESPENSA);
+            nuevoItemDespensa.setProducto(itemCompra.getProducto());
+            nuevoItemDespensa.setUser(itemCompra.getUser());
+
+            itemListaRepository.save(nuevoItemDespensa);
+        }
+
+        itemListaRepository.deleteById(id);
+    }
+
     public List<ItemLista> findAll() {
         String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
 

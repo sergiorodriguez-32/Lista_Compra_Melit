@@ -33,6 +33,12 @@ public class ItemListaResource {
         return ResponseEntity.ok(result);
     }
 
+    @PutMapping("/{id}/comprar")
+    public ResponseEntity<Void> comprarItem(@PathVariable Long id) {
+        itemListaService.comprarItem(id);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping
     public List<ItemLista> getAllItemListas() {
         return itemListaService.findAll();

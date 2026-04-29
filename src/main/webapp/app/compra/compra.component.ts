@@ -20,6 +20,7 @@ export class CompraComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  mensaje = '';
 
   ngOnInit(): void {
     this.cargarCompra();
@@ -61,6 +62,34 @@ export class CompraComponent implements OnInit {
         console.error('ERROR QUITANDO DE COMPRA:', error);
       },
     });
+  }
+
+  marcarComoComprado(item: ICompraItem): void {
+    if (!item.id) {
+      return;
+    }
+
+    item.marcadoComoComprado = true;
+
+    setTimeout(() => {
+      this.compraService.comprarItem(item.id!).subscribe({
+        next: () => {
+          this.mensaje = `${item.producto?.nombre} se ha movido a despensa`;
+          this.cargarCompra();
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.mensaje = '';
+            this.cdr.detectChanges();
+          }, 2500);
+        },
+        error: error => {
+          console.error('ERROR MARCANDO COMO COMPRADO:', error);
+          item.marcadoComoComprado = false;
+          this.cdr.detectChanges();
+        },
+      });
+    }, 350);
   }
 
   restarCantidad(item: ICompraItem): void {
