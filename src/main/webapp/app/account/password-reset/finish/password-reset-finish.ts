@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -13,6 +13,7 @@ import { PasswordResetFinishService } from './password-reset-finish.service';
   selector: 'jhi-password-reset-finish',
   imports: [TranslateDirective, TranslateModule, RouterLink, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './password-reset-finish.html',
+  styleUrls: ['./password-reset-finish.scss'],
 })
 export default class PasswordResetFinish implements OnInit, AfterViewInit {
   newPassword = viewChild.required<ElementRef>('newPassword');
@@ -22,6 +23,8 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
   readonly error = signal(false);
   readonly success = signal(false);
   readonly key = signal('');
+  private readonly router = inject(Router);
+  readonly submitted = signal(false);
 
   passwordForm = new FormGroup({
     newPassword: new FormControl('', {
@@ -51,8 +54,13 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
   }
 
   finishReset(): void {
+    this.submitted.set(true);
     this.doNotMatch.set(false);
     this.error.set(false);
+
+    if (this.passwordForm.invalid) {
+      return;
+    }
 
     const { newPassword, confirmPassword } = this.passwordForm.getRawValue();
 
@@ -64,5 +72,9 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
     } else {
       this.doNotMatch.set(true);
     }
+  }
+
+  volverLogin(): void {
+    this.router.navigate(['/login']);
   }
 }
