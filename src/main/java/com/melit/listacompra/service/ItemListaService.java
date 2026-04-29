@@ -1,6 +1,7 @@
 package com.melit.listacompra.service;
 
 import com.melit.listacompra.domain.ItemLista;
+import com.melit.listacompra.domain.TipoLista;
 import com.melit.listacompra.domain.User;
 import com.melit.listacompra.repository.ItemListaRepository;
 import com.melit.listacompra.repository.UserRepository;
@@ -128,5 +129,43 @@ public class ItemListaService {
 
         item.setCantidad(cantidadActual + suma);
         return itemListaRepository.save(item);
+    }
+
+    public void pasarACompra(Long id) {
+        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+
+        ItemLista itemDespensa = itemListaRepository
+            .findById(id)
+            .orElseThrow(() -> new RuntimeException("ItemLista no encontrado con id: " + id));
+
+        if (itemDespensa.getProducto() == null || itemDespensa.getProducto().getId() == null) {
+            throw new RuntimeException("El item de despensa no tiene producto válido");
+        }
+
+        Optional<ItemLista> itemCompraExistente = itemListaRepository.findByProductoIdAndTipoListaAndUserLogin(
+            itemDespensa.getProducto().getId(),
+            TipoLista.COMPRA,
+            login
+        );
+
+        if (itemCompraExistente.isPresent()) {
+            ItemLista itemCompra = itemCompraExistente.get();
+            int cantidadActual = itemCompra.getCantidad() != null ? itemCompra.getCantidad() : 0;
+            int cantidadNueva = itemDespensa.getCantidad() != null ? itemDespensa.getCantidad() : 0;
+
+            itemCompra.setCantidad(cantidadActual + cantidadNueva);
+            itemListaRepository.save(itemCompra);
+        } else {
+            ItemLista nuevoItemCompra = new ItemLista();
+            nuevoItemCompra.setCantidad(itemDespensa.getCantidad());
+            nuevoItemCompra.setUnidadMedida(itemDespensa.getUnidadMedida());
+            nuevoItemCompra.setTipoLista(TipoLista.COMPRA);
+            nuevoItemCompra.setProducto(itemDespensa.getProducto());
+            nuevoItemCompra.setUser(itemDespensa.getUser());
+
+            itemListaRepository.save(nuevoItemCompra);
+        }
+
+        itemListaRepository.deleteById(id);
     }
 }

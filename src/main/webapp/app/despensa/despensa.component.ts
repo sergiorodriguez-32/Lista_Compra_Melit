@@ -20,6 +20,7 @@ export class DespensaComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  mensaje = '';
 
   ngOnInit(): void {
     this.cargarDespensa();
@@ -114,6 +115,34 @@ export class DespensaComponent implements OnInit {
       default:
         return unidad ?? '';
     }
+  }
+
+  pasarACompra(item: IDespensaItem): void {
+    if (!item.id) {
+      return;
+    }
+
+    item.marcadoParaCompra = true;
+
+    setTimeout(() => {
+      this.despensaService.pasarACompra(item.id!).subscribe({
+        next: () => {
+          this.mensaje = `${item.producto?.nombre} se ha movido a compra`;
+          this.cargarDespensa();
+          this.cdr.detectChanges();
+
+          setTimeout(() => {
+            this.mensaje = '';
+            this.cdr.detectChanges();
+          }, 2500);
+        },
+        error: error => {
+          console.error('ERROR PASANDO A COMPRA:', error);
+          item.marcadoParaCompra = false;
+          this.cdr.detectChanges();
+        },
+      });
+    }, 350);
   }
 
   cerrarSesion(): void {

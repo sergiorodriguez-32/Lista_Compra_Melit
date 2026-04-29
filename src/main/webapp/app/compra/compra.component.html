@@ -33,19 +33,19 @@
             <tbody>
               @for (item of items; track item.id) {
                 <tr [class.tachado]="item.marcadoComoComprado">
-                  <td>
+                  <td data-label="Comprado">
                     <input type="checkbox" class="check-comprado" [checked]="false" (change)="marcarComoComprado(item)" />
                   </td>
-                  <td>{{ item.producto?.nombre }}</td>
-                  <td>{{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</td>
-                  <td>{{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
-                  <td>{{ item.producto?.precio }} €</td>
-                  <td>{{ item.producto?.ubicacion }}</td>
-                  <td>
-                    <button class="btn btn-secondary btn-sm me-2" (click)="toggleEdicion(item)">
+                  <td data-label="Nombre">{{ item.producto?.nombre }}</td>
+                  <td data-label="Cantidad">{{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</td>
+                  <td data-label="Categoría">{{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
+                  <td data-label="Precio">{{ item.producto?.precio }} €</td>
+                  <td data-label="Ubicación">{{ item.producto?.ubicacion }}</td>
+                  <td data-label="Acciones">
+                    <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
                       {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
                     </button>
-                    <button class="btn btn-danger btn-sm" (click)="quitarDeCompra(item.id!)">Quitar</button>
+                    <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeCompra(item.id!)">Quitar</button>
 
                     @if (item.mostrarEdicion) {
                       <div class="edit-inline-box">

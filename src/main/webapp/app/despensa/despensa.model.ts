@@ -6,6 +6,7 @@ export interface IDespensaItem {
   cantidadARestar?: number;
   cantidadASumar?: number;
   mostrarEdicion?: boolean;
+  marcadoParaCompra?: boolean;
   producto?: {
     id?: number;
     nombre?: string;

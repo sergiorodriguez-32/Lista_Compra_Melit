@@ -72,4 +72,10 @@ public class ItemListaResource {
         ItemLista result = itemListaService.sumarCantidad(id, request.getCantidad());
         return ResponseEntity.ok(result);
     }
+
+    @PutMapping("/{id}/pasar-a-compra")
+    public ResponseEntity<Void> pasarACompra(@PathVariable Long id) {
+        itemListaService.pasarACompra(id);
+        return ResponseEntity.ok().build();
+    }
 }

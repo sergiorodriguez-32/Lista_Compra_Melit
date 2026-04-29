@@ -3,63 +3,71 @@
     <div class="despensa-wrapper">
       <div class="page-title-block">
         <h1>Despensa</h1>
-        <p>Controla lo que tienes en casa y ajusta cantidades.</p>
+        <p>Controla lo que tienes en casa y pásalo a compra cuando lo necesites.</p>
       </div>
+
+      @if (mensaje) {
+        <div class="alert alert-success admin-alert">
+          {{ mensaje }}
+        </div>
+      }
 
       <div class="despensa-summary">
         <span>Total productos en despensa: {{ items.length }}</span>
       </div>
 
-      <div class="despensa-grid">
-        @for (item of items; track item.id) {
-          <div class="despensa-card">
-            <div class="despensa-card-top">
-              <div>
-                <h3>{{ item.producto?.nombre }}</h3>
-                <p class="despensa-desc">{{ item.producto?.descripcion || 'Sin descripción' }}</p>
-              </div>
-            </div>
+      @if (items.length > 0) {
+        <div class="tabla-card">
+          <table class="tabla-despensa">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Ubicación</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of items; track item.id) {
+                <tr [class.tachado]="item.marcadoParaCompra">
+                  <td data-label="Nombre">{{ item.producto?.nombre }}</td>
+                  <td data-label="Cantidad">{{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</td>
+                  <td data-label="Categoría">{{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
+                  <td data-label="Precio">{{ item.producto?.precio }} €</td>
+                  <td data-label="Ubicación">{{ item.producto?.ubicacion }}</td>
+                  <td data-label="Acciones">
+                    <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
+                      {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+                    </button>
+                    <button class="btn btn-info btn-sm me-2 mb-2" (click)="pasarACompra(item)">Pasar a compra</button>
+                    <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeDespensa(item.id!)">Quitar</button>
 
-            <div class="despensa-info">
-              <p><strong>Cantidad:</strong> {{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</p>
-              <p><strong>Precio:</strong> {{ item.producto?.precio }} €</p>
-              <p><strong>Ubicación:</strong> {{ item.producto?.ubicacion }}</p>
-              <p><strong>Letra saludable:</strong> {{ item.producto?.letraSaludable }}</p>
-              <p><strong>Fecha caducidad:</strong> {{ item.producto?.fechaCaducidad }}</p>
-              <p><strong>Categoría:</strong> {{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</p>
-            </div>
+                    @if (item.mostrarEdicion) {
+                      <div class="edit-inline-box">
+                        <div class="mb-2">
+                          <label class="form-label"><strong>Cantidad a añadir</strong></label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
+                        </div>
 
-            <div class="despensa-actions-box">
-              <div class="despensa-buttons-top">
-                <button class="btn btn-secondary me-2 mb-2" (click)="toggleEdicion(item)">
-                  {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
-                </button>
-                <button class="btn btn-danger mb-2" (click)="quitarDeDespensa(item.id!)">Quitar de despensa</button>
-              </div>
+                        <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">Sumar</button>
 
-              @if (item.mostrarEdicion) {
-                <div class="despensa-edit-panel">
-                  <div class="mb-3">
-                    <label class="form-label"><strong>Cantidad a añadir</strong></label>
-                    <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
-                  </div>
+                        <div class="mb-2">
+                          <label class="form-label"><strong>Cantidad a quitar</strong></label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
+                        </div>
 
-                  <button class="btn btn-success me-3 mb-3" (click)="sumarCantidad(item)">Sumar cantidad</button>
-
-                  <div class="mb-3">
-                    <label class="form-label"><strong>Cantidad a quitar</strong></label>
-                    <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
-                  </div>
-
-                  <button class="btn btn-warning" (click)="restarCantidad(item)">Restar cantidad</button>
-                </div>
+                        <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">Restar</button>
+                      </div>
+                    }
+                  </td>
+                </tr>
               }
-            </div>
-          </div>
-        }
-      </div>
-
-      @if (items.length === 0) {
+            </tbody>
+          </table>
+        </div>
+      } @else {
         <div class="empty-state">
           <p>No hay productos en despensa.</p>
         </div>
