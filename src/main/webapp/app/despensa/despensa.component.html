@@ -37,6 +37,7 @@
                 <th>Categoría</th>
                 <th>Precio</th>
                 <th>Ubicación</th>
+                <th>Saludable</th>
                 <th>Acciones</th>
               </tr>
             </thead>
@@ -47,6 +48,9 @@
                   <td data-label="Cantidad">{{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</td>
                   <td data-label="Categoría">{{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
                   <td data-label="Precio">{{ item.producto?.precio }} €</td>
+                  <td data-label="Saludable">
+                    {{ item.producto?.categoria === 'ALIMENTACION' ? item.producto?.letraSaludable || '—' : '—' }}
+                  </td>
                   <td data-label="Ubicación">{{ item.producto?.ubicacion }}</td>
                   <td data-label="Acciones">
                     <div class="despensa-acciones">

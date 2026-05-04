@@ -154,6 +154,14 @@ export class CompraComponent implements OnInit {
     return this.items.filter(item => item.producto?.categoria === this.filtroCategoria);
   }
 
+  calcularTotalCompra(): number {
+    return this.itemsFiltrados().reduce((total, item) => {
+      const precio = item.producto?.precio ?? 0;
+      const cantidad = item.cantidad ?? 0;
+      return total + precio * cantidad;
+    }, 0);
+  }
+
   cerrarSesion(): void {
     this.loginService.logout();
     this.router.navigate(['/']);

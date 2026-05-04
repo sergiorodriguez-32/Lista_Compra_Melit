@@ -258,14 +258,27 @@
   margin-bottom: 0.2rem;
 }
 
-.compra-acciones {
+.edit-inline-box {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.compra-acciones .btn {
-  width: auto;
+.edit-inline-box .btn {
+  align-self: flex-start;
+}
+
+.total-compra-card {
+  margin-top: 1rem;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+  color: white;
+  padding: 1rem 1.25rem;
+  font-weight: 800;
+  text-align: right;
 }
 
 @media (max-width: 992px) {
@@ -343,8 +356,13 @@
     gap: 0.5rem;
   }
 
-  .btn {
+  .compra-acciones > .btn {
     width: 100%;
+  }
+
+  .edit-inline-box .btn {
+    width: auto;
+    min-width: 110px;
   }
 
   .btn-sm {

@@ -9,7 +9,7 @@
 
         <div class="filtro-card">
           <label class="form-label mb-1"><strong>Categoría</strong></label>
-          <select class="form-control custom-input filtro-select" [(ngModel)]="filtroCategoria">
+          <select class="form-control custom-input" [(ngModel)]="nuevoProducto.categoria" (ngModelChange)="onCategoriaChange()">
             <option value="TODAS">Todas</option>
             <option value="ALIMENTACION">Alimentación</option>
             <option value="DROGUERIA">Droguería</option>
@@ -44,10 +44,12 @@
             <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.ubicacion" />
           </div>
 
-          <div class="mb-3">
-            <label class="form-label">Letra saludable</label>
-            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.letraSaludable" />
-          </div>
+          @if (nuevoProducto.categoria === 'ALIMENTACION') {
+            <div class="mb-3">
+              <label class="form-label">Letra saludable</label>
+              <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.letraSaludable" />
+            </div>
+          }
 
           <div class="mb-3">
             <label class="form-label">Categoría</label>

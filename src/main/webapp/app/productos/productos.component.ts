@@ -154,6 +154,12 @@ export class ProductosComponent implements OnInit {
       });
   }
 
+  onCategoriaChange(): void {
+    if (this.nuevoProducto.categoria === 'DROGUERIA') {
+      this.nuevoProducto.letraSaludable = '';
+    }
+  }
+
   cerrarSesion(): void {
     this.loginService.logout();
     this.router.navigate(['/']);

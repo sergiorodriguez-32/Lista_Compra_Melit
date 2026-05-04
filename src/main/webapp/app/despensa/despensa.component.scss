@@ -183,14 +183,14 @@
   margin-bottom: 0.2rem;
 }
 
-.despensa-acciones {
+.edit-inline-box {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  flex-direction: column;
+  gap: 0.75rem;
 }
 
-.despensa-acciones .btn {
-  width: auto;
+.edit-inline-box .btn {
+  align-self: flex-start;
 }
 
 @media (max-width: 992px) {
@@ -267,8 +267,13 @@
     grid-column: 1 / -1;
   }
 
-  .btn {
+  .despensa-acciones > .btn {
     width: 100%;
+  }
+
+  .edit-inline-box .btn {
+    width: auto;
+    min-width: 110px;
   }
 
   .btn-sm {
