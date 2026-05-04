@@ -4,7 +4,7 @@
       <div class="page-header-row">
         <div class="page-title-block">
           <h1>Lista de compra</h1>
-          <p>Organiza lo que necesitas comprar y márcalo cuando ya lo tengas</p>
+          <p>Organiza lo que necesitas comprar y márcalo cuando ya lo tengas.</p>
         </div>
 
         <div class="filtro-card">
@@ -16,6 +16,7 @@
           </select>
         </div>
       </div>
+
       @if (mensaje) {
         <div class="alert alert-success admin-alert">
           {{ mensaje }}
@@ -52,28 +53,30 @@
                   <td data-label="Precio">{{ item.producto?.precio }} €</td>
                   <td data-label="Ubicación">{{ item.producto?.ubicacion }}</td>
                   <td data-label="Acciones">
-                    <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
-                      {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
-                    </button>
-                    <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeCompra(item.id!)">Quitar</button>
+                    <div class="compra-acciones">
+                      <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
+                        {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+                      </button>
+                      <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeCompra(item.id!)">Quitar</button>
 
-                    @if (item.mostrarEdicion) {
-                      <div class="edit-inline-box">
-                        <div class="mb-2">
-                          <label class="form-label"><strong>Cantidad a añadir</strong></label>
-                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
+                      @if (item.mostrarEdicion) {
+                        <div class="edit-inline-box">
+                          <div class="mb-2">
+                            <label class="form-label"><strong>Cantidad a añadir</strong></label>
+                            <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
+                          </div>
+
+                          <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">Sumar</button>
+
+                          <div class="mb-2">
+                            <label class="form-label"><strong>Cantidad a quitar</strong></label>
+                            <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
+                          </div>
+
+                          <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">Restar</button>
                         </div>
-
-                        <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">Sumar</button>
-
-                        <div class="mb-2">
-                          <label class="form-label"><strong>Cantidad a quitar</strong></label>
-                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
-                        </div>
-
-                        <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">Restar</button>
-                      </div>
-                    }
+                      }
+                    </div>
                   </td>
                 </tr>
               }

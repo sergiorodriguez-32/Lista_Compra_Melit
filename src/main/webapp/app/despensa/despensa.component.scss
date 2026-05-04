@@ -183,6 +183,16 @@
   margin-bottom: 0.2rem;
 }
 
+.despensa-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.despensa-acciones .btn {
+  width: auto;
+}
+
 @media (max-width: 992px) {
   .page-header-row {
     flex-direction: column;
@@ -239,19 +249,22 @@
 
   .tabla-despensa td {
     border: none;
-    padding: 0.5rem 0;
+    padding: 0.55rem 0;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.75rem;
+    align-items: start;
   }
 
   .tabla-despensa td::before {
     content: attr(data-label);
-    display: block;
     font-weight: 700;
-    margin-bottom: 0.2rem;
     opacity: 0.85;
   }
 
   .edit-inline-box {
     margin-top: 1rem;
+    grid-column: 1 / -1;
   }
 
   .btn {
@@ -259,6 +272,25 @@
   }
 
   .btn-sm {
+    margin-right: 0 !important;
+  }
+
+  td[data-label='Acciones'] .btn,
+  .despensa-acciones .btn {
+    width: 100%;
+    margin-right: 0 !important;
+  }
+
+  td[data-label='Acciones'] {
+    display: block;
+  }
+
+  .despensa-acciones {
+    flex-direction: column;
+  }
+
+  .despensa-acciones .btn {
+    width: 100%;
     margin-right: 0 !important;
   }
 }

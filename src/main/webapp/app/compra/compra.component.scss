@@ -258,6 +258,16 @@
   margin-bottom: 0.2rem;
 }
 
+.compra-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.compra-acciones .btn {
+  width: auto;
+}
+
 @media (max-width: 992px) {
   .page-header-row {
     flex-direction: column;
@@ -308,19 +318,29 @@
 
   .tabla-compra td {
     border: none;
-    padding: 0.5rem 0;
+    padding: 0.55rem 0;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.75rem;
+    align-items: start;
   }
 
   .tabla-compra td::before {
     content: attr(data-label);
-    display: block;
     font-weight: 700;
-    margin-bottom: 0.2rem;
     opacity: 0.85;
   }
 
   .edit-inline-box {
     margin-top: 1rem;
+    grid-column: 1 / -1;
+  }
+
+  .acciones-producto,
+  .usuario-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .btn {
@@ -328,6 +348,25 @@
   }
 
   .btn-sm {
+    margin-right: 0 !important;
+  }
+
+  td[data-label='Acciones'] .btn,
+  .compra-acciones .btn {
+    width: 100%;
+    margin-right: 0 !important;
+  }
+
+  td[data-label='Acciones'] {
+    display: block;
+  }
+
+  .compra-acciones {
+    flex-direction: column;
+  }
+
+  .compra-acciones .btn {
+    width: 100%;
     margin-right: 0 !important;
   }
 }
