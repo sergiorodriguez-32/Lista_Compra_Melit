@@ -86,11 +86,16 @@ export class ProductosComponent implements OnInit {
   editarProducto(producto: IProducto): void {
     this.nuevoProducto = { ...producto };
     this.editando = true;
+
+    const formulario = document.getElementById('formulario-producto');
+    if (formulario) {
+      formulario.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   cancelarEdicion(): void {
-    this.nuevoProducto = this.crearProductoVacio();
     this.editando = false;
+    this.nuevoProducto = this.crearProductoVacio();
   }
 
   eliminarProducto(id: number): void {
