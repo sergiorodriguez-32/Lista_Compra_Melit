@@ -1,11 +1,21 @@
 <div class="compra-page">
   <div class="compra-overlay">
     <div class="compra-wrapper">
-      <div class="page-title-block">
-        <h1>Lista de compra</h1>
-        <p>Organiza lo que necesitas comprar y márcalo cuando ya lo tengas.</p>
-      </div>
+      <div class="page-header-row">
+        <div class="page-title-block">
+          <h1>Lista de compra</h1>
+          <p>Organiza lo que necesitas comprar y márcalo cuando ya lo tengas</p>
+        </div>
 
+        <div class="filtro-card">
+          <label class="form-label mb-1"><strong>Categoría</strong></label>
+          <select class="form-control custom-input filtro-select" [(ngModel)]="filtroCategoria">
+            <option value="TODAS">Todas</option>
+            <option value="ALIMENTACION">Alimentación</option>
+            <option value="DROGUERIA">Droguería</option>
+          </select>
+        </div>
+      </div>
       @if (mensaje) {
         <div class="alert alert-success admin-alert">
           {{ mensaje }}
@@ -13,10 +23,10 @@
       }
 
       <div class="compra-summary">
-        <span>Total productos en compra: {{ items.length }}</span>
+        <span>Total productos en compra: {{ itemsFiltrados().length }}</span>
       </div>
 
-      @if (items.length > 0) {
+      @if (itemsFiltrados().length > 0) {
         <div class="tabla-card">
           <table class="tabla-compra">
             <thead>
@@ -31,7 +41,7 @@
               </tr>
             </thead>
             <tbody>
-              @for (item of items; track item.id) {
+              @for (item of itemsFiltrados(); track item.id) {
                 <tr [class.tachado]="item.marcadoComoComprado">
                   <td data-label="Comprado">
                     <input type="checkbox" class="check-comprado" [checked]="false" (change)="marcarComoComprado(item)" />

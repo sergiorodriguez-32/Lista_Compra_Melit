@@ -25,6 +25,7 @@ export class ProductosComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  filtroCategoria = 'TODAS';
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -156,5 +157,12 @@ export class ProductosComponent implements OnInit {
   cerrarSesion(): void {
     this.loginService.logout();
     this.router.navigate(['/']);
+  }
+  productosFiltrados(): IProducto[] {
+    if (this.filtroCategoria === 'TODAS') {
+      return this.productos;
+    }
+
+    return this.productos.filter(producto => producto.categoria === this.filtroCategoria);
   }
 }

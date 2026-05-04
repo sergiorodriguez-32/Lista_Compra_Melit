@@ -1,9 +1,20 @@
 <div class="productos-page">
   <div class="productos-overlay">
     <div class="productos-wrapper">
-      <div class="page-title-block">
-        <h1>Productos</h1>
-        <p>Gestiona tu catálogo base y añádelo a despensa o compra.</p>
+      <div class="page-header-row">
+        <div class="page-title-block">
+          <h1>Productos</h1>
+          <p>Gestiona tu catálogo base y añádelo a tu despensa o lista de la compra</p>
+        </div>
+
+        <div class="filtro-card">
+          <label class="form-label mb-1"><strong>Categoría</strong></label>
+          <select class="form-control custom-input filtro-select" [(ngModel)]="filtroCategoria">
+            <option value="TODAS">Todas</option>
+            <option value="ALIMENTACION">Alimentación</option>
+            <option value="DROGUERIA">Droguería</option>
+          </select>
+        </div>
       </div>
 
       <div id="formulario-producto" class="productos-form-card">
@@ -64,10 +75,10 @@
       </div>
 
       <div class="productos-summary">
-        <span>Total productos: {{ productos.length }}</span>
+        <span>Total productos: {{ productosFiltrados().length }}</span>
       </div>
 
-      @if (productos.length > 0) {
+      @if (productosFiltrados().length > 0) {
         <div class="tabla-card">
           <table class="tabla-productos">
             <thead>
@@ -86,7 +97,7 @@
             </thead>
 
             <tbody>
-              @for (producto of productos; track producto.id) {
+              @for (producto of productosFiltrados(); track producto.id) {
                 <tr>
                   <td data-label="Nombre">{{ producto.nombre }}</td>
                   <td data-label="Descripción">{{ producto.descripcion || 'Sin descripción' }}</td>

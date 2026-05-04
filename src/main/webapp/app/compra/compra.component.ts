@@ -21,6 +21,7 @@ export class CompraComponent implements OnInit {
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
   mensaje = '';
+  filtroCategoria = 'TODAS';
 
   ngOnInit(): void {
     this.cargarCompra();
@@ -143,6 +144,14 @@ export class CompraComponent implements OnInit {
       default:
         return unidad ?? '';
     }
+  }
+
+  itemsFiltrados(): ICompraItem[] {
+    if (this.filtroCategoria === 'TODAS') {
+      return this.items;
+    }
+
+    return this.items.filter(item => item.producto?.categoria === this.filtroCategoria);
   }
 
   cerrarSesion(): void {

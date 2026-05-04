@@ -21,6 +21,7 @@ export class DespensaComponent implements OnInit {
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
   mensaje = '';
+  filtroCategoria = 'TODAS';
 
   ngOnInit(): void {
     this.cargarDespensa();
@@ -148,5 +149,12 @@ export class DespensaComponent implements OnInit {
   cerrarSesion(): void {
     this.loginService.logout();
     this.router.navigate(['/']);
+  }
+  itemsFiltrados(): IDespensaItem[] {
+    if (this.filtroCategoria === 'TODAS') {
+      return this.items;
+    }
+
+    return this.items.filter(item => item.producto?.categoria === this.filtroCategoria);
   }
 }
