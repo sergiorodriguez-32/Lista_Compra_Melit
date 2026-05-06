@@ -6,26 +6,31 @@
 
       @if (success()) {
         <div class="alert alert-success register-alert">
-          <strong>Registro completado.</strong> Revisa tu correo para activar la cuenta si es necesario.
+          La cuenta se ha creado correctamente. Revisa tu correo para activarla si es necesario.
         </div>
       }
 
       @if (error()) {
-        <div class="alert alert-danger register-alert"><strong>No se ha podido crear la cuenta.</strong> Inténtalo de nuevo.</div>
+        <div class="alert alert-danger register-alert">No se ha podido crear la cuenta. Inténtalo de nuevo.</div>
       }
 
       @if (errorUserExists()) {
-        <div class="alert alert-danger register-alert"><strong>Ese usuario ya existe.</strong> Elige otro diferente.</div>
+        <div class="alert alert-danger register-alert">Ese nombre de usuario ya está en uso. Elige otro diferente.</div>
       }
 
       @if (errorEmailExists()) {
-        <div class="alert alert-danger register-alert"><strong>Ese correo ya está en uso.</strong> Usa otro email.</div>
+        <div class="alert alert-danger register-alert">Ese correo electrónico ya está en uso. Utiliza otro distinto.</div>
+      }
+
+      @if (doNotMatch()) {
+        <div class="alert alert-danger register-alert">La contraseña y la confirmación no coinciden.</div>
       }
 
       <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm">
         <div class="mb-3">
           <label class="form-label" for="login">Usuario</label>
           <input
+            #login
             type="text"
             class="form-control register-input"
             id="login"
@@ -73,6 +78,10 @@
             placeholder="Repite tu contraseña"
             data-cy="secondPassword"
           />
+        </div>
+
+        <div class="mb-3">
+          <jhi-password-strength-bar [passwordToCheck]="registerForm.get('password')?.value ?? ''"></jhi-password-strength-bar>
         </div>
 
         <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary register-btn" data-cy="submit">Crear cuenta</button>

@@ -6,7 +6,7 @@
 
       @if (authenticationError()) {
         <div class="alert alert-danger login-alert" data-cy="loginError">
-          <strong>Inicio de sesión fallido.</strong> Revisa el usuario y la contraseña.
+          No se ha podido iniciar sesión. Revisa tu usuario y tu contraseña.
         </div>
       }
 
@@ -14,6 +14,7 @@
         <div class="mb-3">
           <label class="form-label" for="username">Usuario</label>
           <input
+            #username
             type="text"
             class="form-control login-input"
             name="username"

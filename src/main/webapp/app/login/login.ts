@@ -12,7 +12,7 @@ import { TranslateDirective } from 'app/shared/language';
   selector: 'jhi-login',
   imports: [TranslateDirective, TranslateModule, ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['./login.scss'],
 })
 export default class Login implements OnInit, AfterViewInit {
   username = viewChild.required<ElementRef>('username');
@@ -30,10 +30,9 @@ export default class Login implements OnInit, AfterViewInit {
   private readonly router = inject(Router);
 
   ngOnInit(): void {
-    // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
-        this.router.navigate(['']);
+        this.router.navigate(['/panel']);
       }
     });
   }

@@ -15,7 +15,7 @@ const initialAccount: Account = {} as Account;
   selector: 'jhi-settings',
   imports: [TranslateDirective, TranslateModule, FindLanguageFromKeyPipe, AlertError, ReactiveFormsModule],
   templateUrl: './settings.html',
-  styleUrl: './settings.scss',
+  styleUrls: ['./settings.scss'],
 })
 export default class Settings implements OnInit {
   readonly success = signal(false);
@@ -60,7 +60,6 @@ export default class Settings implements OnInit {
     this.accountService.save(account).subscribe({
       next: () => {
         this.success.set(true);
-
         this.accountService.authenticate(account);
 
         if (account.langKey !== this.translateService.getCurrentLang()) {
@@ -68,7 +67,7 @@ export default class Settings implements OnInit {
         }
       },
       error() {
-        // Handled by interceptor.
+        // Gestionado por el interceptor
       },
     });
   }

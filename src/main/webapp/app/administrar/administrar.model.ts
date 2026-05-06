@@ -7,4 +7,13 @@ export interface IAdminUser {
   activated?: boolean;
   langKey?: string;
   authorities?: string[];
+
+  mostrarEdicion?: boolean;
+
+  editFirstName?: string;
+  editLastName?: string;
+  editEmail?: string;
+  editLangKey?: string;
+  editActivated?: boolean;
+  editAuthorities?: string[];
 }

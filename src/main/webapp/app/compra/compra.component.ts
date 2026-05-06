@@ -11,20 +11,57 @@ import { ICompraItem } from './compra.model';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './compra.component.html',
-  styleUrl: './compra.component.scss',
+  styleUrls: ['./compra.component.scss'],
 })
 export class CompraComponent implements OnInit {
   items: ICompraItem[] = [];
+  mensaje = '';
+  tipoMensaje: 'success' | 'error' = 'success';
+  filtroCategoria = 'TODAS';
+
+  mostrarConfirmacion = false;
+  mensajeConfirmacion = '';
+  accionConfirmada: (() => void) | null = null;
 
   private readonly compraService = inject(CompraService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
-  mensaje = '';
-  filtroCategoria = 'TODAS';
 
   ngOnInit(): void {
     this.cargarCompra();
+  }
+
+  mostrarMensaje(texto: string, tipo: 'success' | 'error' = 'success'): void {
+    this.mensaje = texto;
+    this.tipoMensaje = tipo;
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.mensaje = '';
+      this.cdr.detectChanges();
+    }, 2500);
+  }
+
+  abrirConfirmacion(mensaje: string, accion: () => void): void {
+    this.mensajeConfirmacion = mensaje;
+    this.accionConfirmada = accion;
+    this.mostrarConfirmacion = true;
+    this.cdr.detectChanges();
+  }
+
+  cancelarConfirmacion(): void {
+    this.mostrarConfirmacion = false;
+    this.mensajeConfirmacion = '';
+    this.accionConfirmada = null;
+    this.cdr.detectChanges();
+  }
+
+  confirmarAccion(): void {
+    if (this.accionConfirmada) {
+      this.accionConfirmada();
+    }
+    this.cancelarConfirmacion();
   }
 
   cargarCompra(): void {
@@ -40,6 +77,7 @@ export class CompraComponent implements OnInit {
       },
       error: error => {
         console.error('ERROR CARGANDO COMPRA:', error);
+        this.mostrarMensaje('No se ha podido cargar la lista de compra.', 'error');
       },
     });
   }
@@ -49,19 +87,17 @@ export class CompraComponent implements OnInit {
   }
 
   quitarDeCompra(id: number): void {
-    const confirmado = window.confirm('¿Seguro que quieres quitar este producto de la lista de compra?');
-
-    if (!confirmado) {
-      return;
-    }
-
-    this.compraService.deleteItem(id).subscribe({
-      next: () => {
-        this.cargarCompra();
-      },
-      error: error => {
-        console.error('ERROR QUITANDO DE COMPRA:', error);
-      },
+    this.abrirConfirmacion('¿Quieres quitar este producto de la lista de compra?', () => {
+      this.compraService.deleteItem(id).subscribe({
+        next: () => {
+          this.cargarCompra();
+          this.mostrarMensaje('Producto quitado de la compra correctamente.');
+        },
+        error: error => {
+          console.error('ERROR QUITANDO DE COMPRA:', error);
+          this.mostrarMensaje('No se ha podido quitar el producto de la compra.', 'error');
+        },
+      });
     });
   }
 
@@ -75,19 +111,14 @@ export class CompraComponent implements OnInit {
     setTimeout(() => {
       this.compraService.comprarItem(item.id!).subscribe({
         next: () => {
-          this.mensaje = `${item.producto?.nombre} se ha movido a despensa`;
           this.cargarCompra();
-          this.cdr.detectChanges();
-
-          setTimeout(() => {
-            this.mensaje = '';
-            this.cdr.detectChanges();
-          }, 2500);
+          this.mostrarMensaje(`${item.producto?.nombre} se ha movido a la despensa.`);
         },
         error: error => {
           console.error('ERROR MARCANDO COMO COMPRADO:', error);
           item.marcadoComoComprado = false;
           this.cdr.detectChanges();
+          this.mostrarMensaje('No se ha podido mover el producto a la despensa.', 'error');
         },
       });
     }, 350);
@@ -102,11 +133,12 @@ export class CompraComponent implements OnInit {
 
     this.compraService.restarCantidad(item.id, cantidad).subscribe({
       next: () => {
-        alert(`Se han restado ${cantidad} ${item.unidadMedida ?? ''} de ${item.producto?.nombre}`);
         this.cargarCompra();
+        this.mostrarMensaje(`Se han quitado ${cantidad} ${this.formatearUnidad(item.unidadMedida)} de ${item.producto?.nombre}.`);
       },
       error: error => {
         console.error('ERROR RESTANDO EN COMPRA:', error);
+        this.mostrarMensaje('No se ha podido actualizar la cantidad en la compra.', 'error');
       },
     });
   }
@@ -120,11 +152,12 @@ export class CompraComponent implements OnInit {
 
     this.compraService.sumarCantidad(item.id, cantidad).subscribe({
       next: () => {
-        alert(`Se han añadido ${cantidad} ${item.unidadMedida ?? ''} a ${item.producto?.nombre}`);
         this.cargarCompra();
+        this.mostrarMensaje(`Se han añadido ${cantidad} ${this.formatearUnidad(item.unidadMedida)} a ${item.producto?.nombre}.`);
       },
       error: error => {
         console.error('ERROR SUMANDO EN COMPRA:', error);
+        this.mostrarMensaje('No se ha podido actualizar la cantidad en la compra.', 'error');
       },
     });
   }
@@ -132,9 +165,9 @@ export class CompraComponent implements OnInit {
   formatearUnidad(unidad?: string): string {
     switch (unidad) {
       case 'UNIDAD':
-        return 'Unidad';
+        return 'unidad';
       case 'KG':
-        return 'Kg';
+        return 'kg';
       case 'G':
         return 'g';
       case 'L':

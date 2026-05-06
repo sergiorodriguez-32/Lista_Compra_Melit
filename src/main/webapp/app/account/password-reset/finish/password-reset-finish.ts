@@ -23,8 +23,11 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
   readonly error = signal(false);
   readonly success = signal(false);
   readonly key = signal('');
-  private readonly router = inject(Router);
   readonly submitted = signal(false);
+
+  private readonly router = inject(Router);
+  private readonly passwordResetFinishService = inject(PasswordResetFinishService);
+  private readonly route = inject(ActivatedRoute);
 
   passwordForm = new FormGroup({
     newPassword: new FormControl('', {
@@ -36,9 +39,6 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
       validators: [Validators.required, Validators.minLength(4), Validators.maxLength(50)],
     }),
   });
-
-  private readonly passwordResetFinishService = inject(PasswordResetFinishService);
-  private readonly route = inject(ActivatedRoute);
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {

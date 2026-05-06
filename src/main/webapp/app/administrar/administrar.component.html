@@ -6,11 +6,9 @@
         <p>Gestiona los permisos y roles de los usuarios de la aplicación.</p>
       </div>
 
-      @if (mensaje) {
-        <div class="alert alert-success admin-alert">
-          {{ mensaje }}
-        </div>
-      }
+      <div class="admin-top-actions">
+        <a routerLink="/panel" class="btn btn-light">Volver al inicio</a>
+      </div>
 
       <div class="usuarios-grid">
         @for (usuario of usuarios; track usuario.id) {
@@ -18,11 +16,11 @@
             <div class="usuario-header">
               <div>
                 <h2>{{ usuario.login }}</h2>
-                <p class="usuario-email">{{ usuario.email || 'Sin email' }}</p>
+                <p class="usuario-email">{{ usuario.email || 'Sin correo' }}</p>
               </div>
 
               <span class="estado-badge" [class.inactivo]="!usuario.activated">
-                {{ usuario.activated ? 'Activo' : 'Inactivo' }}
+                {{ usuario.activated ? 'Activa' : 'Desactivada' }}
               </span>
             </div>
 
@@ -32,32 +30,80 @@
               <p><strong>Idioma:</strong> {{ usuario.langKey || '—' }}</p>
             </div>
 
-            <div class="roles-box">
-              <h3>Roles</h3>
-
-              <label class="role-item">
-                <input
-                  type="checkbox"
-                  [checked]="tieneRol(usuario, 'ROLE_USER')"
-                  (change)="toggleRol(usuario, 'ROLE_USER', $any($event.target).checked)"
-                />
-                ROLE_USER
-              </label>
-
-              <label class="role-item">
-                <input
-                  type="checkbox"
-                  [checked]="tieneRol(usuario, 'ROLE_ADMIN')"
-                  (change)="toggleRol(usuario, 'ROLE_ADMIN', $any($event.target).checked)"
-                />
-                ROLE_ADMIN
-              </label>
-            </div>
-
             <div class="usuario-actions">
+              <button class="btn btn-secondary" (click)="toggleEdicion(usuario)">
+                {{ usuario.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+              </button>
+
               <button class="btn btn-primary" (click)="guardarCambios(usuario)">Guardar cambios</button>
-              <button class="btn btn-danger" (click)="eliminarUsuario(usuario)">Eliminar usuario</button>
+
+              <button class="btn btn-danger" [disabled]="usuario.login === usuarioActualLogin" (click)="eliminarUsuario(usuario)">
+                Eliminar usuario
+              </button>
             </div>
+
+            @if (usuario.mostrarEdicion) {
+              <div class="edit-user-box">
+                <div class="edit-user-grid">
+                  <div class="mb-3">
+                    <label class="form-label">Nombre</label>
+                    <input type="text" class="form-control custom-input" [(ngModel)]="usuario.editFirstName" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Apellidos</label>
+                    <input type="text" class="form-control custom-input" [(ngModel)]="usuario.editLastName" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control custom-input" [(ngModel)]="usuario.editEmail" />
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Idioma</label>
+                    <select class="form-control custom-input" [(ngModel)]="usuario.editLangKey">
+                      <option value="es">Español</option>
+                      <option value="en">English</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="roles-box">
+                  <h3>Estado de la cuenta</h3>
+                  <label class="role-item">
+                    <input
+                      type="checkbox"
+                      [checked]="usuario.editActivated ?? false"
+                      (change)="usuario.editActivated = $any($event.target).checked"
+                    />
+                    Cuenta activada
+                  </label>
+                </div>
+
+                <div class="roles-box">
+                  <h3>Roles</h3>
+
+                  <label class="role-item">
+                    <input
+                      type="checkbox"
+                      [checked]="tieneRolEdicion(usuario, 'ROLE_USER')"
+                      (change)="toggleRolEdicion(usuario, 'ROLE_USER', $any($event.target).checked)"
+                    />
+                    ROLE_USER
+                  </label>
+
+                  <label class="role-item">
+                    <input
+                      type="checkbox"
+                      [checked]="tieneRolEdicion(usuario, 'ROLE_ADMIN')"
+                      (change)="toggleRolEdicion(usuario, 'ROLE_ADMIN', $any($event.target).checked)"
+                    />
+                    ROLE_ADMIN
+                  </label>
+                </div>
+              </div>
+            }
           </div>
         }
       </div>
@@ -70,3 +116,24 @@
     </div>
   </div>
 </div>
+
+@if (mensaje) {
+  <div class="mensaje-overlay">
+    <div class="mensaje-flotante" [ngClass]="tipoMensaje === 'success' ? 'mensaje-success' : 'mensaje-error'">
+      {{ mensaje }}
+    </div>
+  </div>
+}
+
+@if (mostrarConfirmacion) {
+  <div class="confirmacion-overlay">
+    <div class="confirmacion-flotante">
+      <p>{{ mensajeConfirmacion }}</p>
+
+      <div class="confirmacion-botones">
+        <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
+        <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+}

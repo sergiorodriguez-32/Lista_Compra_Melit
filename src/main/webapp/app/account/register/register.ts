@@ -15,7 +15,7 @@ import { RegisterService } from './register.service';
   selector: 'jhi-register',
   imports: [TranslateDirective, TranslateModule, RouterLink, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './register.html',
-  styleUrl: './register.scss',
+  styleUrls: ['./register.scss'],
 })
 export default class Register implements AfterViewInit {
   login = viewChild.required<ElementRef>('login');
@@ -64,11 +64,14 @@ export default class Register implements AfterViewInit {
     this.errorUserExists.set(false);
 
     const { password, confirmPassword } = this.registerForm.getRawValue();
+
     if (password === confirmPassword) {
       const { login, email } = this.registerForm.getRawValue();
-      this.registerService
-        .save({ login, email, password, langKey: this.translateService.getCurrentLang() })
-        .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
+
+      this.registerService.save({ login, email, password, langKey: this.translateService.getCurrentLang() }).subscribe({
+        next: () => this.success.set(true),
+        error: response => this.processError(response),
+      });
     } else {
       this.doNotMatch.set(true);
     }

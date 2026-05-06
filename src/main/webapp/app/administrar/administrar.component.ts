@@ -1,24 +1,31 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { AdministrarService } from './administrar.service';
 import { IAdminUser } from './administrar.model';
 import { AccountService } from 'app/core/auth/account.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'jhi-administrar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './administrar.component.html',
   styleUrls: ['./administrar.component.scss'],
 })
 export class AdministrarComponent implements OnInit {
   usuarios: IAdminUser[] = [];
   mensaje = '';
+  tipoMensaje: 'success' | 'error' = 'success';
   usuarioActualLogin = '';
 
-  private readonly administrarService = inject(AdministrarService);
-  private readonly cdr = inject(ChangeDetectorRef);
-  private readonly accountService = inject(AccountService);
+  mostrarConfirmacion = false;
+  mensajeConfirmacion = '';
+  accionConfirmada: (() => void) | null = null;
+
+  private readonly administrarService: AdministrarService = inject(AdministrarService);
+  private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private readonly accountService: AccountService = inject(AccountService);
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(account => {
@@ -27,27 +34,79 @@ export class AdministrarComponent implements OnInit {
 
     this.cargarUsuarios();
   }
+
+  mostrarMensaje(texto: string, tipo: 'success' | 'error' = 'success'): void {
+    this.mensaje = texto;
+    this.tipoMensaje = tipo;
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.mensaje = '';
+      this.cdr.detectChanges();
+    }, 2500);
+  }
+
+  abrirConfirmacion(mensaje: string, accion: () => void): void {
+    this.mensajeConfirmacion = mensaje;
+    this.accionConfirmada = accion;
+    this.mostrarConfirmacion = true;
+    this.cdr.detectChanges();
+  }
+
+  cancelarConfirmacion(): void {
+    this.mostrarConfirmacion = false;
+    this.mensajeConfirmacion = '';
+    this.accionConfirmada = null;
+    this.cdr.detectChanges();
+  }
+
+  confirmarAccion(): void {
+    if (this.accionConfirmada) {
+      this.accionConfirmada();
+    }
+    this.cancelarConfirmacion();
+  }
+
   cargarUsuarios(): void {
     this.administrarService.getUsuarios().subscribe({
       next: usuarios => {
-        console.log('USUARIOS RECIBIDOS:', usuarios);
-        this.usuarios = [...usuarios];
+        this.usuarios = usuarios.map(usuario => ({
+          ...usuario,
+          mostrarEdicion: false,
+        }));
         this.cdr.detectChanges();
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR CARGANDO USUARIOS:', error);
-        this.mensaje = 'No se han podido cargar los usuarios';
-        this.cdr.detectChanges();
+        this.mostrarMensaje('No se han podido cargar los usuarios.', 'error');
       },
     });
   }
 
-  tieneRol(usuario: IAdminUser, rol: string): boolean {
-    return usuario.authorities?.includes(rol) ?? false;
+  toggleEdicion(usuario: IAdminUser): void {
+    const abrir = !usuario.mostrarEdicion;
+
+    this.usuarios.forEach(u => {
+      u.mostrarEdicion = false;
+    });
+
+    if (abrir) {
+      usuario.mostrarEdicion = true;
+      usuario.editFirstName = usuario.firstName ?? '';
+      usuario.editLastName = usuario.lastName ?? '';
+      usuario.editEmail = usuario.email ?? '';
+      usuario.editLangKey = usuario.langKey ?? 'es';
+      usuario.editActivated = usuario.activated ?? false;
+      usuario.editAuthorities = [...(usuario.authorities ?? [])];
+    }
   }
 
-  toggleRol(usuario: IAdminUser, rol: string, checked: boolean): void {
-    const authorities = new Set(usuario.authorities ?? []);
+  tieneRolEdicion(usuario: IAdminUser, rol: string): boolean {
+    return usuario.editAuthorities?.includes(rol) ?? false;
+  }
+
+  toggleRolEdicion(usuario: IAdminUser, rol: string, checked: boolean): void {
+    const authorities = new Set(usuario.editAuthorities ?? []);
 
     if (checked) {
       authorities.add(rol);
@@ -59,17 +118,36 @@ export class AdministrarComponent implements OnInit {
       authorities.add('ROLE_USER');
     }
 
-    usuario.authorities = Array.from(authorities);
+    usuario.editAuthorities = Array.from(authorities);
   }
 
   guardarCambios(usuario: IAdminUser): void {
-    this.administrarService.actualizarUsuario(usuario).subscribe({
+    const usuarioActualizado: IAdminUser = {
+      ...usuario,
+      firstName: usuario.editFirstName ?? '',
+      lastName: usuario.editLastName ?? '',
+      email: usuario.editEmail ?? '',
+      langKey: usuario.editLangKey ?? 'es',
+      activated: usuario.editActivated ?? false,
+      authorities: [...(usuario.editAuthorities ?? ['ROLE_USER'])],
+    };
+
+    this.administrarService.actualizarUsuario(usuarioActualizado).subscribe({
       next: () => {
-        this.mensaje = `Cambios guardados para ${usuario.login}`;
-        setTimeout(() => (this.mensaje = ''), 2500);
+        usuario.firstName = usuarioActualizado.firstName;
+        usuario.lastName = usuarioActualizado.lastName;
+        usuario.email = usuarioActualizado.email;
+        usuario.langKey = usuarioActualizado.langKey;
+        usuario.activated = usuarioActualizado.activated;
+        usuario.authorities = usuarioActualizado.authorities;
+        usuario.mostrarEdicion = false;
+
+        this.mostrarMensaje(`Los cambios de ${usuario.login} se han guardado correctamente.`);
+        this.cdr.detectChanges();
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR ACTUALIZANDO USUARIO:', error);
+        this.mostrarMensaje('No se han podido guardar los cambios del usuario.', 'error');
       },
     });
   }
@@ -79,25 +157,17 @@ export class AdministrarComponent implements OnInit {
       return;
     }
 
-    const confirmado = window.confirm(`¿Seguro que quieres eliminar al usuario ${usuario.login}?`);
-
-    if (!confirmado) {
-      return;
-    }
-
-    this.administrarService.eliminarUsuario(usuario.login).subscribe({
-      next: () => {
-        this.mensaje = `Usuario ${usuario.login} eliminado correctamente`;
-        this.cargarUsuarios();
-        this.cdr.detectChanges();
-        setTimeout(() => {
-          this.mensaje = '';
-          this.cdr.detectChanges();
-        }, 2500);
-      },
-      error: error => {
-        console.error('ERROR ELIMINANDO USUARIO:', error);
-      },
+    this.abrirConfirmacion(`¿Quieres eliminar al usuario ${usuario.login}?`, () => {
+      this.administrarService.eliminarUsuario(usuario.login!).subscribe({
+        next: () => {
+          this.cargarUsuarios();
+          this.mostrarMensaje(`El usuario ${usuario.login} se ha eliminado correctamente.`);
+        },
+        error: (error: unknown) => {
+          console.error('ERROR ELIMINANDO USUARIO:', error);
+          this.mostrarMensaje('No se ha podido eliminar el usuario.', 'error');
+        },
+      });
     });
   }
 }

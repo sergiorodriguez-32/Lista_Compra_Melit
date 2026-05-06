@@ -6,6 +6,13 @@
           <h1>Despensa</h1>
           <p>Controla lo que tienes en casa y pásalo a compra cuando lo necesites.</p>
         </div>
+        @if (mensaje) {
+          <div class="mensaje-overlay">
+            <div class="mensaje-flotante" [ngClass]="tipoMensaje === 'success' ? 'mensaje-success' : 'mensaje-error'">
+              {{ mensaje }}
+            </div>
+          </div>
+        }
 
         <div class="filtro-card">
           <label class="form-label mb-1"><strong>Categoría</strong></label>
@@ -87,6 +94,18 @@
       } @else {
         <div class="empty-state">
           <p>No hay productos en despensa.</p>
+        </div>
+      }
+      @if (mostrarConfirmacion) {
+        <div class="confirmacion-overlay">
+          <div class="confirmacion-flotante">
+            <p>{{ mensajeConfirmacion }}</p>
+
+            <div class="confirmacion-botones">
+              <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
+              <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+            </div>
+          </div>
         </div>
       }
     </div>

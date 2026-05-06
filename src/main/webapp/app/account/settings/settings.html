@@ -48,9 +48,7 @@
           <h2>Editar perfil</h2>
 
           @if (success()) {
-            <div class="alert alert-success account-alert">
-              <strong>Datos guardados.</strong> Tu perfil se ha actualizado correctamente.
-            </div>
+            <div class="alert alert-success account-alert">Tu perfil se ha actualizado correctamente.</div>
           }
 
           <form (ngSubmit)="save()" [formGroup]="settingsForm">

@@ -6,6 +6,13 @@
           <h1>Productos</h1>
           <p>Gestiona tu catálogo base y añádelo a despensa o compra.</p>
         </div>
+        @if (mensaje) {
+          <div class="mensaje-overlay">
+            <div class="mensaje-flotante" [ngClass]="tipoMensaje === 'success' ? 'mensaje-success' : 'mensaje-error'">
+              {{ mensaje }}
+            </div>
+          </div>
+        }
 
         <div class="filtro-card">
           <label class="form-label mb-1"><strong>Categoría</strong></label>
@@ -141,6 +148,19 @@
             </tbody>
           </table>
         </div>
+
+        @if (mostrarConfirmacion) {
+          <div class="confirmacion-overlay">
+            <div class="confirmacion-flotante">
+              <p>{{ mensajeConfirmacion }}</p>
+
+              <div class="confirmacion-botones">
+                <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
+                <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+              </div>
+            </div>
+          </div>
+        }
       } @else {
         <div class="empty-state">
           <p>No hay productos todavía.</p>

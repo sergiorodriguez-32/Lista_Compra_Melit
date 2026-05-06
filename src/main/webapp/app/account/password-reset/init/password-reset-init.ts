@@ -19,12 +19,13 @@ export default class PasswordResetInit implements AfterViewInit {
   email = viewChild.required<ElementRef>('email');
 
   readonly success = signal(false);
+  readonly submitted = signal(false);
+
   resetRequestForm;
 
   private readonly passwordResetInitService = inject(PasswordResetInitService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
-  readonly submitted = signal(false);
 
   constructor() {
     this.resetRequestForm = this.fb.group({

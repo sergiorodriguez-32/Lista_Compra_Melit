@@ -7,6 +7,14 @@
           <p>Organiza lo que necesitas comprar y márcalo cuando ya lo tengas.</p>
         </div>
 
+        @if (mensaje) {
+          <div class="mensaje-overlay">
+            <div class="mensaje-flotante" [ngClass]="tipoMensaje === 'success' ? 'mensaje-success' : 'mensaje-error'">
+              {{ mensaje }}
+            </div>
+          </div>
+        }
+
         <div class="filtro-card">
           <label class="form-label mb-1"><strong>Categoría</strong></label>
           <select class="form-control custom-input filtro-select" [(ngModel)]="filtroCategoria">
@@ -96,5 +104,17 @@
         </div>
       }
     </div>
+    @if (mostrarConfirmacion) {
+      <div class="confirmacion-overlay">
+        <div class="confirmacion-flotante">
+          <p>{{ mensajeConfirmacion }}</p>
+
+          <div class="confirmacion-botones">
+            <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
+            <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+          </div>
+        </div>
+      </div>
+    }
   </div>
 </div>

@@ -11,20 +11,57 @@ import { IDespensaItem } from './despensa.model';
   standalone: true,
   imports: [CommonModule, RouterLink, FormsModule],
   templateUrl: './despensa.component.html',
-  styleUrl: './despensa.component.scss',
+  styleUrls: ['./despensa.component.scss'],
 })
 export class DespensaComponent implements OnInit {
   items: IDespensaItem[] = [];
-
-  private readonly despensaService = inject(DespensaService);
-  private readonly cdr = inject(ChangeDetectorRef);
-  private readonly loginService = inject(LoginService);
-  private readonly router = inject(Router);
   mensaje = '';
+  tipoMensaje: 'success' | 'error' = 'success';
   filtroCategoria = 'TODAS';
+
+  mostrarConfirmacion = false;
+  mensajeConfirmacion = '';
+  accionConfirmada: (() => void) | null = null;
+
+  private readonly despensaService: DespensaService = inject(DespensaService);
+  private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+  private readonly loginService: LoginService = inject(LoginService);
+  private readonly router: Router = inject(Router);
 
   ngOnInit(): void {
     this.cargarDespensa();
+  }
+
+  mostrarMensaje(texto: string, tipo: 'success' | 'error' = 'success'): void {
+    this.mensaje = texto;
+    this.tipoMensaje = tipo;
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.mensaje = '';
+      this.cdr.detectChanges();
+    }, 2500);
+  }
+
+  abrirConfirmacion(mensaje: string, accion: () => void): void {
+    this.mensajeConfirmacion = mensaje;
+    this.accionConfirmada = accion;
+    this.mostrarConfirmacion = true;
+    this.cdr.detectChanges();
+  }
+
+  cancelarConfirmacion(): void {
+    this.mostrarConfirmacion = false;
+    this.mensajeConfirmacion = '';
+    this.accionConfirmada = null;
+    this.cdr.detectChanges();
+  }
+
+  confirmarAccion(): void {
+    if (this.accionConfirmada) {
+      this.accionConfirmada();
+    }
+    this.cancelarConfirmacion();
   }
 
   cargarDespensa(): void {
@@ -38,8 +75,9 @@ export class DespensaComponent implements OnInit {
         }));
         this.cdr.detectChanges();
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR CARGANDO DESPENSA:', error);
+        this.mostrarMensaje('No se ha podido cargar la despensa.', 'error');
       },
     });
   }
@@ -49,19 +87,17 @@ export class DespensaComponent implements OnInit {
   }
 
   quitarDeDespensa(id: number): void {
-    const confirmado = window.confirm('¿Seguro que quieres quitar este producto de la despensa?');
-
-    if (!confirmado) {
-      return;
-    }
-
-    this.despensaService.deleteItem(id).subscribe({
-      next: () => {
-        this.cargarDespensa();
-      },
-      error: error => {
-        console.error('ERROR QUITANDO DE DESPENSA:', error);
-      },
+    this.abrirConfirmacion('¿Quieres quitar este producto de la despensa?', () => {
+      this.despensaService.deleteItem(id).subscribe({
+        next: () => {
+          this.cargarDespensa();
+          this.mostrarMensaje('Producto quitado de la despensa correctamente.');
+        },
+        error: (error: unknown) => {
+          console.error('ERROR QUITANDO DE DESPENSA:', error);
+          this.mostrarMensaje('No se ha podido quitar el producto de la despensa.', 'error');
+        },
+      });
     });
   }
 
@@ -74,11 +110,12 @@ export class DespensaComponent implements OnInit {
 
     this.despensaService.restarCantidad(item.id, cantidad).subscribe({
       next: () => {
-        alert(`Se han restado ${cantidad} ${item.unidadMedida ?? ''} de ${item.producto?.nombre}`);
         this.cargarDespensa();
+        this.mostrarMensaje(`Se han quitado ${cantidad} ${this.formatearUnidad(item.unidadMedida)} de ${item.producto?.nombre}.`);
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR RESTANDO EN DESPENSA:', error);
+        this.mostrarMensaje('No se ha podido actualizar la cantidad en despensa.', 'error');
       },
     });
   }
@@ -92,11 +129,12 @@ export class DespensaComponent implements OnInit {
 
     this.despensaService.sumarCantidad(item.id, cantidad).subscribe({
       next: () => {
-        alert(`Se han añadido ${cantidad} ${item.unidadMedida ?? ''} a ${item.producto?.nombre}`);
         this.cargarDespensa();
+        this.mostrarMensaje(`Se han añadido ${cantidad} ${this.formatearUnidad(item.unidadMedida)} a ${item.producto?.nombre}.`);
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR SUMANDO EN DESPENSA:', error);
+        this.mostrarMensaje('No se ha podido actualizar la cantidad en despensa.', 'error');
       },
     });
   }
@@ -104,9 +142,9 @@ export class DespensaComponent implements OnInit {
   formatearUnidad(unidad?: string): string {
     switch (unidad) {
       case 'UNIDAD':
-        return 'Unidad';
+        return 'unidad';
       case 'KG':
-        return 'Kg';
+        return 'kg';
       case 'G':
         return 'g';
       case 'L':
@@ -128,19 +166,14 @@ export class DespensaComponent implements OnInit {
     setTimeout(() => {
       this.despensaService.pasarACompra(item.id!).subscribe({
         next: () => {
-          this.mensaje = `${item.producto?.nombre} se ha movido a compra`;
           this.cargarDespensa();
-          this.cdr.detectChanges();
-
-          setTimeout(() => {
-            this.mensaje = '';
-            this.cdr.detectChanges();
-          }, 2500);
+          this.mostrarMensaje(`${item.producto?.nombre} se ha movido a la compra.`);
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR PASANDO A COMPRA:', error);
           item.marcadoParaCompra = false;
           this.cdr.detectChanges();
+          this.mostrarMensaje('No se ha podido mover el producto a la compra.', 'error');
         },
       });
     }, 350);
@@ -150,6 +183,7 @@ export class DespensaComponent implements OnInit {
     this.loginService.logout();
     this.router.navigate(['/']);
   }
+
   itemsFiltrados(): IDespensaItem[] {
     if (this.filtroCategoria === 'TODAS') {
       return this.items;

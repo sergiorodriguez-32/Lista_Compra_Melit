@@ -13,13 +13,14 @@ import { PasswordService } from './password.service';
   selector: 'jhi-password',
   imports: [TranslateDirective, TranslateModule, ReactiveFormsModule, PasswordStrengthBar],
   templateUrl: './password.html',
-  styleUrl: './password.scss',
+  styleUrls: ['./password.scss'],
 })
 export default class Password {
   readonly doNotMatch = signal(false);
   readonly error = signal(false);
   readonly success = signal(false);
   readonly account = inject(AccountService).account;
+
   passwordForm = new FormGroup({
     currentPassword: new FormControl('', { nonNullable: true, validators: Validators.required }),
     newPassword: new FormControl('', {
@@ -40,6 +41,7 @@ export default class Password {
     this.doNotMatch.set(false);
 
     const { newPassword, confirmPassword, currentPassword } = this.passwordForm.getRawValue();
+
     if (newPassword === confirmPassword) {
       this.passwordService.save(newPassword, currentPassword).subscribe({
         next: () => this.success.set(true),

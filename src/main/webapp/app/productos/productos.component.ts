@@ -12,20 +12,26 @@ import { LoginService } from 'app/login/login.service';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './productos.component.html',
-  styleUrl: './productos.component.scss',
+  styleUrls: ['./productos.component.scss'],
 })
 export class ProductosComponent implements OnInit {
   productos: IProducto[] = [];
-
   nuevoProducto: IProducto = this.crearProductoVacio();
   editando = false;
+  filtroCategoria = 'TODAS';
+
+  mensaje = '';
+  tipoMensaje: 'success' | 'error' = 'success';
+
+  mostrarConfirmacion = false;
+  mensajeConfirmacion = '';
+  accionConfirmada: (() => void) | null = null;
 
   private readonly productosService = inject(ProductosService);
   private readonly itemListaService = inject(ItemListaService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
-  filtroCategoria = 'TODAS';
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -43,6 +49,38 @@ export class ProductosComponent implements OnInit {
     };
   }
 
+  mostrarMensaje(texto: string, tipo: 'success' | 'error' = 'success'): void {
+    this.mensaje = texto;
+    this.tipoMensaje = tipo;
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.mensaje = '';
+      this.cdr.detectChanges();
+    }, 2500);
+  }
+
+  abrirConfirmacion(mensaje: string, accion: () => void): void {
+    this.mensajeConfirmacion = mensaje;
+    this.accionConfirmada = accion;
+    this.mostrarConfirmacion = true;
+    this.cdr.detectChanges();
+  }
+
+  cancelarConfirmacion(): void {
+    this.mostrarConfirmacion = false;
+    this.mensajeConfirmacion = '';
+    this.accionConfirmada = null;
+    this.cdr.detectChanges();
+  }
+
+  confirmarAccion(): void {
+    if (this.accionConfirmada) {
+      this.accionConfirmada();
+    }
+    this.cancelarConfirmacion();
+  }
+
   cargarProductos(): void {
     this.productosService.getProductos().subscribe({
       next: productos => {
@@ -55,6 +93,7 @@ export class ProductosComponent implements OnInit {
       },
       error: error => {
         console.error('ERROR API PRODUCTOS:', error);
+        this.mostrarMensaje('No se han podido cargar los productos.', 'error');
       },
     });
   }
@@ -66,9 +105,11 @@ export class ProductosComponent implements OnInit {
           this.nuevoProducto = this.crearProductoVacio();
           this.editando = false;
           this.cargarProductos();
+          this.mostrarMensaje('Producto actualizado correctamente.');
         },
         error: error => {
           console.error('ERROR ACTUALIZANDO PRODUCTO:', error);
+          this.mostrarMensaje('No se ha podido actualizar el producto.', 'error');
         },
       });
     } else {
@@ -76,9 +117,11 @@ export class ProductosComponent implements OnInit {
         next: () => {
           this.nuevoProducto = this.crearProductoVacio();
           this.cargarProductos();
+          this.mostrarMensaje('Producto creado correctamente.');
         },
         error: error => {
           console.error('ERROR CREANDO PRODUCTO:', error);
+          this.mostrarMensaje('No se ha podido crear el producto.', 'error');
         },
       });
     }
@@ -97,22 +140,21 @@ export class ProductosComponent implements OnInit {
   cancelarEdicion(): void {
     this.editando = false;
     this.nuevoProducto = this.crearProductoVacio();
+    this.mostrarMensaje('Edición cancelada.');
   }
 
   eliminarProducto(id: number): void {
-    const confirmado = window.confirm('¿Seguro que quieres eliminar este producto?');
-
-    if (!confirmado) {
-      return;
-    }
-
-    this.productosService.deleteProducto(id).subscribe({
-      next: () => {
-        this.cargarProductos();
-      },
-      error: error => {
-        console.error('ERROR ELIMINANDO PRODUCTO:', error);
-      },
+    this.abrirConfirmacion('¿Quieres eliminar este producto?', () => {
+      this.productosService.deleteProducto(id).subscribe({
+        next: () => {
+          this.cargarProductos();
+          this.mostrarMensaje('Producto eliminado correctamente.');
+        },
+        error: error => {
+          console.error('ERROR ELIMINANDO PRODUCTO:', error);
+          this.mostrarMensaje('No se ha podido eliminar el producto.', 'error');
+        },
+      });
     });
   }
 
@@ -125,12 +167,12 @@ export class ProductosComponent implements OnInit {
         producto: { id: producto.id },
       })
       .subscribe({
-        next: respuesta => {
-          console.log('Añadido a despensa:', respuesta);
-          alert(`"${producto.nombre}" añadido a despensa`);
+        next: () => {
+          this.mostrarMensaje(`"${producto.nombre}" se ha añadido a la despensa.`);
         },
         error: error => {
           console.error('ERROR AÑADIENDO A DESPENSA:', error);
+          this.mostrarMensaje('No se ha podido añadir el producto a la despensa.', 'error');
         },
       });
   }
@@ -144,12 +186,12 @@ export class ProductosComponent implements OnInit {
         producto: { id: producto.id },
       })
       .subscribe({
-        next: respuesta => {
-          console.log('Añadido a compra:', respuesta);
-          alert(`"${producto.nombre}" añadido a compra`);
+        next: () => {
+          this.mostrarMensaje(`"${producto.nombre}" se ha añadido a la compra.`);
         },
         error: error => {
           console.error('ERROR AÑADIENDO A COMPRA:', error);
+          this.mostrarMensaje('No se ha podido añadir el producto a la compra.', 'error');
         },
       });
   }
@@ -164,6 +206,7 @@ export class ProductosComponent implements OnInit {
     this.loginService.logout();
     this.router.navigate(['/']);
   }
+
   productosFiltrados(): IProducto[] {
     if (this.filtroCategoria === 'TODAS') {
       return this.productos;

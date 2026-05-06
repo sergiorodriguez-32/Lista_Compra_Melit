@@ -8,7 +8,12 @@
           <p class="panel-subtitle">Gestiona tus productos, tu despensa y tu lista de compra desde un solo lugar.</p>
         </div>
 
-        <button class="btn btn-danger panel-logout-btn" (click)="cerrarSesion()">Cerrar sesión</button>
+        <div class="header-actions">
+          @if (isAdmin) {
+            <a routerLink="/administrar" class="btn btn-warning me-2">Administrar</a>
+          }
+          <button class="btn btn-danger" (click)="cerrarSesion()">Cerrar sesión</button>
+        </div>
       </div>
 
       <div class="panel-cards">
