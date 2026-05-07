@@ -1,7 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { TranslateDirective } from 'app/shared/language';
@@ -21,6 +21,8 @@ export default class Password {
   readonly success = signal(false);
   readonly account = inject(AccountService).account;
 
+  idiomaActual = 'es';
+
   passwordForm = new FormGroup({
     currentPassword: new FormControl('', { nonNullable: true, validators: Validators.required }),
     newPassword: new FormControl('', {
@@ -34,6 +36,16 @@ export default class Password {
   });
 
   private readonly passwordService = inject(PasswordService);
+  private readonly translateService = inject(TranslateService);
+
+  constructor() {
+    this.idiomaActual = this.translateService.currentLang || this.translateService.getCurrentLang() || 'es';
+  }
+
+  cambiarIdioma(idioma: string): void {
+    this.translateService.use(idioma);
+    this.idiomaActual = idioma;
+  }
 
   changePassword(): void {
     this.error.set(false);
