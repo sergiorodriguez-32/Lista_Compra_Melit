@@ -1,24 +1,32 @@
 {
   "register": {
-    "title": "Registration",
+    "title": "Create account",
+    "subtitle": "Create your user account to start managing your pantry and shopping list.",
     "form": {
-      "button": "Register"
+      "username": "Username",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password"
+    },
+    "placeholders": {
+      "username": "Enter your username",
+      "email": "Enter your email",
+      "password": "Enter your password",
+      "confirmPassword": "Repeat your password"
+    },
+    "actions": {
+      "submit": "Create account"
+    },
+    "loginBox": {
+      "text": "Already have an account?",
+      "link": "Log in"
     },
     "messages": {
-      "validate": {
-        "login": {
-          "required": "Your username is required.",
-          "minlength": "Your username is required to be at least 1 character.",
-          "maxlength": "Your username cannot be longer than 50 characters.",
-          "pattern": "Your username is invalid."
-        }
-      },
-      "success": "<strong>Registration saved!</strong> Please check your email for confirmation.",
-      "error": {
-        "fail": "<strong>Registration failed!</strong> Please try again later.",
-        "userexists": "<strong>Login name already registered!</strong> Please choose another one.",
-        "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
-      }
+      "success": "The account has been created successfully. Check your email to activate it if necessary.",
+      "error": "The account could not be created. Please try again.",
+      "userExists": "That username is already in use. Choose a different one.",
+      "emailExists": "That email address is already in use. Use a different one.",
+      "doNotMatch": "The password and confirmation do not match."
     }
   }
 }

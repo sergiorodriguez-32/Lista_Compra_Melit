@@ -1,19 +1,28 @@
 {
   "home": {
-    "title": "Welcome, Java Hipster!",
-    "subtitle": "This is your homepage",
-    "logged": {
-      "message": "You are logged in as user \"{{username}}\"."
+    "badge": "ListaCompra Melit",
+    "title": "Organize your pantry and shopping in one place",
+    "subtitle": "Manage products, control quantities, and keep your home organized in a fast, visual, and simple way.",
+    "features": {
+      "pantry": {
+        "title": "Pantry",
+        "text": "Keep track of what you already have at home."
+      },
+      "shopping": {
+        "title": "Shopping",
+        "text": "Prepare your list before going out."
+      },
+      "products": {
+        "title": "Products",
+        "text": "Save your base products and reuse them."
+      }
     },
-    "question": "If you have any questions on JHipster:",
-    "link": {
-      "homepage": "JHipster homepage",
-      "stackoverflow": "JHipster on Stack Overflow",
-      "bugtracker": "JHipster bug tracker",
-      "chat": "JHipster public chat room",
-      "follow": "follow @jhipster on Twitter"
-    },
-    "like": "If you like JHipster, don't forget to give us a star on",
-    "github": "GitHub"
+    "auth": {
+      "title": "Welcome",
+      "subtitle": "Access your account or create a new one to get started.",
+      "login": "Log in",
+      "register": "Create account",
+      "note": "Your pantry and shopping list, always organized."
+    }
   }
 }

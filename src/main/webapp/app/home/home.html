@@ -1,39 +1,54 @@
 <div class="landing-page">
   <div class="overlay">
+    <div class="home-language-bar">
+      <div class="language-switch">
+        <button type="button" class="btn btn-light btn-sm me-2" [class.active-lang]="idiomaActual === 'es'" (click)="cambiarIdioma('es')">
+          ES
+        </button>
+        <button type="button" class="btn btn-light btn-sm" [class.active-lang]="idiomaActual === 'en'" (click)="cambiarIdioma('en')">
+          EN
+        </button>
+      </div>
+    </div>
+
     <div class="content-wrapper">
       <div class="hero-section">
-        <span class="app-badge">ListaCompra Melit</span>
-        <h1>Organiza tu despensa y tu compra en un solo lugar</h1>
-        <p class="hero-text">Gestiona productos, controla cantidades y mantén tu casa organizada de forma rápida, visual y sencilla.</p>
+        <span class="app-badge">{{ 'home.badge' | translate }}</span>
+        <h1>{{ 'home.title' | translate }}</h1>
+        <p class="hero-text">{{ 'home.subtitle' | translate }}</p>
 
         <div class="feature-cards">
           <div class="feature-card">
-            <h3>Despensa</h3>
-            <p>Controla lo que ya tienes en casa.</p>
+            <h3>{{ 'home.features.pantry.title' | translate }}</h3>
+            <p>{{ 'home.features.pantry.text' | translate }}</p>
           </div>
 
           <div class="feature-card">
-            <h3>Compra</h3>
-            <p>Prepara tu lista antes de salir.</p>
+            <h3>{{ 'home.features.shopping.title' | translate }}</h3>
+            <p>{{ 'home.features.shopping.text' | translate }}</p>
           </div>
 
           <div class="feature-card">
-            <h3>Productos</h3>
-            <p>Guarda tus productos base y reutilízalos.</p>
+            <h3>{{ 'home.features.products.title' | translate }}</h3>
+            <p>{{ 'home.features.products.text' | translate }}</p>
           </div>
         </div>
       </div>
 
       <div class="auth-card">
-        <h2>Bienvenido</h2>
-        <p>Accede a tu cuenta o crea una nueva para empezar.</p>
+        <h2>{{ 'home.auth.title' | translate }}</h2>
+        <p>{{ 'home.auth.subtitle' | translate }}</p>
 
         <div class="auth-buttons">
-          <a routerLink="/login" class="btn btn-primary btn-lg w-100 mb-3">Iniciar sesión</a>
-          <a routerLink="/account/register" class="btn btn-outline-light btn-lg w-100">Crear cuenta</a>
+          <a routerLink="/login" class="btn btn-primary btn-lg w-100 mb-3">
+            {{ 'home.auth.login' | translate }}
+          </a>
+          <a routerLink="/account/register" class="btn btn-outline-light btn-lg w-100">
+            {{ 'home.auth.register' | translate }}
+          </a>
         </div>
 
-        <div class="small-note">Tu despensa y tu lista de compra, siempre organizadas.</div>
+        <div class="small-note">{{ 'home.auth.note' | translate }}</div>
       </div>
     </div>
   </div>

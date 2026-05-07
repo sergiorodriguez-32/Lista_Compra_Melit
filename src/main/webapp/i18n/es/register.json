@@ -1,24 +1,32 @@
 {
   "register": {
-    "title": "Registro",
+    "title": "Crear cuenta",
+    "subtitle": "Crea tu usuario para empezar a gestionar tu despensa y tu compra.",
     "form": {
-      "button": "Crear la cuenta"
+      "username": "Usuario",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "confirmPassword": "Confirmar contraseña"
+    },
+    "placeholders": {
+      "username": "Introduce tu usuario",
+      "email": "Introduce tu correo",
+      "password": "Introduce tu contraseña",
+      "confirmPassword": "Repite tu contraseña"
+    },
+    "actions": {
+      "submit": "Crear cuenta"
+    },
+    "loginBox": {
+      "text": "¿Ya tienes cuenta?",
+      "link": "Iniciar sesión"
     },
     "messages": {
-      "validate": {
-        "login": {
-          "required": "Su nombre de usuario es obligatorio.",
-          "minlength": "Su nombre de usuario debe tener al menos 1 caracter.",
-          "maxlength": "Su nombre de usuario no puede tener más de 50 caracteres.",
-          "pattern": "Su nombre de usuario no es válido."
-        }
-      },
-      "success": "<strong>¡Registro guardado!</strong> Por favor, revise su correo electrónico para confirmar.",
-      "error": {
-        "fail": "<strong>¡El registro ha fallado!</strong> Por favor, inténtelo de nuevo más tarde.",
-        "userexists": "<strong>¡El nombre de usuario ya está registrado!</strong> Por favor, escoja otro usuario.",
-        "emailexists": "<strong>¡El correo electrónico ya está en uso!</strong> Por favor, escoja otro email."
-      }
+      "success": "La cuenta se ha creado correctamente. Revisa tu correo para activarla si es necesario.",
+      "error": "No se ha podido crear la cuenta. Inténtalo de nuevo.",
+      "userExists": "Ese nombre de usuario ya está en uso. Elige otro diferente.",
+      "emailExists": "Ese correo electrónico ya está en uso. Utiliza otro distinto.",
+      "doNotMatch": "La contraseña y la confirmación no coinciden."
     }
   }
 }

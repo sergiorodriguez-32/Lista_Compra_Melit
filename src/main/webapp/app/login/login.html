@@ -1,38 +1,51 @@
 <div class="login-page">
   <div class="login-overlay">
     <div class="login-card centered-login-card">
-      <h2 data-cy="loginTitle">Iniciar sesión</h2>
-      <p class="login-subtitle">Accede a tu cuenta para continuar.</p>
+      <div class="login-top-bar">
+        <div></div>
+
+        <div class="language-switch">
+          <button type="button" class="btn btn-light btn-sm me-2" [class.active-lang]="idiomaActual === 'es'" (click)="cambiarIdioma('es')">
+            ES
+          </button>
+          <button type="button" class="btn btn-light btn-sm" [class.active-lang]="idiomaActual === 'en'" (click)="cambiarIdioma('en')">
+            EN
+          </button>
+        </div>
+      </div>
+
+      <h2 data-cy="loginTitle">{{ 'login.title' | translate }}</h2>
+      <p class="login-subtitle">{{ 'login.subtitle' | translate }}</p>
 
       @if (authenticationError()) {
         <div class="alert alert-danger login-alert" data-cy="loginError">
-          No se ha podido iniciar sesión. Revisa tu usuario y tu contraseña.
+          {{ 'login.messages.error' | translate }}
         </div>
       }
 
       <form class="form" (ngSubmit)="login()" [formGroup]="loginForm">
         <div class="mb-3">
-          <label class="form-label" for="username">Usuario</label>
+          <label class="form-label" for="username">{{ 'login.form.username' | translate }}</label>
           <input
             #username
             type="text"
             class="form-control login-input"
             name="username"
             id="username"
-            placeholder="Introduce tu usuario"
+            [placeholder]="'login.placeholders.username' | translate"
             formControlName="username"
             data-cy="username"
           />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="password">Contraseña</label>
+          <label class="form-label" for="password">{{ 'login.form.password' | translate }}</label>
           <input
             type="password"
             class="form-control login-input"
             name="password"
             id="password"
-            placeholder="Introduce tu contraseña"
+            [placeholder]="'login.placeholders.password' | translate"
             formControlName="password"
             data-cy="password"
           />
@@ -41,20 +54,26 @@
         <div class="form-check login-check">
           <label class="form-check-label" for="rememberMe">
             <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
-            <span>Recordarme</span>
+            <span>{{ 'login.form.rememberMe' | translate }}</span>
           </label>
         </div>
 
-        <button type="submit" class="btn btn-primary login-btn" data-cy="submit">Iniciar sesión</button>
+        <button type="submit" class="btn btn-primary login-btn" data-cy="submit">
+          {{ 'login.actions.submit' | translate }}
+        </button>
       </form>
 
       <div class="login-links">
-        <a class="login-link" routerLink="/account/reset/request">¿Has olvidado tu contraseña?</a>
+        <a class="login-link" routerLink="/account/reset/request">
+          {{ 'login.actions.forgotPassword' | translate }}
+        </a>
       </div>
 
       <div class="register-box">
-        <span>¿Aún no tienes una cuenta?</span>
-        <a class="register-link" routerLink="/account/register">Crear cuenta</a>
+        <span>{{ 'login.registerBox.text' | translate }}</span>
+        <a class="register-link" routerLink="/account/register">
+          {{ 'login.registerBox.link' | translate }}
+        </a>
       </div>
     </div>
   </div>

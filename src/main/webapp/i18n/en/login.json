@@ -1,19 +1,26 @@
 {
   "login": {
-    "title": "Sign in",
+    "title": "Log in",
+    "subtitle": "Access your account to continue.",
     "form": {
+      "username": "Username",
       "password": "Password",
-      "password.placeholder": "Your password",
-      "rememberme": "Remember me",
-      "button": "Sign in"
+      "rememberMe": "Remember me"
+    },
+    "placeholders": {
+      "username": "Enter your username",
+      "password": "Enter your password"
+    },
+    "actions": {
+      "submit": "Log in",
+      "forgotPassword": "Forgot your password?"
+    },
+    "registerBox": {
+      "text": "Don’t have an account yet?",
+      "link": "Create account"
     },
     "messages": {
-      "error": {
-        "authentication": "<strong>Failed to sign in!</strong> Please check your credentials and try again."
-      }
-    },
-    "password": {
-      "forgot": "Did you forget your password?"
+      "error": "Login could not be completed. Check your username and password."
     }
   }
 }

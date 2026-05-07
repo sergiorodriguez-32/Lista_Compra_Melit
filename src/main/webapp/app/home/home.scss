@@ -1,130 +1,215 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+
 .landing-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a, #1d4ed8, #22c55e);
+  background: linear-gradient(135deg, #142c73 0%, #2954d1 45%, #1fa463 100%);
+}
+
+.overlay {
+  min-height: 100vh;
+  position: relative;
+  padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.overlay {
-  width: 100%;
-  min-height: 100vh;
-  background: rgba(15, 23, 42, 0.18);
+.home-language-bar {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  z-index: 5;
+}
+
+.language-switch {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
+}
+
+.active-lang {
+  background: #1d4ed8;
+  color: white;
+  border-color: #1d4ed8;
 }
 
 .content-wrapper {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1300px;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 2rem;
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 420px);
+  gap: 2.5rem;
   align-items: center;
 }
 
 .hero-section {
   color: white;
+  max-width: 760px;
 }
 
 .app-badge {
   display: inline-block;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.16);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 999px;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  backdrop-filter: blur(8px);
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+  backdrop-filter: blur(10px);
 }
 
 .hero-section h1 {
-  font-size: 3rem;
-  font-weight: 800;
+  font-size: clamp(2.1rem, 4vw, 3.6rem);
   line-height: 1.1;
-  margin-bottom: 1rem;
+  font-weight: 800;
+  margin-bottom: 1.1rem;
 }
 
 .hero-text {
-  font-size: 1.15rem;
-  max-width: 650px;
-  opacity: 0.95;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  opacity: 0.96;
+  max-width: 760px;
   margin-bottom: 2rem;
 }
 
 .feature-cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  display: flex;
+  gap: 1.25rem;
+  flex-wrap: wrap;
 }
 
 .feature-card {
+  flex: 1 1 180px;
+  max-width: 200px;
+  min-height: 180px;
+  padding: 1.4rem 1.2rem;
+  border-radius: 24px;
   background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 20px;
-  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(12px);
   color: white;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
 }
 
 .feature-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin-bottom: 0.65rem;
 }
 
 .feature-card p {
+  font-size: 1rem;
+  line-height: 1.5;
   margin: 0;
-  opacity: 0.92;
+  opacity: 0.96;
 }
 
 .auth-card {
-  background: rgba(255, 255, 255, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 28px;
+  width: 100%;
   padding: 2rem;
-  color: white;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(14px);
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.16);
+  color: white;
 }
 
 .auth-card h2 {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 800;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.auth-card p {
-  margin-bottom: 1.5rem;
-  opacity: 0.95;
+.auth-card > p {
+  font-size: 1.15rem;
+  line-height: 1.5;
+  margin-bottom: 1.75rem;
+  opacity: 0.96;
 }
 
 .auth-buttons .btn {
-  border-radius: 14px;
-  font-weight: 600;
-  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  font-weight: 700;
+  padding: 0.9rem 1rem;
 }
 
 .small-note {
-  margin-top: 1.25rem;
-  font-size: 0.95rem;
-  opacity: 0.9;
+  margin-top: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
   text-align: center;
+  opacity: 0.96;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 1100px) {
   .content-wrapper {
     grid-template-columns: 1fr;
+    max-width: 900px;
+    gap: 2rem;
   }
 
-  .hero-section h1 {
-    font-size: 2.3rem;
+  .hero-section {
+    max-width: 100%;
   }
 
   .feature-cards {
-    grid-template-columns: 1fr;
+    justify-content: center;
+  }
+
+  .feature-card {
+    max-width: 230px;
+  }
+
+  .auth-card {
+    max-width: 520px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .overlay {
+    padding: 1rem;
+    padding-top: 4.5rem;
+  }
+
+  .home-language-bar {
+    top: 16px;
+    right: 16px;
+  }
+
+  .hero-section h1 {
+    font-size: 2.4rem;
+  }
+
+  .hero-text {
+    font-size: 1.05rem;
+  }
+
+  .feature-cards {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .feature-card {
+    max-width: 100%;
+    min-height: auto;
+  }
+
+  .auth-card {
+    padding: 1.5rem;
+    border-radius: 24px;
+  }
+
+  .auth-card h2 {
+    font-size: 1.9rem;
+  }
+
+  .small-note {
+    font-size: 0.98rem;
   }
 }

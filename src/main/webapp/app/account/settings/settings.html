@@ -2,42 +2,42 @@
   <div class="account-overlay">
     <div class="account-wrapper">
       <div class="page-title-block centered-title">
-        <h1>Mi perfil</h1>
-        <p>Consulta tu información actual y actualízala cuando lo necesites.</p>
+        <h1>{{ 'settings.title' | translate }}</h1>
+        <p>{{ 'settings.subtitle' | translate }}</p>
       </div>
 
       <div class="account-layout">
         <div class="account-info-card">
-          <h2>Información actual</h2>
+          <h2>{{ 'settings.currentInfo.title' | translate }}</h2>
 
           <div class="info-item">
-            <span class="info-label">Usuario</span>
+            <span class="info-label">{{ 'settings.currentInfo.username' | translate }}</span>
             <span class="info-value">{{ settingsForm.get('login')?.value || '—' }}</span>
           </div>
 
           <div class="info-item">
-            <span class="info-label">Nombre</span>
+            <span class="info-label">{{ 'settings.currentInfo.firstName' | translate }}</span>
             <span class="info-value">{{ settingsForm.get('firstName')?.value || '—' }}</span>
           </div>
 
           <div class="info-item">
-            <span class="info-label">Apellidos</span>
+            <span class="info-label">{{ 'settings.currentInfo.lastName' | translate }}</span>
             <span class="info-value">{{ settingsForm.get('lastName')?.value || '—' }}</span>
           </div>
 
           <div class="info-item">
-            <span class="info-label">Correo electrónico</span>
+            <span class="info-label">{{ 'settings.currentInfo.email' | translate }}</span>
             <span class="info-value">{{ settingsForm.get('email')?.value || '—' }}</span>
           </div>
 
           <div class="info-item">
-            <span class="info-label">Idioma</span>
+            <span class="info-label">{{ 'settings.currentInfo.language' | translate }}</span>
             <span class="info-value">
               {{
                 settingsForm.get('langKey')?.value === 'es'
-                  ? 'Español'
+                  ? ('settings.languages.es' | translate)
                   : settingsForm.get('langKey')?.value === 'en'
-                    ? 'English'
+                    ? ('settings.languages.en' | translate)
                     : settingsForm.get('langKey')?.value || '—'
               }}
             </span>
@@ -45,58 +45,66 @@
         </div>
 
         <div class="account-card">
-          <h2>Editar perfil</h2>
+          <h2>{{ 'settings.edit.title' | translate }}</h2>
 
           @if (success()) {
-            <div class="alert alert-success account-alert">Tu perfil se ha actualizado correctamente.</div>
+            <div class="alert alert-success account-alert">
+              {{ 'settings.messages.success' | translate }}
+            </div>
           }
 
           <form (ngSubmit)="save()" [formGroup]="settingsForm">
             <div class="account-form-grid">
               <div class="mb-3">
-                <label class="form-label" for="login">Usuario</label>
+                <label class="form-label" for="login">{{ 'settings.form.username' | translate }}</label>
                 <input id="login" type="text" class="form-control custom-input" formControlName="login" readonly />
               </div>
 
               <div class="mb-3">
-                <label class="form-label" for="firstName">Nombre</label>
+                <label class="form-label" for="firstName">{{ 'settings.form.firstName' | translate }}</label>
                 <input
                   id="firstName"
                   type="text"
                   class="form-control custom-input"
                   formControlName="firstName"
-                  placeholder="Introduce tu nombre"
+                  [placeholder]="'settings.placeholders.firstName' | translate"
                 />
               </div>
 
               <div class="mb-3">
-                <label class="form-label" for="lastName">Apellidos</label>
+                <label class="form-label" for="lastName">{{ 'settings.form.lastName' | translate }}</label>
                 <input
                   id="lastName"
                   type="text"
                   class="form-control custom-input"
                   formControlName="lastName"
-                  placeholder="Introduce tus apellidos"
+                  [placeholder]="'settings.placeholders.lastName' | translate"
                 />
               </div>
 
               <div class="mb-3 account-full-width">
-                <label class="form-label" for="email">Correo electrónico</label>
+                <label class="form-label" for="email">{{ 'settings.form.email' | translate }}</label>
                 <input
                   id="email"
                   type="email"
                   class="form-control custom-input"
                   formControlName="email"
-                  placeholder="Introduce tu correo"
+                  [placeholder]="'settings.placeholders.email' | translate"
                 />
               </div>
 
               <div class="mb-3">
-                <label class="form-label" for="langKey">Idioma</label>
+                <label class="form-label" for="langKey">{{ 'settings.form.language' | translate }}</label>
                 <select id="langKey" class="form-control custom-input" formControlName="langKey">
                   @for (language of languages; track language) {
                     <option [value]="language">
-                      {{ language === 'es' ? 'Español' : language === 'en' ? 'English' : language }}
+                      {{
+                        language === 'es'
+                          ? ('settings.languages.es' | translate)
+                          : language === 'en'
+                            ? ('settings.languages.en' | translate)
+                            : language
+                      }}
                     </option>
                   }
                 </select>
@@ -104,7 +112,9 @@
             </div>
 
             <div class="account-actions">
-              <button type="submit" class="btn btn-primary">Guardar cambios</button>
+              <button type="submit" class="btn btn-primary">
+                {{ 'settings.actions.save' | translate }}
+              </button>
             </div>
           </form>
         </div>

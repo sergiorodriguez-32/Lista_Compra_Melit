@@ -1,34 +1,55 @@
 <div class="register-page">
   <div class="register-overlay">
     <div class="register-card centered-register-card">
-      <h2 data-cy="registerTitle">Crear cuenta</h2>
-      <p class="register-subtitle">Crea tu usuario para empezar a gestionar tu despensa y tu compra.</p>
+      <div class="register-top-bar">
+        <div></div>
+
+        <div class="language-switch">
+          <button type="button" class="btn btn-light btn-sm me-2" [class.active-lang]="idiomaActual === 'es'" (click)="cambiarIdioma('es')">
+            ES
+          </button>
+          <button type="button" class="btn btn-light btn-sm" [class.active-lang]="idiomaActual === 'en'" (click)="cambiarIdioma('en')">
+            EN
+          </button>
+        </div>
+      </div>
+
+      <h2 data-cy="registerTitle">{{ 'register.title' | translate }}</h2>
+      <p class="register-subtitle">{{ 'register.subtitle' | translate }}</p>
 
       @if (success()) {
         <div class="alert alert-success register-alert">
-          La cuenta se ha creado correctamente. Revisa tu correo para activarla si es necesario.
+          {{ 'register.messages.success' | translate }}
         </div>
       }
 
       @if (error()) {
-        <div class="alert alert-danger register-alert">No se ha podido crear la cuenta. Inténtalo de nuevo.</div>
+        <div class="alert alert-danger register-alert">
+          {{ 'register.messages.error' | translate }}
+        </div>
       }
 
       @if (errorUserExists()) {
-        <div class="alert alert-danger register-alert">Ese nombre de usuario ya está en uso. Elige otro diferente.</div>
+        <div class="alert alert-danger register-alert">
+          {{ 'register.messages.userExists' | translate }}
+        </div>
       }
 
       @if (errorEmailExists()) {
-        <div class="alert alert-danger register-alert">Ese correo electrónico ya está en uso. Utiliza otro distinto.</div>
+        <div class="alert alert-danger register-alert">
+          {{ 'register.messages.emailExists' | translate }}
+        </div>
       }
 
       @if (doNotMatch()) {
-        <div class="alert alert-danger register-alert">La contraseña y la confirmación no coinciden.</div>
+        <div class="alert alert-danger register-alert">
+          {{ 'register.messages.doNotMatch' | translate }}
+        </div>
       }
 
       <form name="form" role="form" (ngSubmit)="register()" [formGroup]="registerForm">
         <div class="mb-3">
-          <label class="form-label" for="login">Usuario</label>
+          <label class="form-label" for="login">{{ 'register.form.username' | translate }}</label>
           <input
             #login
             type="text"
@@ -36,46 +57,46 @@
             id="login"
             name="login"
             formControlName="login"
-            placeholder="Introduce tu usuario"
+            [placeholder]="'register.placeholders.username' | translate"
             data-cy="username"
           />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="email">Correo electrónico</label>
+          <label class="form-label" for="email">{{ 'register.form.email' | translate }}</label>
           <input
             type="email"
             class="form-control register-input"
             id="email"
             name="email"
             formControlName="email"
-            placeholder="Introduce tu correo"
+            [placeholder]="'register.placeholders.email' | translate"
             data-cy="email"
           />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="password">Contraseña</label>
+          <label class="form-label" for="password">{{ 'register.form.password' | translate }}</label>
           <input
             type="password"
             class="form-control register-input"
             id="password"
             name="password"
             formControlName="password"
-            placeholder="Introduce tu contraseña"
+            [placeholder]="'register.placeholders.password' | translate"
             data-cy="firstPassword"
           />
         </div>
 
         <div class="mb-3">
-          <label class="form-label" for="confirmPassword">Confirmar contraseña</label>
+          <label class="form-label" for="confirmPassword">{{ 'register.form.confirmPassword' | translate }}</label>
           <input
             type="password"
             class="form-control register-input"
             id="confirmPassword"
             name="confirmPassword"
             formControlName="confirmPassword"
-            placeholder="Repite tu contraseña"
+            [placeholder]="'register.placeholders.confirmPassword' | translate"
             data-cy="secondPassword"
           />
         </div>
@@ -84,12 +105,16 @@
           <jhi-password-strength-bar [passwordToCheck]="registerForm.get('password')?.value ?? ''"></jhi-password-strength-bar>
         </div>
 
-        <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary register-btn" data-cy="submit">Crear cuenta</button>
+        <button type="submit" [disabled]="registerForm.invalid" class="btn btn-primary register-btn" data-cy="submit">
+          {{ 'register.actions.submit' | translate }}
+        </button>
       </form>
 
       <div class="register-links">
-        <span>¿Ya tienes cuenta?</span>
-        <a class="register-link" routerLink="/login">Iniciar sesión</a>
+        <span>{{ 'register.loginBox.text' | translate }}</span>
+        <a class="register-link" routerLink="/login">
+          {{ 'register.loginBox.link' | translate }}
+        </a>
       </div>
     </div>
   </div>

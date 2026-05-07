@@ -108,3 +108,20 @@
   border-radius: 12px;
   margin-bottom: 1rem;
 }
+
+.login-top-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.75rem;
+}
+
+.language-switch {
+  display: flex;
+  align-items: center;
+}
+
+.active-lang {
+  background: #1d4ed8;
+  color: white;
+  border-color: #1d4ed8;
+}

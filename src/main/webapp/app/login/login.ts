@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { LoginService } from 'app/login/login.service';
@@ -18,6 +18,7 @@ export default class Login implements OnInit, AfterViewInit {
   username = viewChild.required<ElementRef>('username');
 
   readonly authenticationError = signal(false);
+  idiomaActual = 'es';
 
   loginForm = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -28,6 +29,11 @@ export default class Login implements OnInit, AfterViewInit {
   private readonly accountService = inject(AccountService);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  private readonly translateService = inject(TranslateService);
+
+  constructor() {
+    this.idiomaActual = this.translateService.currentLang || this.translateService.getCurrentLang() || 'es';
+  }
 
   ngOnInit(): void {
     this.accountService.identity().subscribe(() => {
@@ -39,6 +45,11 @@ export default class Login implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.username().nativeElement.focus();
+  }
+
+  cambiarIdioma(idioma: string): void {
+    this.translateService.use(idioma);
+    this.idiomaActual = idioma;
   }
 
   login(): void {

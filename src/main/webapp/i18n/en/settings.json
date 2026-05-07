@@ -1,32 +1,39 @@
 {
   "settings": {
-    "title": "User settings for [<strong>{{username}}</strong>]",
+    "title": "My profile",
+    "subtitle": "Check your current information and update it whenever you need.",
+    "currentInfo": {
+      "title": "Current information",
+      "username": "Username",
+      "firstName": "Name",
+      "lastName": "Last name",
+      "email": "Email",
+      "language": "Language"
+    },
+    "edit": {
+      "title": "Edit profile"
+    },
     "form": {
-      "firstname": "First Name",
-      "firstname.placeholder": "Your first name",
-      "lastname": "Last Name",
-      "lastname.placeholder": "Your last name",
-      "language": "Language",
-      "button": "Save"
+      "username": "Username",
+      "firstName": "Name",
+      "lastName": "Last name",
+      "email": "Email",
+      "language": "Language"
+    },
+    "placeholders": {
+      "firstName": "Enter your name",
+      "lastName": "Enter your last name",
+      "email": "Enter your email"
+    },
+    "actions": {
+      "save": "Save changes"
     },
     "messages": {
-      "error": {
-        "fail": "<strong>An error has occurred!</strong> Settings could not be saved.",
-        "emailexists": "<strong>Email is already in use!</strong> Please choose another one."
-      },
-      "success": "<strong>Settings saved!</strong>",
-      "validate": {
-        "firstname": {
-          "required": "Your first name is required.",
-          "minlength": "Your first name is required to be at least 1 character",
-          "maxlength": "Your first name cannot be longer than 50 characters"
-        },
-        "lastname": {
-          "required": "Your last name is required.",
-          "minlength": "Your last name is required to be at least 1 character",
-          "maxlength": "Your last name cannot be longer than 50 characters"
-        }
-      }
+      "success": "Your profile has been updated successfully."
+    },
+    "languages": {
+      "es": "Spanish",
+      "en": "English"
     }
   }
 }

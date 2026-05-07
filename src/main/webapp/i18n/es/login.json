@@ -1,19 +1,26 @@
 {
   "login": {
-    "title": "Iniciar la sesión",
+    "title": "Iniciar sesión",
+    "subtitle": "Accede a tu cuenta para continuar.",
     "form": {
+      "username": "Usuario",
       "password": "Contraseña",
-      "password.placeholder": "Su contraseña",
-      "rememberme": "Iniciar la sesión automáticamente",
-      "button": "Iniciar sesión"
+      "rememberMe": "Recordarme"
+    },
+    "placeholders": {
+      "username": "Introduce tu usuario",
+      "password": "Introduce tu contraseña"
+    },
+    "actions": {
+      "submit": "Iniciar sesión",
+      "forgotPassword": "¿Has olvidado tu contraseña?"
+    },
+    "registerBox": {
+      "text": "¿Aún no tienes una cuenta?",
+      "link": "Crear cuenta"
     },
     "messages": {
-      "error": {
-        "authentication": "<strong>¡El inicio de sesión ha fallado!</strong> Por favor, revise las credenciales e intente de nuevo."
-      }
-    },
-    "password": {
-      "forgot": "¿Ha olvidado su contraseña?"
+      "error": "No se ha podido iniciar sesión. Revisa tu usuario y tu contraseña."
     }
   }
 }

@@ -26,6 +26,8 @@ export default class Register implements AfterViewInit {
   readonly errorUserExists = signal(false);
   readonly success = signal(false);
 
+  idiomaActual = 'es';
+
   registerForm = new FormGroup({
     login: new FormControl('', {
       nonNullable: true,
@@ -53,8 +55,17 @@ export default class Register implements AfterViewInit {
   private readonly translateService = inject(TranslateService);
   private readonly registerService = inject(RegisterService);
 
+  constructor() {
+    this.idiomaActual = this.translateService.currentLang || this.translateService.getCurrentLang() || 'es';
+  }
+
   ngAfterViewInit(): void {
     this.login().nativeElement.focus();
+  }
+
+  cambiarIdioma(idioma: string): void {
+    this.translateService.use(idioma);
+    this.idiomaActual = idioma;
   }
 
   register(): void {
