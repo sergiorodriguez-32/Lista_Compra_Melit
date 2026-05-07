@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { AlertError } from 'app/shared/alert/alert-error';
 import { TranslateDirective } from 'app/shared/language';
 
 import { PasswordResetInitService } from './password-reset-init.service';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-password-reset-init',
@@ -21,20 +21,30 @@ export default class PasswordResetInit implements AfterViewInit {
   readonly success = signal(false);
   readonly submitted = signal(false);
 
+  idiomaActual = 'es';
+
   resetRequestForm;
 
   private readonly passwordResetInitService = inject(PasswordResetInitService);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly translateService = inject(TranslateService);
 
   constructor() {
     this.resetRequestForm = this.fb.group({
       email: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email]],
     });
+
+    this.idiomaActual = this.translateService.currentLang || this.translateService.getCurrentLang() || 'es';
   }
 
   ngAfterViewInit(): void {
     this.email().nativeElement.focus();
+  }
+
+  cambiarIdioma(idioma: string): void {
+    this.translateService.use(idioma);
+    this.idiomaActual = idioma;
   }
 
   requestReset(): void {

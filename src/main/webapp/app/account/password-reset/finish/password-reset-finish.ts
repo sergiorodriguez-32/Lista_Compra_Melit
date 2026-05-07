@@ -2,7 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import PasswordStrengthBar from 'app/account/password/password-strength-bar/password-strength-bar';
 import { TranslateDirective } from 'app/shared/language';
@@ -25,9 +25,12 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
   readonly key = signal('');
   readonly submitted = signal(false);
 
+  idiomaActual = 'es';
+
   private readonly router = inject(Router);
   private readonly passwordResetFinishService = inject(PasswordResetFinishService);
   private readonly route = inject(ActivatedRoute);
+  private readonly translateService = inject(TranslateService);
 
   passwordForm = new FormGroup({
     newPassword: new FormControl('', {
@@ -40,6 +43,10 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
     }),
   });
 
+  constructor() {
+    this.idiomaActual = this.translateService.currentLang || this.translateService.getCurrentLang() || 'es';
+  }
+
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       if (params.key) {
@@ -51,6 +58,11 @@ export default class PasswordResetFinish implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     this.newPassword().nativeElement.focus();
+  }
+
+  cambiarIdioma(idioma: string): void {
+    this.translateService.use(idioma);
+    this.idiomaActual = idioma;
   }
 
   finishReset(): void {
