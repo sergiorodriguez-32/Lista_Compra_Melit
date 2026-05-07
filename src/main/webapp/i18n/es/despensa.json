@@ -1,3 +1,57 @@
 {
-  "title": "Despensa"
+  "despensa": {
+    "title": "Despensa",
+    "subtitle": "Controla lo que tienes en casa y pásalo a compra cuando lo necesites.",
+    "total": "Total productos en despensa",
+    "empty": "No hay productos en despensa.",
+    "filter": {
+      "category": "Categoría",
+      "all": "Todas"
+    },
+    "category": {
+      "food": "Alimentación",
+      "drugstore": "Droguería"
+    },
+    "table": {
+      "name": "Nombre",
+      "quantity": "Cantidad",
+      "category": "Categoría",
+      "price": "Precio",
+      "healthy": "Saludable",
+      "location": "Ubicación",
+      "actions": "Acciones"
+    },
+    "edit": {
+      "addQuantity": "Cantidad a añadir",
+      "removeQuantity": "Cantidad a quitar"
+    },
+    "actions": {
+      "edit": "Modificar",
+      "close": "Cerrar",
+      "moveToShopping": "Pasar a compra",
+      "remove": "Quitar",
+      "add": "Sumar",
+      "subtract": "Restar",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "units": {
+      "unit": "unidad",
+      "kg": "kg",
+      "g": "g",
+      "l": "L",
+      "ml": "ml"
+    },
+    "messages": {
+      "loadError": "No se ha podido cargar la despensa.",
+      "removeConfirm": "¿Quieres quitar este producto de la despensa?",
+      "removed": "Producto quitado de la despensa correctamente.",
+      "removeError": "No se ha podido quitar el producto de la despensa.",
+      "subtracted": "Se han quitado {{amount}} {{unit}} de {{name}}.",
+      "added": "Se han añadido {{amount}} {{unit}} a {{name}}.",
+      "quantityError": "No se ha podido actualizar la cantidad en despensa.",
+      "movedToShopping": "{{name}} se ha movido a la compra.",
+      "moveToShoppingError": "No se ha podido mover el producto a la compra."
+    }
+  }
 }

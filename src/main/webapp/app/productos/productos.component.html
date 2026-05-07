@@ -3,9 +3,10 @@
     <div class="productos-wrapper">
       <div class="page-header-row">
         <div class="page-title-block">
-          <h1>Productos</h1>
-          <p>Gestiona tu catálogo base y añádelo a despensa o compra.</p>
+          <h1>{{ 'productos.title' | translate }}</h1>
+          <p>{{ 'productos.subtitle' | translate }}</p>
         </div>
+
         @if (mensaje) {
           <div class="mensaje-overlay">
             <div class="mensaje-flotante" [ngClass]="tipoMensaje === 'success' ? 'mensaje-success' : 'mensaje-error'">
@@ -15,31 +16,35 @@
         }
 
         <div class="filtro-card">
-          <label class="form-label mb-1"><strong>Categoría</strong></label>
-          <select class="form-control custom-input" [(ngModel)]="nuevoProducto.categoria" (ngModelChange)="onCategoriaChange()">
-            <option value="TODAS">Todas</option>
-            <option value="ALIMENTACION">Alimentación</option>
-            <option value="DROGUERIA">Droguería</option>
+          <label class="form-label mb-1">
+            <strong>{{ 'productos.filter.category' | translate }}</strong>
+          </label>
+          <select class="form-control custom-input" [(ngModel)]="filtroCategoria">
+            <option value="TODAS">{{ 'productos.filter.all' | translate }}</option>
+            <option value="ALIMENTACION">{{ 'productos.category.food' | translate }}</option>
+            <option value="DROGUERIA">{{ 'productos.category.drugstore' | translate }}</option>
           </select>
         </div>
       </div>
 
       <div id="formulario-producto" class="productos-form-card">
-        <h2>{{ editando ? 'Editar producto' : 'Crear producto' }}</h2>
+        <h2>
+          {{ editando ? ('productos.form.editTitle' | translate) : ('productos.form.createTitle' | translate) }}
+        </h2>
 
         <div class="productos-form-grid">
           <div class="mb-3">
-            <label class="form-label">Nombre</label>
+            <label class="form-label">{{ 'productos.form.name' | translate }}</label>
             <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.nombre" />
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Descripción</label>
+            <label class="form-label">{{ 'productos.form.description' | translate }}</label>
             <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.descripcion" />
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Precio</label>
+            <label class="form-label">{{ 'productos.form.price' | translate }}</label>
             <div class="input-group">
               <input type="number" step="0.01" class="form-control custom-input" [(ngModel)]="nuevoProducto.precio" />
               <span class="input-group-text">€</span>
@@ -47,44 +52,46 @@
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Ubicación</label>
+            <label class="form-label">{{ 'productos.form.location' | translate }}</label>
             <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.ubicacion" />
           </div>
 
           @if (nuevoProducto.categoria === 'ALIMENTACION') {
             <div class="mb-3">
-              <label class="form-label">Letra saludable</label>
+              <label class="form-label">{{ 'productos.form.healthy' | translate }}</label>
               <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.letraSaludable" />
             </div>
           }
 
           <div class="mb-3">
-            <label class="form-label">Categoría</label>
-            <select class="form-control custom-input" [(ngModel)]="nuevoProducto.categoria">
-              <option value="ALIMENTACION">Alimentación</option>
-              <option value="DROGUERIA">Droguería</option>
+            <label class="form-label">{{ 'productos.form.category' | translate }}</label>
+            <select class="form-control custom-input" [(ngModel)]="nuevoProducto.categoria" (ngModelChange)="onCategoriaChange()">
+              <option value="ALIMENTACION">{{ 'productos.category.food' | translate }}</option>
+              <option value="DROGUERIA">{{ 'productos.category.drugstore' | translate }}</option>
             </select>
           </div>
 
           <div class="mb-3">
-            <label class="form-label">Fecha caducidad</label>
+            <label class="form-label">{{ 'productos.form.expiry' | translate }}</label>
             <input type="date" class="form-control custom-input" [(ngModel)]="nuevoProducto.fechaCaducidad" />
           </div>
         </div>
 
         <div class="productos-form-actions">
           <button class="btn btn-primary me-2" (click)="guardarProducto()">
-            {{ editando ? 'Actualizar producto' : 'Guardar producto' }}
+            {{ editando ? ('productos.actions.update' | translate) : ('productos.actions.save' | translate) }}
           </button>
 
           @if (editando) {
-            <button class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+            <button class="btn btn-secondary" (click)="cancelarEdicion()">
+              {{ 'productos.actions.cancel' | translate }}
+            </button>
           }
         </div>
       </div>
 
       <div class="productos-summary">
-        <span>Total productos: {{ productosFiltrados().length }}</span>
+        <span>{{ 'productos.total' | translate }}: {{ productosFiltrados().length }}</span>
       </div>
 
       @if (productosFiltrados().length > 0) {
@@ -92,31 +99,47 @@
           <table class="tabla-productos">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Categoría</th>
-                <th>Ubicación</th>
-                <th>Saludable</th>
-                <th>Caducidad</th>
-                <th>Cantidad</th>
-                <th>Unidad</th>
-                <th>Acciones</th>
+                <th>{{ 'productos.table.name' | translate }}</th>
+                <th>{{ 'productos.table.description' | translate }}</th>
+                <th>{{ 'productos.table.price' | translate }}</th>
+                <th>{{ 'productos.table.category' | translate }}</th>
+                <th>{{ 'productos.table.location' | translate }}</th>
+                <th>{{ 'productos.table.healthy' | translate }}</th>
+                <th>{{ 'productos.table.expiry' | translate }}</th>
+                <th>{{ 'productos.table.quantity' | translate }}</th>
+                <th>{{ 'productos.table.unit' | translate }}</th>
+                <th>{{ 'productos.table.actions' | translate }}</th>
               </tr>
             </thead>
 
             <tbody>
               @for (producto of productosFiltrados(); track producto.id) {
                 <tr>
-                  <td data-label="Nombre">{{ producto.nombre }}</td>
-                  <td data-label="Descripción">{{ producto.descripcion || 'Sin descripción' }}</td>
-                  <td data-label="Precio">{{ producto.precio }} €</td>
-                  <td data-label="Categoría">{{ producto.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
-                  <td data-label="Ubicación">{{ producto.ubicacion }}</td>
-                  <td data-label="Saludable">{{ producto.letraSaludable }}</td>
-                  <td data-label="Caducidad">{{ producto.fechaCaducidad }}</td>
+                  <td [attr.data-label]="'productos.table.name' | translate">{{ producto.nombre }}</td>
 
-                  <td data-label="Cantidad">
+                  <td [attr.data-label]="'productos.table.description' | translate">
+                    {{ producto.descripcion || ('productos.table.noDescription' | translate) }}
+                  </td>
+
+                  <td [attr.data-label]="'productos.table.price' | translate">{{ producto.precio }} €</td>
+
+                  <td [attr.data-label]="'productos.table.category' | translate">
+                    {{
+                      producto.categoria === 'ALIMENTACION'
+                        ? ('productos.category.food' | translate)
+                        : ('productos.category.drugstore' | translate)
+                    }}
+                  </td>
+
+                  <td [attr.data-label]="'productos.table.location' | translate">{{ producto.ubicacion }}</td>
+
+                  <td [attr.data-label]="'productos.table.healthy' | translate">
+                    {{ producto.categoria === 'ALIMENTACION' ? producto.letraSaludable || '—' : '—' }}
+                  </td>
+
+                  <td [attr.data-label]="'productos.table.expiry' | translate">{{ producto.fechaCaducidad }}</td>
+
+                  <td [attr.data-label]="'productos.table.quantity' | translate">
                     <input
                       type="number"
                       class="form-control custom-input small-input"
@@ -125,22 +148,30 @@
                     />
                   </td>
 
-                  <td data-label="Unidad">
+                  <td [attr.data-label]="'productos.table.unit' | translate">
                     <select class="form-control custom-input small-input" [(ngModel)]="producto.unidadSeleccionada">
-                      <option value="UNIDAD">Unidad</option>
-                      <option value="KG">Kg</option>
-                      <option value="G">g</option>
-                      <option value="L">L</option>
-                      <option value="ML">ml</option>
+                      <option value="UNIDAD">{{ 'productos.units.unit' | translate }}</option>
+                      <option value="KG">{{ 'productos.units.kg' | translate }}</option>
+                      <option value="G">{{ 'productos.units.g' | translate }}</option>
+                      <option value="L">{{ 'productos.units.l' | translate }}</option>
+                      <option value="ML">{{ 'productos.units.ml' | translate }}</option>
                     </select>
                   </td>
 
-                  <td data-label="Acciones">
+                  <td [attr.data-label]="'productos.table.actions' | translate">
                     <div class="acciones-producto">
-                      <button class="btn btn-success btn-sm me-2 mb-2" (click)="anadirADespensa(producto)">Añadir a despensa</button>
-                      <button class="btn btn-info btn-sm me-2 mb-2" (click)="anadirACompra(producto)">Añadir a compra</button>
-                      <button class="btn btn-warning btn-sm me-2 mb-2" (click)="editarProducto(producto)">Editar</button>
-                      <button class="btn btn-danger btn-sm mb-2" (click)="eliminarProducto(producto.id!)">Eliminar</button>
+                      <button class="btn btn-success btn-sm me-2 mb-2" (click)="anadirADespensa(producto)">
+                        {{ 'productos.actions.addToPantry' | translate }}
+                      </button>
+                      <button class="btn btn-info btn-sm me-2 mb-2" (click)="anadirACompra(producto)">
+                        {{ 'productos.actions.addToShopping' | translate }}
+                      </button>
+                      <button class="btn btn-warning btn-sm me-2 mb-2" (click)="editarProducto(producto)">
+                        {{ 'productos.actions.edit' | translate }}
+                      </button>
+                      <button class="btn btn-danger btn-sm mb-2" (click)="eliminarProducto(producto.id!)">
+                        {{ 'productos.actions.delete' | translate }}
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -155,15 +186,19 @@
               <p>{{ mensajeConfirmacion }}</p>
 
               <div class="confirmacion-botones">
-                <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
-                <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+                <button class="btn btn-secondary" (click)="cancelarConfirmacion()">
+                  {{ 'productos.actions.cancel' | translate }}
+                </button>
+                <button class="btn btn-danger" (click)="confirmarAccion()">
+                  {{ 'productos.actions.confirm' | translate }}
+                </button>
               </div>
             </div>
           </div>
         }
       } @else {
         <div class="empty-state">
-          <p>No hay productos todavía.</p>
+          <p>{{ 'productos.empty' | translate }}</p>
         </div>
       }
     </div>

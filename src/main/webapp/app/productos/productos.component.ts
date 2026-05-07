@@ -6,11 +6,12 @@ import { ProductosService } from './productos.service';
 import { ItemListaService } from './item-lista.service';
 import { Router, RouterLink } from '@angular/router';
 import { LoginService } from 'app/login/login.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-productos',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslateModule],
   templateUrl: './productos.component.html',
   styleUrls: ['./productos.component.scss'],
 })
@@ -32,6 +33,7 @@ export class ProductosComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  private readonly translateService = inject(TranslateService);
 
   ngOnInit(): void {
     this.cargarProductos();
@@ -91,9 +93,9 @@ export class ProductosComponent implements OnInit {
         }));
         this.cdr.detectChanges();
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR API PRODUCTOS:', error);
-        this.mostrarMensaje('No se han podido cargar los productos.', 'error');
+        this.mostrarMensaje(this.translateService.instant('productos.messages.loadedError'), 'error');
       },
     });
   }
@@ -105,11 +107,11 @@ export class ProductosComponent implements OnInit {
           this.nuevoProducto = this.crearProductoVacio();
           this.editando = false;
           this.cargarProductos();
-          this.mostrarMensaje('Producto actualizado correctamente.');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.updated'));
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR ACTUALIZANDO PRODUCTO:', error);
-          this.mostrarMensaje('No se ha podido actualizar el producto.', 'error');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.updateError'), 'error');
         },
       });
     } else {
@@ -117,11 +119,11 @@ export class ProductosComponent implements OnInit {
         next: () => {
           this.nuevoProducto = this.crearProductoVacio();
           this.cargarProductos();
-          this.mostrarMensaje('Producto creado correctamente.');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.created'));
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR CREANDO PRODUCTO:', error);
-          this.mostrarMensaje('No se ha podido crear el producto.', 'error');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.createError'), 'error');
         },
       });
     }
@@ -140,19 +142,19 @@ export class ProductosComponent implements OnInit {
   cancelarEdicion(): void {
     this.editando = false;
     this.nuevoProducto = this.crearProductoVacio();
-    this.mostrarMensaje('Edición cancelada.');
+    this.mostrarMensaje(this.translateService.instant('productos.messages.editCancelled'));
   }
 
   eliminarProducto(id: number): void {
-    this.abrirConfirmacion('¿Quieres eliminar este producto?', () => {
+    this.abrirConfirmacion(this.translateService.instant('productos.messages.deleteConfirm'), () => {
       this.productosService.deleteProducto(id).subscribe({
         next: () => {
           this.cargarProductos();
-          this.mostrarMensaje('Producto eliminado correctamente.');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.deleted'));
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR ELIMINANDO PRODUCTO:', error);
-          this.mostrarMensaje('No se ha podido eliminar el producto.', 'error');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.deleteError'), 'error');
         },
       });
     });
@@ -168,11 +170,11 @@ export class ProductosComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.mostrarMensaje(`"${producto.nombre}" se ha añadido a la despensa.`);
+          this.mostrarMensaje(this.translateService.instant('productos.messages.addedToPantry', { name: producto.nombre }));
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR AÑADIENDO A DESPENSA:', error);
-          this.mostrarMensaje('No se ha podido añadir el producto a la despensa.', 'error');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.addToPantryError'), 'error');
         },
       });
   }
@@ -187,11 +189,11 @@ export class ProductosComponent implements OnInit {
       })
       .subscribe({
         next: () => {
-          this.mostrarMensaje(`"${producto.nombre}" se ha añadido a la compra.`);
+          this.mostrarMensaje(this.translateService.instant('productos.messages.addedToShopping', { name: producto.nombre }));
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR AÑADIENDO A COMPRA:', error);
-          this.mostrarMensaje('No se ha podido añadir el producto a la compra.', 'error');
+          this.mostrarMensaje(this.translateService.instant('productos.messages.addToShoppingError'), 'error');
         },
       });
   }

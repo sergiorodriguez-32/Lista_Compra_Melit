@@ -1,3 +1,58 @@
 {
-  "title": "Compra"
+  "compra": {
+    "title": "Lista de compra",
+    "subtitle": "Organiza lo que necesitas comprar y márcalo cuando ya lo tengas.",
+    "total": "Total productos en compra",
+    "estimatedTotal": "Total estimado",
+    "empty": "No hay productos en la lista de compra.",
+    "filter": {
+      "category": "Categoría",
+      "all": "Todas"
+    },
+    "category": {
+      "food": "Alimentación",
+      "drugstore": "Droguería"
+    },
+    "table": {
+      "checked": "Comprado",
+      "name": "Nombre",
+      "quantity": "Cantidad",
+      "category": "Categoría",
+      "price": "Precio",
+      "location": "Ubicación",
+      "healthy": "Saludable",
+      "actions": "Acciones"
+    },
+    "edit": {
+      "addQuantity": "Cantidad a añadir",
+      "removeQuantity": "Cantidad a quitar"
+    },
+    "actions": {
+      "edit": "Modificar",
+      "close": "Cerrar",
+      "remove": "Quitar",
+      "add": "Sumar",
+      "subtract": "Restar",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar"
+    },
+    "units": {
+      "unit": "unidad",
+      "kg": "kg",
+      "g": "g",
+      "l": "L",
+      "ml": "ml"
+    },
+    "messages": {
+      "loadError": "No se ha podido cargar la lista de compra.",
+      "removeConfirm": "¿Quieres quitar este producto de la lista de compra?",
+      "removed": "Producto quitado de la compra correctamente.",
+      "removeError": "No se ha podido quitar el producto de la compra.",
+      "movedToPantry": "{{name}} se ha movido a la despensa.",
+      "moveToPantryError": "No se ha podido mover el producto a la despensa.",
+      "subtracted": "Se han quitado {{amount}} {{unit}} de {{name}}.",
+      "added": "Se han añadido {{amount}} {{unit}} a {{name}}.",
+      "quantityError": "No se ha podido actualizar la cantidad en la compra."
+    }
+  }
 }

@@ -1,3 +1,72 @@
 {
-  "title": "Productos"
+  "productos": {
+    "title": "Productos",
+    "subtitle": "Gestiona tu catálogo base y añádelo a despensa o compra.",
+    "total": "Total productos",
+    "empty": "No hay productos todavía.",
+    "filter": {
+      "category": "Categoría",
+      "all": "Todas"
+    },
+    "category": {
+      "food": "Alimentación",
+      "drugstore": "Droguería"
+    },
+    "form": {
+      "createTitle": "Crear producto",
+      "editTitle": "Editar producto",
+      "name": "Nombre",
+      "description": "Descripción",
+      "price": "Precio",
+      "location": "Ubicación",
+      "healthy": "Letra saludable",
+      "category": "Categoría",
+      "expiry": "Fecha caducidad"
+    },
+    "table": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "price": "Precio",
+      "category": "Categoría",
+      "location": "Ubicación",
+      "healthy": "Saludable",
+      "expiry": "Caducidad",
+      "quantity": "Cantidad",
+      "unit": "Unidad",
+      "actions": "Acciones",
+      "noDescription": "Sin descripción"
+    },
+    "actions": {
+      "save": "Guardar producto",
+      "update": "Actualizar producto",
+      "cancel": "Cancelar",
+      "confirm": "Confirmar",
+      "addToPantry": "Añadir a despensa",
+      "addToShopping": "Añadir a compra",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "units": {
+      "unit": "Unidad",
+      "kg": "Kg",
+      "g": "g",
+      "l": "L",
+      "ml": "ml"
+    },
+    "messages": {
+      "loadedError": "No se han podido cargar los productos.",
+      "created": "Producto creado correctamente.",
+      "updated": "Producto actualizado correctamente.",
+      "deleted": "Producto eliminado correctamente.",
+      "updateError": "No se ha podido actualizar el producto.",
+      "createError": "No se ha podido crear el producto.",
+      "deleteError": "No se ha podido eliminar el producto.",
+      "editCancelled": "Edición cancelada.",
+      "deleteConfirm": "¿Quieres eliminar este producto?",
+      "addedToPantry": "\"{{name}}\" se ha añadido a la despensa.",
+      "addedToShopping": "\"{{name}}\" se ha añadido a la compra.",
+      "addToPantryError": "No se ha podido añadir el producto a la despensa.",
+      "addToShoppingError": "No se ha podido añadir el producto a la compra."
+    }
+  }
 }

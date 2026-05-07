@@ -3,9 +3,10 @@
     <div class="despensa-wrapper">
       <div class="page-header-row">
         <div class="page-title-block">
-          <h1>Despensa</h1>
-          <p>Controla lo que tienes en casa y pásalo a compra cuando lo necesites.</p>
+          <h1>{{ 'despensa.title' | translate }}</h1>
+          <p>{{ 'despensa.subtitle' | translate }}</p>
         </div>
+
         @if (mensaje) {
           <div class="mensaje-overlay">
             <div class="mensaje-flotante" [ngClass]="tipoMensaje === 'success' ? 'mensaje-success' : 'mensaje-error'">
@@ -15,23 +16,19 @@
         }
 
         <div class="filtro-card">
-          <label class="form-label mb-1"><strong>Categoría</strong></label>
+          <label class="form-label mb-1">
+            <strong>{{ 'despensa.filter.category' | translate }}</strong>
+          </label>
           <select class="form-control custom-input filtro-select" [(ngModel)]="filtroCategoria">
-            <option value="TODAS">Todas</option>
-            <option value="ALIMENTACION">Alimentación</option>
-            <option value="DROGUERIA">Droguería</option>
+            <option value="TODAS">{{ 'despensa.filter.all' | translate }}</option>
+            <option value="ALIMENTACION">{{ 'despensa.category.food' | translate }}</option>
+            <option value="DROGUERIA">{{ 'despensa.category.drugstore' | translate }}</option>
           </select>
         </div>
       </div>
 
-      @if (mensaje) {
-        <div class="alert alert-success admin-alert">
-          {{ mensaje }}
-        </div>
-      }
-
       <div class="despensa-summary">
-        <span>Total productos en despensa: {{ itemsFiltrados().length }}</span>
+        <span>{{ 'despensa.total' | translate }}: {{ itemsFiltrados().length }}</span>
       </div>
 
       @if (itemsFiltrados().length > 0) {
@@ -39,49 +36,77 @@
           <table class="tabla-despensa">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Cantidad</th>
-                <th>Categoría</th>
-                <th>Precio</th>
-                <th>Ubicación</th>
-                <th>Saludable</th>
-                <th>Acciones</th>
+                <th>{{ 'despensa.table.name' | translate }}</th>
+                <th>{{ 'despensa.table.quantity' | translate }}</th>
+                <th>{{ 'despensa.table.category' | translate }}</th>
+                <th>{{ 'despensa.table.price' | translate }}</th>
+                <th>{{ 'despensa.table.healthy' | translate }}</th>
+                <th>{{ 'despensa.table.location' | translate }}</th>
+                <th>{{ 'despensa.table.actions' | translate }}</th>
               </tr>
             </thead>
             <tbody>
               @for (item of itemsFiltrados(); track item.id) {
                 <tr [class.tachado]="item.marcadoParaCompra">
-                  <td data-label="Nombre">{{ item.producto?.nombre }}</td>
-                  <td data-label="Cantidad">{{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</td>
-                  <td data-label="Categoría">{{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
-                  <td data-label="Precio">{{ item.producto?.precio }} €</td>
-                  <td data-label="Saludable">
+                  <td [attr.data-label]="'despensa.table.name' | translate">{{ item.producto?.nombre }}</td>
+
+                  <td [attr.data-label]="'despensa.table.quantity' | translate">
+                    {{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}
+                  </td>
+
+                  <td [attr.data-label]="'despensa.table.category' | translate">
+                    {{
+                      item.producto?.categoria === 'ALIMENTACION'
+                        ? ('despensa.category.food' | translate)
+                        : ('despensa.category.drugstore' | translate)
+                    }}
+                  </td>
+
+                  <td [attr.data-label]="'despensa.table.price' | translate">{{ item.producto?.precio }} €</td>
+
+                  <td [attr.data-label]="'despensa.table.healthy' | translate">
                     {{ item.producto?.categoria === 'ALIMENTACION' ? item.producto?.letraSaludable || '—' : '—' }}
                   </td>
-                  <td data-label="Ubicación">{{ item.producto?.ubicacion }}</td>
-                  <td data-label="Acciones">
+
+                  <td [attr.data-label]="'despensa.table.location' | translate">
+                    {{ item.producto?.ubicacion }}
+                  </td>
+
+                  <td [attr.data-label]="'despensa.table.actions' | translate">
                     <div class="despensa-acciones">
                       <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
-                        {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+                        {{ item.mostrarEdicion ? ('despensa.actions.close' | translate) : ('despensa.actions.edit' | translate) }}
                       </button>
-                      <button class="btn btn-info btn-sm me-2 mb-2" (click)="pasarACompra(item)">Pasar a compra</button>
-                      <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeDespensa(item.id!)">Quitar</button>
+                      <button class="btn btn-info btn-sm me-2 mb-2" (click)="pasarACompra(item)">
+                        {{ 'despensa.actions.moveToShopping' | translate }}
+                      </button>
+                      <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeDespensa(item.id!)">
+                        {{ 'despensa.actions.remove' | translate }}
+                      </button>
 
                       @if (item.mostrarEdicion) {
                         <div class="edit-inline-box">
                           <div class="mb-2">
-                            <label class="form-label"><strong>Cantidad a añadir</strong></label>
+                            <label class="form-label">
+                              <strong>{{ 'despensa.edit.addQuantity' | translate }}</strong>
+                            </label>
                             <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
                           </div>
 
-                          <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">Sumar</button>
+                          <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">
+                            {{ 'despensa.actions.add' | translate }}
+                          </button>
 
                           <div class="mb-2">
-                            <label class="form-label"><strong>Cantidad a quitar</strong></label>
+                            <label class="form-label">
+                              <strong>{{ 'despensa.edit.removeQuantity' | translate }}</strong>
+                            </label>
                             <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
                           </div>
 
-                          <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">Restar</button>
+                          <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">
+                            {{ 'despensa.actions.subtract' | translate }}
+                          </button>
                         </div>
                       }
                     </div>
@@ -93,17 +118,22 @@
         </div>
       } @else {
         <div class="empty-state">
-          <p>No hay productos en despensa.</p>
+          <p>{{ 'despensa.empty' | translate }}</p>
         </div>
       }
+
       @if (mostrarConfirmacion) {
         <div class="confirmacion-overlay">
           <div class="confirmacion-flotante">
             <p>{{ mensajeConfirmacion }}</p>
 
             <div class="confirmacion-botones">
-              <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
-              <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+              <button class="btn btn-secondary" (click)="cancelarConfirmacion()">
+                {{ 'despensa.actions.cancel' | translate }}
+              </button>
+              <button class="btn btn-danger" (click)="confirmarAccion()">
+                {{ 'despensa.actions.confirm' | translate }}
+              </button>
             </div>
           </div>
         </div>

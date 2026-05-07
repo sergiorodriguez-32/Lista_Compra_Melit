@@ -1,3 +1,72 @@
 {
-  "title": "Productos"
+  "productos": {
+    "title": "Products",
+    "subtitle": "Manage your base catalog and add items to pantry or shopping list.",
+    "total": "Total products",
+    "empty": "There are no products yet.",
+    "filter": {
+      "category": "Category",
+      "all": "All"
+    },
+    "category": {
+      "food": "Food",
+      "drugstore": "Drugstore"
+    },
+    "form": {
+      "createTitle": "Create product",
+      "editTitle": "Edit product",
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "location": "Location",
+      "healthy": "Health grade",
+      "category": "Category",
+      "expiry": "Expiry date"
+    },
+    "table": {
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "category": "Category",
+      "location": "Location",
+      "healthy": "Healthy",
+      "expiry": "Expiry",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "actions": "Actions",
+      "noDescription": "No description"
+    },
+    "actions": {
+      "save": "Save product",
+      "update": "Update product",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "addToPantry": "Add to pantry",
+      "addToShopping": "Add to shopping list",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "units": {
+      "unit": "Unit",
+      "kg": "Kg",
+      "g": "g",
+      "l": "L",
+      "ml": "ml"
+    },
+    "messages": {
+      "loadedError": "Products could not be loaded.",
+      "created": "Product created successfully.",
+      "updated": "Product updated successfully.",
+      "deleted": "Product deleted successfully.",
+      "updateError": "The product could not be updated.",
+      "createError": "The product could not be created.",
+      "deleteError": "The product could not be deleted.",
+      "editCancelled": "Edit cancelled.",
+      "deleteConfirm": "Do you want to delete this product?",
+      "addedToPantry": "\"{{name}}\" has been added to the pantry.",
+      "addedToShopping": "\"{{name}}\" has been added to the shopping list.",
+      "addToPantryError": "The product could not be added to the pantry.",
+      "addToShoppingError": "The product could not be added to the shopping list."
+    }
+  }
 }

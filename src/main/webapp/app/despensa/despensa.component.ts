@@ -5,11 +5,12 @@ import { LoginService } from 'app/login/login.service';
 import { FormsModule } from '@angular/forms';
 import { DespensaService } from './despensa.service';
 import { IDespensaItem } from './despensa.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-despensa',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule],
   templateUrl: './despensa.component.html',
   styleUrls: ['./despensa.component.scss'],
 })
@@ -27,6 +28,7 @@ export class DespensaComponent implements OnInit {
   private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private readonly loginService: LoginService = inject(LoginService);
   private readonly router: Router = inject(Router);
+  private readonly translateService = inject(TranslateService);
 
   ngOnInit(): void {
     this.cargarDespensa();
@@ -77,7 +79,7 @@ export class DespensaComponent implements OnInit {
       },
       error: (error: unknown) => {
         console.error('ERROR CARGANDO DESPENSA:', error);
-        this.mostrarMensaje('No se ha podido cargar la despensa.', 'error');
+        this.mostrarMensaje(this.translateService.instant('despensa.messages.loadError'), 'error');
       },
     });
   }
@@ -87,15 +89,15 @@ export class DespensaComponent implements OnInit {
   }
 
   quitarDeDespensa(id: number): void {
-    this.abrirConfirmacion('¿Quieres quitar este producto de la despensa?', () => {
+    this.abrirConfirmacion(this.translateService.instant('despensa.messages.removeConfirm'), () => {
       this.despensaService.deleteItem(id).subscribe({
         next: () => {
           this.cargarDespensa();
-          this.mostrarMensaje('Producto quitado de la despensa correctamente.');
+          this.mostrarMensaje(this.translateService.instant('despensa.messages.removed'));
         },
         error: (error: unknown) => {
           console.error('ERROR QUITANDO DE DESPENSA:', error);
-          this.mostrarMensaje('No se ha podido quitar el producto de la despensa.', 'error');
+          this.mostrarMensaje(this.translateService.instant('despensa.messages.removeError'), 'error');
         },
       });
     });
@@ -111,11 +113,17 @@ export class DespensaComponent implements OnInit {
     this.despensaService.restarCantidad(item.id, cantidad).subscribe({
       next: () => {
         this.cargarDespensa();
-        this.mostrarMensaje(`Se han quitado ${cantidad} ${this.formatearUnidad(item.unidadMedida)} de ${item.producto?.nombre}.`);
+        this.mostrarMensaje(
+          this.translateService.instant('despensa.messages.subtracted', {
+            amount: cantidad,
+            unit: this.formatearUnidad(item.unidadMedida),
+            name: item.producto?.nombre,
+          }),
+        );
       },
       error: (error: unknown) => {
         console.error('ERROR RESTANDO EN DESPENSA:', error);
-        this.mostrarMensaje('No se ha podido actualizar la cantidad en despensa.', 'error');
+        this.mostrarMensaje(this.translateService.instant('despensa.messages.quantityError'), 'error');
       },
     });
   }
@@ -130,11 +138,17 @@ export class DespensaComponent implements OnInit {
     this.despensaService.sumarCantidad(item.id, cantidad).subscribe({
       next: () => {
         this.cargarDespensa();
-        this.mostrarMensaje(`Se han añadido ${cantidad} ${this.formatearUnidad(item.unidadMedida)} a ${item.producto?.nombre}.`);
+        this.mostrarMensaje(
+          this.translateService.instant('despensa.messages.added', {
+            amount: cantidad,
+            unit: this.formatearUnidad(item.unidadMedida),
+            name: item.producto?.nombre,
+          }),
+        );
       },
       error: (error: unknown) => {
         console.error('ERROR SUMANDO EN DESPENSA:', error);
-        this.mostrarMensaje('No se ha podido actualizar la cantidad en despensa.', 'error');
+        this.mostrarMensaje(this.translateService.instant('despensa.messages.quantityError'), 'error');
       },
     });
   }
@@ -142,15 +156,15 @@ export class DespensaComponent implements OnInit {
   formatearUnidad(unidad?: string): string {
     switch (unidad) {
       case 'UNIDAD':
-        return 'unidad';
+        return this.translateService.instant('despensa.units.unit');
       case 'KG':
-        return 'kg';
+        return this.translateService.instant('despensa.units.kg');
       case 'G':
-        return 'g';
+        return this.translateService.instant('despensa.units.g');
       case 'L':
-        return 'L';
+        return this.translateService.instant('despensa.units.l');
       case 'ML':
-        return 'ml';
+        return this.translateService.instant('despensa.units.ml');
       default:
         return unidad ?? '';
     }
@@ -167,13 +181,17 @@ export class DespensaComponent implements OnInit {
       this.despensaService.pasarACompra(item.id!).subscribe({
         next: () => {
           this.cargarDespensa();
-          this.mostrarMensaje(`${item.producto?.nombre} se ha movido a la compra.`);
+          this.mostrarMensaje(
+            this.translateService.instant('despensa.messages.movedToShopping', {
+              name: item.producto?.nombre,
+            }),
+          );
         },
         error: (error: unknown) => {
           console.error('ERROR PASANDO A COMPRA:', error);
           item.marcadoParaCompra = false;
           this.cdr.detectChanges();
-          this.mostrarMensaje('No se ha podido mover el producto a la compra.', 'error');
+          this.mostrarMensaje(this.translateService.instant('despensa.messages.moveToShoppingError'), 'error');
         },
       });
     }, 350);

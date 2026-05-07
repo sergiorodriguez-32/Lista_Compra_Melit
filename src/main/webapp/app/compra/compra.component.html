@@ -3,8 +3,8 @@
     <div class="compra-wrapper">
       <div class="page-header-row">
         <div class="page-title-block">
-          <h1>Lista de compra</h1>
-          <p>Organiza lo que necesitas comprar y márcalo cuando ya lo tengas.</p>
+          <h1>{{ 'compra.title' | translate }}</h1>
+          <p>{{ 'compra.subtitle' | translate }}</p>
         </div>
 
         @if (mensaje) {
@@ -16,23 +16,19 @@
         }
 
         <div class="filtro-card">
-          <label class="form-label mb-1"><strong>Categoría</strong></label>
+          <label class="form-label mb-1">
+            <strong>{{ 'compra.filter.category' | translate }}</strong>
+          </label>
           <select class="form-control custom-input filtro-select" [(ngModel)]="filtroCategoria">
-            <option value="TODAS">Todas</option>
-            <option value="ALIMENTACION">Alimentación</option>
-            <option value="DROGUERIA">Droguería</option>
+            <option value="TODAS">{{ 'compra.filter.all' | translate }}</option>
+            <option value="ALIMENTACION">{{ 'compra.category.food' | translate }}</option>
+            <option value="DROGUERIA">{{ 'compra.category.drugstore' | translate }}</option>
           </select>
         </div>
       </div>
 
-      @if (mensaje) {
-        <div class="alert alert-success admin-alert">
-          {{ mensaje }}
-        </div>
-      }
-
       <div class="compra-summary">
-        <span>Total productos en compra: {{ itemsFiltrados().length }}</span>
+        <span>{{ 'compra.total' | translate }}: {{ itemsFiltrados().length }}</span>
       </div>
 
       @if (itemsFiltrados().length > 0) {
@@ -40,52 +36,81 @@
           <table class="tabla-compra">
             <thead>
               <tr>
-                <th>Comprado</th>
-                <th>Nombre</th>
-                <th>Cantidad</th>
-                <th>Categoría</th>
-                <th>Precio</th>
-                <th>Ubicación</th>
-                <th>Saludable</th>
-                <th>Acciones</th>
+                <th>{{ 'compra.table.checked' | translate }}</th>
+                <th>{{ 'compra.table.name' | translate }}</th>
+                <th>{{ 'compra.table.quantity' | translate }}</th>
+                <th>{{ 'compra.table.category' | translate }}</th>
+                <th>{{ 'compra.table.price' | translate }}</th>
+                <th>{{ 'compra.table.location' | translate }}</th>
+                <th>{{ 'compra.table.healthy' | translate }}</th>
+                <th>{{ 'compra.table.actions' | translate }}</th>
               </tr>
             </thead>
             <tbody>
               @for (item of itemsFiltrados(); track item.id) {
                 <tr [class.tachado]="item.marcadoComoComprado">
-                  <td data-label="Comprado">
+                  <td [attr.data-label]="'compra.table.checked' | translate">
                     <input type="checkbox" class="check-comprado" [checked]="false" (change)="marcarComoComprado(item)" />
                   </td>
-                  <td data-label="Nombre">{{ item.producto?.nombre }}</td>
-                  <td data-label="Cantidad">{{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}</td>
-                  <td data-label="Categoría">{{ item.producto?.categoria === 'ALIMENTACION' ? 'Alimentación' : 'Droguería' }}</td>
-                  <td data-label="Precio">{{ item.producto?.precio }} €</td>
-                  <td data-label="Ubicación">{{ item.producto?.ubicacion }}</td>
-                  <td data-label="Saludable">
+
+                  <td [attr.data-label]="'compra.table.name' | translate">
+                    {{ item.producto?.nombre }}
+                  </td>
+
+                  <td [attr.data-label]="'compra.table.quantity' | translate">
+                    {{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}
+                  </td>
+
+                  <td [attr.data-label]="'compra.table.category' | translate">
+                    {{
+                      item.producto?.categoria === 'ALIMENTACION'
+                        ? ('compra.category.food' | translate)
+                        : ('compra.category.drugstore' | translate)
+                    }}
+                  </td>
+
+                  <td [attr.data-label]="'compra.table.price' | translate">{{ item.producto?.precio }} €</td>
+
+                  <td [attr.data-label]="'compra.table.location' | translate">
+                    {{ item.producto?.ubicacion }}
+                  </td>
+
+                  <td [attr.data-label]="'compra.table.healthy' | translate">
                     {{ item.producto?.categoria === 'ALIMENTACION' ? item.producto?.letraSaludable || '—' : '—' }}
                   </td>
-                  <td data-label="Acciones">
+
+                  <td [attr.data-label]="'compra.table.actions' | translate">
                     <div class="compra-acciones">
                       <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
-                        {{ item.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+                        {{ item.mostrarEdicion ? ('compra.actions.close' | translate) : ('compra.actions.edit' | translate) }}
                       </button>
-                      <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeCompra(item.id!)">Quitar</button>
+                      <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeCompra(item.id!)">
+                        {{ 'compra.actions.remove' | translate }}
+                      </button>
 
                       @if (item.mostrarEdicion) {
                         <div class="edit-inline-box">
                           <div class="mb-2">
-                            <label class="form-label"><strong>Cantidad a añadir</strong></label>
+                            <label class="form-label">
+                              <strong>{{ 'compra.edit.addQuantity' | translate }}</strong>
+                            </label>
                             <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
                           </div>
 
-                          <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">Sumar</button>
+                          <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">
+                            {{ 'compra.actions.add' | translate }}
+                          </button>
 
                           <div class="mb-2">
-                            <label class="form-label"><strong>Cantidad a quitar</strong></label>
+                            <label class="form-label">
+                              <strong>{{ 'compra.edit.removeQuantity' | translate }}</strong>
+                            </label>
                             <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
                           </div>
 
-                          <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">Restar</button>
+                          <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">
+                            {{ 'compra.actions.subtract' | translate }}
+                          </button>
                         </div>
                       }
                     </div>
@@ -94,24 +119,30 @@
               }
             </tbody>
           </table>
+
           <div class="total-compra-card">
-            <span>Total estimado: {{ calcularTotalCompra() | number: '1.2-2' }} €</span>
+            <span>{{ 'compra.estimatedTotal' | translate }}: {{ calcularTotalCompra() | number: '1.2-2' }} €</span>
           </div>
         </div>
       } @else {
         <div class="empty-state">
-          <p>No hay productos en la lista de compra.</p>
+          <p>{{ 'compra.empty' | translate }}</p>
         </div>
       }
     </div>
+
     @if (mostrarConfirmacion) {
       <div class="confirmacion-overlay">
         <div class="confirmacion-flotante">
           <p>{{ mensajeConfirmacion }}</p>
 
           <div class="confirmacion-botones">
-            <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
-            <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+            <button class="btn btn-secondary" (click)="cancelarConfirmacion()">
+              {{ 'compra.actions.cancel' | translate }}
+            </button>
+            <button class="btn btn-danger" (click)="confirmarAccion()">
+              {{ 'compra.actions.confirm' | translate }}
+            </button>
           </div>
         </div>
       </div>

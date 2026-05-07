@@ -5,11 +5,12 @@ import { LoginService } from 'app/login/login.service';
 import { FormsModule } from '@angular/forms';
 import { CompraService } from './compra.service';
 import { ICompraItem } from './compra.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'jhi-compra',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule],
+  imports: [CommonModule, RouterLink, FormsModule, TranslateModule],
   templateUrl: './compra.component.html',
   styleUrls: ['./compra.component.scss'],
 })
@@ -27,6 +28,7 @@ export class CompraComponent implements OnInit {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
   private readonly router = inject(Router);
+  private readonly translateService = inject(TranslateService);
 
   ngOnInit(): void {
     this.cargarCompra();
@@ -75,9 +77,9 @@ export class CompraComponent implements OnInit {
         }));
         this.cdr.detectChanges();
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR CARGANDO COMPRA:', error);
-        this.mostrarMensaje('No se ha podido cargar la lista de compra.', 'error');
+        this.mostrarMensaje(this.translateService.instant('compra.messages.loadError'), 'error');
       },
     });
   }
@@ -87,15 +89,15 @@ export class CompraComponent implements OnInit {
   }
 
   quitarDeCompra(id: number): void {
-    this.abrirConfirmacion('¿Quieres quitar este producto de la lista de compra?', () => {
+    this.abrirConfirmacion(this.translateService.instant('compra.messages.removeConfirm'), () => {
       this.compraService.deleteItem(id).subscribe({
         next: () => {
           this.cargarCompra();
-          this.mostrarMensaje('Producto quitado de la compra correctamente.');
+          this.mostrarMensaje(this.translateService.instant('compra.messages.removed'));
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR QUITANDO DE COMPRA:', error);
-          this.mostrarMensaje('No se ha podido quitar el producto de la compra.', 'error');
+          this.mostrarMensaje(this.translateService.instant('compra.messages.removeError'), 'error');
         },
       });
     });
@@ -112,13 +114,17 @@ export class CompraComponent implements OnInit {
       this.compraService.comprarItem(item.id!).subscribe({
         next: () => {
           this.cargarCompra();
-          this.mostrarMensaje(`${item.producto?.nombre} se ha movido a la despensa.`);
+          this.mostrarMensaje(
+            this.translateService.instant('compra.messages.movedToPantry', {
+              name: item.producto?.nombre,
+            }),
+          );
         },
-        error: error => {
+        error: (error: unknown) => {
           console.error('ERROR MARCANDO COMO COMPRADO:', error);
           item.marcadoComoComprado = false;
           this.cdr.detectChanges();
-          this.mostrarMensaje('No se ha podido mover el producto a la despensa.', 'error');
+          this.mostrarMensaje(this.translateService.instant('compra.messages.moveToPantryError'), 'error');
         },
       });
     }, 350);
@@ -134,11 +140,17 @@ export class CompraComponent implements OnInit {
     this.compraService.restarCantidad(item.id, cantidad).subscribe({
       next: () => {
         this.cargarCompra();
-        this.mostrarMensaje(`Se han quitado ${cantidad} ${this.formatearUnidad(item.unidadMedida)} de ${item.producto?.nombre}.`);
+        this.mostrarMensaje(
+          this.translateService.instant('compra.messages.subtracted', {
+            amount: cantidad,
+            unit: this.formatearUnidad(item.unidadMedida),
+            name: item.producto?.nombre,
+          }),
+        );
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR RESTANDO EN COMPRA:', error);
-        this.mostrarMensaje('No se ha podido actualizar la cantidad en la compra.', 'error');
+        this.mostrarMensaje(this.translateService.instant('compra.messages.quantityError'), 'error');
       },
     });
   }
@@ -153,11 +165,17 @@ export class CompraComponent implements OnInit {
     this.compraService.sumarCantidad(item.id, cantidad).subscribe({
       next: () => {
         this.cargarCompra();
-        this.mostrarMensaje(`Se han añadido ${cantidad} ${this.formatearUnidad(item.unidadMedida)} a ${item.producto?.nombre}.`);
+        this.mostrarMensaje(
+          this.translateService.instant('compra.messages.added', {
+            amount: cantidad,
+            unit: this.formatearUnidad(item.unidadMedida),
+            name: item.producto?.nombre,
+          }),
+        );
       },
-      error: error => {
+      error: (error: unknown) => {
         console.error('ERROR SUMANDO EN COMPRA:', error);
-        this.mostrarMensaje('No se ha podido actualizar la cantidad en la compra.', 'error');
+        this.mostrarMensaje(this.translateService.instant('compra.messages.quantityError'), 'error');
       },
     });
   }
@@ -165,15 +183,15 @@ export class CompraComponent implements OnInit {
   formatearUnidad(unidad?: string): string {
     switch (unidad) {
       case 'UNIDAD':
-        return 'unidad';
+        return this.translateService.instant('compra.units.unit');
       case 'KG':
-        return 'kg';
+        return this.translateService.instant('compra.units.kg');
       case 'G':
-        return 'g';
+        return this.translateService.instant('compra.units.g');
       case 'L':
-        return 'L';
+        return this.translateService.instant('compra.units.l');
       case 'ML':
-        return 'ml';
+        return this.translateService.instant('compra.units.ml');
       default:
         return unidad ?? '';
     }

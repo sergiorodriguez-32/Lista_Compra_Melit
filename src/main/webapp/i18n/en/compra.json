@@ -1,3 +1,58 @@
 {
-  "title": "Shopping list"
+  "compra": {
+    "title": "Shopping list",
+    "subtitle": "Organize what you need to buy and mark it when you have bought it.",
+    "total": "Total shopping list products",
+    "estimatedTotal": "Estimated total",
+    "empty": "There are no products in the shopping list.",
+    "filter": {
+      "category": "Category",
+      "all": "All"
+    },
+    "category": {
+      "food": "Food",
+      "drugstore": "Drugstore"
+    },
+    "table": {
+      "checked": "Bought",
+      "name": "Name",
+      "quantity": "Quantity",
+      "category": "Category",
+      "price": "Price",
+      "location": "Location",
+      "healthy": "Healthy",
+      "actions": "Actions"
+    },
+    "edit": {
+      "addQuantity": "Quantity to add",
+      "removeQuantity": "Quantity to remove"
+    },
+    "actions": {
+      "edit": "Edit",
+      "close": "Close",
+      "remove": "Remove",
+      "add": "Add",
+      "subtract": "Subtract",
+      "cancel": "Cancel",
+      "confirm": "Confirm"
+    },
+    "units": {
+      "unit": "unit",
+      "kg": "kg",
+      "g": "g",
+      "l": "L",
+      "ml": "ml"
+    },
+    "messages": {
+      "loadError": "The shopping list could not be loaded.",
+      "removeConfirm": "Do you want to remove this product from the shopping list?",
+      "removed": "Product removed from the shopping list successfully.",
+      "removeError": "The product could not be removed from the shopping list.",
+      "movedToPantry": "{{name}} has been moved to the pantry.",
+      "moveToPantryError": "The product could not be moved to the pantry.",
+      "subtracted": "{{amount}} {{unit}} have been removed from {{name}}.",
+      "added": "{{amount}} {{unit}} have been added to {{name}}.",
+      "quantityError": "The quantity in the shopping list could not be updated."
+    }
+  }
 }
