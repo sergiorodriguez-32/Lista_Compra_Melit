@@ -1,0 +1,22 @@
+{
+  "main": {
+    "miCuenta": "My account",
+    "nav": {
+      "productos": "Products",
+      "despensa": "Pantry",
+      "compra": "Shopping"
+    },
+    "dropdown": {
+      "miPerfil": "My profile",
+      "cambiarContrasena": "Change password",
+      "administrar": "Manage users and roles",
+      "cerrarSesion": "Log out"
+    },
+    "footer": {
+      "avisoLegal": "Legal notice",
+      "privacidad": "Privacy policy",
+      "proteccionDatos": "Data protection",
+      "cookies": "Cookies"
+    }
+  }
+}

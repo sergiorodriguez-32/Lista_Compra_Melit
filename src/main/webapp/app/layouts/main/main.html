@@ -7,9 +7,9 @@
       </div>
 
       <nav class="header-nav">
-        <a routerLink="/productos" class="nav-link">Productos</a>
-        <a routerLink="/despensa" class="nav-link">Despensa</a>
-        <a routerLink="/compra" class="nav-link">Compra</a>
+        <a routerLink="/productos" class="nav-link">{{ 'main.nav.productos' | translate }}</a>
+        <a routerLink="/despensa" class="nav-link">{{ 'main.nav.despensa' | translate }}</a>
+        <a routerLink="/compra" class="nav-link">{{ 'main.nav.compra' | translate }}</a>
       </nav>
 
       <div class="header-right">
@@ -19,20 +19,20 @@
         </div>
 
         <div class="user-menu-wrapper">
-          <button class="user-menu-btn" (click)="toggleMenuUsuario()">Mi cuenta</button>
+          <button class="user-menu-btn" (click)="toggleMenuUsuario()">{{ 'main.miCuenta' | translate }}</button>
 
           @if (mostrarMenuUsuario) {
             <div class="user-dropdown">
-              <a routerLink="/account/settings" class="dropdown-item">Mi perfil</a>
-              <a routerLink="/account/password" class="dropdown-item">Cambiar contraseña</a>
+              <a routerLink="/account/settings" class="dropdown-item">{{ 'main.dropdown.miPerfil' | translate }}</a>
+              <a routerLink="/account/password" class="dropdown-item">{{ 'main.dropdown.cambiarContrasena' | translate }}</a>
 
               @if (isAdmin) {
                 <div class="dropdown-divider"></div>
-                <a routerLink="/administrar" class="dropdown-item">Administrar usuarios y roles</a>
+                <a routerLink="/administrar" class="dropdown-item">{{ 'main.dropdown.administrar' | translate }}</a>
               }
 
               <div class="dropdown-divider"></div>
-              <button class="dropdown-item logout-item" (click)="cerrarSesion()">Cerrar sesión</button>
+              <button class="dropdown-item logout-item" (click)="cerrarSesion()">{{ 'main.dropdown.cerrarSesion' | translate }}</button>
             </div>
           }
         </div>
@@ -47,10 +47,10 @@
       <div class="footer-content">
         <span>© ListaCompraMelit</span>
         <div class="footer-links">
-          <a href="#">Aviso legal</a>
-          <a href="#">Política de privacidad</a>
-          <a href="#">Protección de datos</a>
-          <a href="#">Cookies</a>
+          <a href="#">{{ 'main.footer.avisoLegal' | translate }}</a>
+          <a href="#">{{ 'main.footer.privacidad' | translate }}</a>
+          <a href="#">{{ 'main.footer.proteccionDatos' | translate }}</a>
+          <a href="#">{{ 'main.footer.cookies' | translate }}</a>
         </div>
       </div>
     </footer>

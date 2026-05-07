@@ -1,3 +1,23 @@
 {
-  "title": "Panel"
+  "panel": {
+    "bienvenido": "Bienvenido",
+    "subtitulo": "Gestiona tus productos, tu despensa y tu lista de compra desde un solo lugar.",
+    "administrar": "Administrar",
+    "cerrarSesion": "Cerrar sesión",
+    "productos": {
+      "titulo": "Productos",
+      "descripcion": "Gestiona tu catálogo base, crea productos y edítalos.",
+      "enlace": "Ir a productos"
+    },
+    "despensa": {
+      "titulo": "Despensa",
+      "descripcion": "Controla lo que tienes en casa y ajusta cantidades.",
+      "enlace": "Ir a despensa"
+    },
+    "compra": {
+      "titulo": "Compra",
+      "descripcion": "Organiza lo que necesitas comprar y actualiza tu lista.",
+      "enlace": "Ir a compra"
+    }
+  }
 }

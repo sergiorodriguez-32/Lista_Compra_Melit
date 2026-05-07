@@ -1,6 +1,7 @@
 import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AdministrarService } from './administrar.service';
 import { IAdminUser } from './administrar.model';
 import { AccountService } from 'app/core/auth/account.service';
@@ -9,7 +10,7 @@ import { RouterLink } from '@angular/router';
 @Component({
   selector: 'jhi-administrar',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TranslateModule],
   templateUrl: './administrar.component.html',
   styleUrls: ['./administrar.component.scss'],
 })
@@ -18,6 +19,7 @@ export class AdministrarComponent implements OnInit {
   mensaje = '';
   tipoMensaje: 'success' | 'error' = 'success';
   usuarioActualLogin = '';
+  currentLang = 'es';
 
   mostrarConfirmacion = false;
   mensajeConfirmacion = '';
@@ -26,13 +28,21 @@ export class AdministrarComponent implements OnInit {
   private readonly administrarService: AdministrarService = inject(AdministrarService);
   private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private readonly accountService: AccountService = inject(AccountService);
+  private readonly translateService: TranslateService = inject(TranslateService);
 
   ngOnInit(): void {
+    this.currentLang = this.translateService.currentLang ?? 'es';
+
     this.accountService.identity().subscribe(account => {
       this.usuarioActualLogin = account?.login ?? '';
     });
 
     this.cargarUsuarios();
+  }
+
+  cambiarIdioma(lang: string): void {
+    this.currentLang = lang;
+    this.translateService.use(lang);
   }
 
   mostrarMensaje(texto: string, tipo: 'success' | 'error' = 'success'): void {

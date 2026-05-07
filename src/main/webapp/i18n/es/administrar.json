@@ -1,3 +1,26 @@
 {
-  "title": "Administrar"
+  "administrar": {
+    "titulo": "Administrar usuarios",
+    "subtitulo": "Gestiona los permisos y roles de los usuarios de la aplicación.",
+    "volverInicio": "Volver al inicio",
+    "sinCorreo": "Sin correo",
+    "estadoActiva": "Activa",
+    "estadoDesactivada": "Desactivada",
+    "nombre": "Nombre",
+    "apellidos": "Apellidos",
+    "idioma": "Idioma",
+    "correo": "Correo electrónico",
+    "espanol": "Español",
+    "ingles": "English",
+    "modificar": "Modificar",
+    "cerrar": "Cerrar",
+    "guardarCambios": "Guardar cambios",
+    "eliminarUsuario": "Eliminar usuario",
+    "estadoCuenta": "Estado de la cuenta",
+    "cuentaActivada": "Cuenta activada",
+    "roles": "Roles",
+    "sinUsuarios": "No hay usuarios para mostrar.",
+    "cancelar": "Cancelar",
+    "confirmar": "Confirmar"
+  }
 }

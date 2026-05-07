@@ -1,7 +1,7 @@
 import { Component, OnInit, Renderer2, RendererFactory2, inject } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 
-import { LangChangeEvent, TranslateService } from '@ngx-translate/core';
+import { LangChangeEvent, TranslateService, TranslateModule } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
 import { filter } from 'rxjs/operators';
 
@@ -15,7 +15,7 @@ import { LoginService } from 'app/login/login.service';
   templateUrl: './main.html',
   styleUrls: ['./main.scss'],
   providers: [AppPageTitleStrategy],
-  imports: [RouterOutlet, RouterLink],
+  imports: [RouterOutlet, RouterLink, TranslateModule],
 })
 export default class Main implements OnInit {
   private readonly renderer: Renderer2;
@@ -68,7 +68,13 @@ export default class Main implements OnInit {
   }
 
   actualizarShellSegunRuta(url: string): void {
-    this.showAppShell = url.startsWith('/productos') || url.startsWith('/despensa') || url.startsWith('/compra');
+    this.showAppShell =
+      url.startsWith('/productos') ||
+      url.startsWith('/despensa') ||
+      url.startsWith('/compra') ||
+      url.startsWith('/administrar') ||
+      url.startsWith('/account/settings') ||
+      url.startsWith('/account/password');
   }
 
   cambiarIdioma(lang: string): void {

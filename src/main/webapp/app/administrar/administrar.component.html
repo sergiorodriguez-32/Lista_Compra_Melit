@@ -2,12 +2,8 @@
   <div class="administrar-overlay">
     <div class="administrar-wrapper">
       <div class="page-title-block">
-        <h1>Administrar usuarios</h1>
-        <p>Gestiona los permisos y roles de los usuarios de la aplicación.</p>
-      </div>
-
-      <div class="admin-top-actions">
-        <a routerLink="/panel" class="btn btn-light">Volver al inicio</a>
+        <h1>{{ 'administrar.titulo' | translate }}</h1>
+        <p>{{ 'administrar.subtitulo' | translate }}</p>
       </div>
 
       <div class="usuarios-grid">
@@ -16,29 +12,37 @@
             <div class="usuario-header">
               <div>
                 <h2>{{ usuario.login }}</h2>
-                <p class="usuario-email">{{ usuario.email || 'Sin correo' }}</p>
+                <p class="usuario-email">{{ usuario.email || ('administrar.sinCorreo' | translate) }}</p>
               </div>
 
               <span class="estado-badge" [class.inactivo]="!usuario.activated">
-                {{ usuario.activated ? 'Activa' : 'Desactivada' }}
+                {{ usuario.activated ? ('administrar.estadoActiva' | translate) : ('administrar.estadoDesactivada' | translate) }}
               </span>
             </div>
 
             <div class="usuario-info">
-              <p><strong>Nombre:</strong> {{ usuario.firstName || '—' }}</p>
-              <p><strong>Apellidos:</strong> {{ usuario.lastName || '—' }}</p>
-              <p><strong>Idioma:</strong> {{ usuario.langKey || '—' }}</p>
+              <p>
+                <strong>{{ 'administrar.nombre' | translate }}:</strong> {{ usuario.firstName || '—' }}
+              </p>
+              <p>
+                <strong>{{ 'administrar.apellidos' | translate }}:</strong> {{ usuario.lastName || '—' }}
+              </p>
+              <p>
+                <strong>{{ 'administrar.idioma' | translate }}:</strong> {{ usuario.langKey || '—' }}
+              </p>
             </div>
 
             <div class="usuario-actions">
               <button class="btn btn-secondary" (click)="toggleEdicion(usuario)">
-                {{ usuario.mostrarEdicion ? 'Cerrar' : 'Modificar' }}
+                {{ usuario.mostrarEdicion ? ('administrar.cerrar' | translate) : ('administrar.modificar' | translate) }}
               </button>
 
-              <button class="btn btn-primary" (click)="guardarCambios(usuario)">Guardar cambios</button>
+              <button class="btn btn-primary" (click)="guardarCambios(usuario)">
+                {{ 'administrar.guardarCambios' | translate }}
+              </button>
 
               <button class="btn btn-danger" [disabled]="usuario.login === usuarioActualLogin" (click)="eliminarUsuario(usuario)">
-                Eliminar usuario
+                {{ 'administrar.eliminarUsuario' | translate }}
               </button>
             </div>
 
@@ -46,43 +50,43 @@
               <div class="edit-user-box">
                 <div class="edit-user-grid">
                   <div class="mb-3">
-                    <label class="form-label">Nombre</label>
+                    <label class="form-label">{{ 'administrar.nombre' | translate }}</label>
                     <input type="text" class="form-control custom-input" [(ngModel)]="usuario.editFirstName" />
                   </div>
 
                   <div class="mb-3">
-                    <label class="form-label">Apellidos</label>
+                    <label class="form-label">{{ 'administrar.apellidos' | translate }}</label>
                     <input type="text" class="form-control custom-input" [(ngModel)]="usuario.editLastName" />
                   </div>
 
                   <div class="mb-3">
-                    <label class="form-label">Correo electrónico</label>
+                    <label class="form-label">{{ 'administrar.correo' | translate }}</label>
                     <input type="email" class="form-control custom-input" [(ngModel)]="usuario.editEmail" />
                   </div>
 
                   <div class="mb-3">
-                    <label class="form-label">Idioma</label>
+                    <label class="form-label">{{ 'administrar.idioma' | translate }}</label>
                     <select class="form-control custom-input" [(ngModel)]="usuario.editLangKey">
-                      <option value="es">Español</option>
-                      <option value="en">English</option>
+                      <option value="es">{{ 'administrar.espanol' | translate }}</option>
+                      <option value="en">{{ 'administrar.ingles' | translate }}</option>
                     </select>
                   </div>
                 </div>
 
                 <div class="roles-box">
-                  <h3>Estado de la cuenta</h3>
+                  <h3>{{ 'administrar.estadoCuenta' | translate }}</h3>
                   <label class="role-item">
                     <input
                       type="checkbox"
                       [checked]="usuario.editActivated ?? false"
                       (change)="usuario.editActivated = $any($event.target).checked"
                     />
-                    Cuenta activada
+                    {{ 'administrar.cuentaActivada' | translate }}
                   </label>
                 </div>
 
                 <div class="roles-box">
-                  <h3>Roles</h3>
+                  <h3>{{ 'administrar.roles' | translate }}</h3>
 
                   <label class="role-item">
                     <input
@@ -110,7 +114,7 @@
 
       @if (usuarios.length === 0) {
         <div class="empty-state">
-          <p>No hay usuarios para mostrar.</p>
+          <p>{{ 'administrar.sinUsuarios' | translate }}</p>
         </div>
       }
     </div>
@@ -131,8 +135,12 @@
       <p>{{ mensajeConfirmacion }}</p>
 
       <div class="confirmacion-botones">
-        <button class="btn btn-secondary" (click)="cancelarConfirmacion()">Cancelar</button>
-        <button class="btn btn-danger" (click)="confirmarAccion()">Confirmar</button>
+        <button class="btn btn-secondary" (click)="cancelarConfirmacion()">
+          {{ 'administrar.cancelar' | translate }}
+        </button>
+        <button class="btn btn-danger" (click)="confirmarAccion()">
+          {{ 'administrar.confirmar' | translate }}
+        </button>
       </div>
     </div>
   </div>

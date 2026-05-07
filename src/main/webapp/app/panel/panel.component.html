@@ -4,35 +4,40 @@
       <div class="panel-header">
         <div>
           <span class="panel-badge">ListaCompra Melit</span>
-          <h1>Bienvenido</h1>
-          <p class="panel-subtitle">Gestiona tus productos, tu despensa y tu lista de compra desde un solo lugar.</p>
+          <h1>{{ 'panel.bienvenido' | translate }}</h1>
+          <p class="panel-subtitle">{{ 'panel.subtitulo' | translate }}</p>
         </div>
 
         <div class="header-actions">
+          <div class="language-switch">
+            <button class="lang-btn" [class.active]="currentLang === 'es'" (click)="cambiarIdioma('es')">ES</button>
+            <button class="lang-btn" [class.active]="currentLang === 'en'" (click)="cambiarIdioma('en')">EN</button>
+          </div>
+
           @if (isAdmin) {
-            <a routerLink="/administrar" class="btn btn-warning me-2">Administrar</a>
+            <a routerLink="/administrar" class="btn btn-warning me-2">{{ 'panel.administrar' | translate }}</a>
           }
-          <button class="btn btn-danger" (click)="cerrarSesion()">Cerrar sesión</button>
+          <button class="btn btn-danger" (click)="cerrarSesion()">{{ 'panel.cerrarSesion' | translate }}</button>
         </div>
       </div>
 
       <div class="panel-cards">
         <a routerLink="/productos" class="panel-card productos-card">
-          <h2>Productos</h2>
-          <p>Gestiona tu catálogo base, crea productos y edítalos.</p>
-          <span>Ir a productos</span>
+          <h2>{{ 'panel.productos.titulo' | translate }}</h2>
+          <p>{{ 'panel.productos.descripcion' | translate }}</p>
+          <span>{{ 'panel.productos.enlace' | translate }}</span>
         </a>
 
         <a routerLink="/despensa" class="panel-card despensa-card">
-          <h2>Despensa</h2>
-          <p>Controla lo que tienes en casa y ajusta cantidades.</p>
-          <span>Ir a despensa</span>
+          <h2>{{ 'panel.despensa.titulo' | translate }}</h2>
+          <p>{{ 'panel.despensa.descripcion' | translate }}</p>
+          <span>{{ 'panel.despensa.enlace' | translate }}</span>
         </a>
 
         <a routerLink="/compra" class="panel-card compra-card">
-          <h2>Compra</h2>
-          <p>Organiza lo que necesitas comprar y actualiza tu lista.</p>
-          <span>Ir a compra</span>
+          <h2>{{ 'panel.compra.titulo' | translate }}</h2>
+          <p>{{ 'panel.compra.descripcion' | translate }}</p>
+          <span>{{ 'panel.compra.enlace' | translate }}</span>
         </a>
       </div>
     </div>

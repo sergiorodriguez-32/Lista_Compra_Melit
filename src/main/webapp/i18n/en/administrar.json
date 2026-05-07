@@ -1,3 +1,26 @@
 {
-  "title": "Admin"
+  "administrar": {
+    "titulo": "Manage users",
+    "subtitulo": "Manage the permissions and roles of the application users.",
+    "volverInicio": "Back to home",
+    "sinCorreo": "No email",
+    "estadoActiva": "Active",
+    "estadoDesactivada": "Deactivated",
+    "nombre": "First name",
+    "apellidos": "Last name",
+    "idioma": "Language",
+    "correo": "Email address",
+    "espanol": "Español",
+    "ingles": "English",
+    "modificar": "Edit",
+    "cerrar": "Close",
+    "guardarCambios": "Save changes",
+    "eliminarUsuario": "Delete user",
+    "estadoCuenta": "Account status",
+    "cuentaActivada": "Account activated",
+    "roles": "Roles",
+    "sinUsuarios": "No users to display.",
+    "cancelar": "Cancel",
+    "confirmar": "Confirm"
+  }
 }

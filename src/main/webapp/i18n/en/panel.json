@@ -1,3 +1,23 @@
 {
-  "title": "Dashboard"
+  "panel": {
+    "bienvenido": "Welcome",
+    "subtitulo": "Manage your products, pantry and shopping list from one place.",
+    "administrar": "Manage users",
+    "cerrarSesion": "Log out",
+    "productos": {
+      "titulo": "Products",
+      "descripcion": "Manage your base catalogue, create and edit products.",
+      "enlace": "Go to products"
+    },
+    "despensa": {
+      "titulo": "Pantry",
+      "descripcion": "Track what you have at home and adjust quantities.",
+      "enlace": "Go to pantry"
+    },
+    "compra": {
+      "titulo": "Shopping",
+      "descripcion": "Organise what you need to buy and update your list.",
+      "enlace": "Go to shopping"
+    }
+  }
 }

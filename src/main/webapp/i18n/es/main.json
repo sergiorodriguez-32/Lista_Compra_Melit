@@ -1,0 +1,22 @@
+{
+  "main": {
+    "miCuenta": "Mi cuenta",
+    "nav": {
+      "productos": "Productos",
+      "despensa": "Despensa",
+      "compra": "Compra"
+    },
+    "dropdown": {
+      "miPerfil": "Mi perfil",
+      "cambiarContrasena": "Cambiar contraseña",
+      "administrar": "Administrar usuarios y roles",
+      "cerrarSesion": "Cerrar sesión"
+    },
+    "footer": {
+      "avisoLegal": "Aviso legal",
+      "privacidad": "Política de privacidad",
+      "proteccionDatos": "Protección de datos",
+      "cookies": "Cookies"
+    }
+  }
+}

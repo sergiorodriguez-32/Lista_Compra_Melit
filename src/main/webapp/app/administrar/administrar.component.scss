@@ -36,6 +36,25 @@
   opacity: 0.95;
 }
 
+.language-switch {
+  display: flex;
+  gap: 0.4rem;
+  padding: 20px 20px 20px 0;
+}
+
+.lang-btn {
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  padding: 0.45rem 0.7rem;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.lang-btn.active {
+  background: rgba(255, 255, 255, 0.25);
+}
+
 .admin-alert,
 .usuario-card,
 .empty-state {
