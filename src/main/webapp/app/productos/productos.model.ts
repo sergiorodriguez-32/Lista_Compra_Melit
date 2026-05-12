@@ -7,7 +7,8 @@ export interface IProducto {
   letraSaludable?: string;
   fechaCaducidad?: string;
   categoria?: string;
+  unidadMedida?: string;
+  cantidadPorDefecto?: number;
 
   cantidadSeleccionada?: number;
-  unidadSeleccionada?: string;
 }

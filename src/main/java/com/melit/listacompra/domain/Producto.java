@@ -41,6 +41,15 @@ public class Producto implements Serializable {
     @Column(name = "categoria", nullable = false)
     private CategoriaProducto categoria;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "unidad_medida", nullable = false)
+    private UnidadMedida unidadMedida;
+
+    @NotNull
+    @Column(name = "cantidad_por_defecto", nullable = false)
+    private Integer cantidadPorDefecto;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -115,5 +124,21 @@ public class Producto implements Serializable {
 
     public void setCategoria(CategoriaProducto categoria) {
         this.categoria = categoria;
+    }
+
+    public UnidadMedida getUnidadMedida() {
+        return unidadMedida;
+    }
+
+    public void setUnidadMedida(UnidadMedida unidadMedida) {
+        this.unidadMedida = unidadMedida;
+    }
+
+    public Integer getCantidadPorDefecto() {
+        return cantidadPorDefecto;
+    }
+
+    public void setCantidadPorDefecto(Integer cantidadPorDefecto) {
+        this.cantidadPorDefecto = cantidadPorDefecto;
     }
 }

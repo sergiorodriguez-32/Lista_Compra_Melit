@@ -27,72 +27,94 @@
         </div>
       </div>
 
-      <div id="formulario-producto" class="productos-form-card">
-        <h2>
-          {{ editando ? ('productos.form.editTitle' | translate) : ('productos.form.createTitle' | translate) }}
-        </h2>
-
-        <div class="productos-form-grid">
-          <div class="mb-3">
-            <label class="form-label">{{ 'productos.form.name' | translate }}</label>
-            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.nombre" />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">{{ 'productos.form.description' | translate }}</label>
-            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.descripcion" />
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">{{ 'productos.form.price' | translate }}</label>
-            <div class="input-group">
-              <input type="number" step="0.01" class="form-control custom-input" [(ngModel)]="nuevoProducto.precio" />
-              <span class="input-group-text">€</span>
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">{{ 'productos.form.location' | translate }}</label>
-            <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.ubicacion" />
-          </div>
-
-          @if (nuevoProducto.categoria === 'ALIMENTACION') {
-            <div class="mb-3">
-              <label class="form-label">{{ 'productos.form.healthy' | translate }}</label>
-              <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.letraSaludable" />
-            </div>
-          }
-
-          <div class="mb-3">
-            <label class="form-label">{{ 'productos.form.category' | translate }}</label>
-            <select class="form-control custom-input" [(ngModel)]="nuevoProducto.categoria" (ngModelChange)="onCategoriaChange()">
-              <option value="ALIMENTACION">{{ 'productos.category.food' | translate }}</option>
-              <option value="DROGUERIA">{{ 'productos.category.drugstore' | translate }}</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label">{{ 'productos.form.expiry' | translate }}</label>
-            <input type="date" class="form-control custom-input" [(ngModel)]="nuevoProducto.fechaCaducidad" />
-          </div>
+      <div class="productos-top-actions">
+        <div class="productos-summary">
+          <span>{{ 'productos.total' | translate }}: {{ productosFiltrados().length }}</span>
         </div>
 
-        <div class="productos-form-actions">
-          <button class="btn btn-primary me-2" (click)="guardarProducto()">
-            {{ editando ? ('productos.actions.update' | translate) : ('productos.actions.save' | translate) }}
-          </button>
+        <button class="btn btn-primary" (click)="toggleFormulario()">
+          {{ mostrarFormulario ? ('productos.actions.hideForm' | translate) : ('productos.actions.newProduct' | translate) }}
+        </button>
+      </div>
 
-          @if (editando) {
+      @if (mostrarFormulario) {
+        <div id="formulario-producto" class="productos-form-card">
+          <h2>
+            {{ editando ? ('productos.form.editTitle' | translate) : ('productos.form.createTitle' | translate) }}
+          </h2>
+
+          <div class="productos-form-grid">
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.name' | translate }}</label>
+              <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.nombre" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.description' | translate }}</label>
+              <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.descripcion" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.price' | translate }}</label>
+              <div class="input-group">
+                <input type="number" step="0.01" class="form-control custom-input" [(ngModel)]="nuevoProducto.precio" />
+                <span class="input-group-text">€</span>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.location' | translate }}</label>
+              <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.ubicacion" />
+            </div>
+
+            @if (nuevoProducto.categoria === 'ALIMENTACION') {
+              <div class="mb-3">
+                <label class="form-label">{{ 'productos.form.healthy' | translate }}</label>
+                <input type="text" class="form-control custom-input" [(ngModel)]="nuevoProducto.letraSaludable" />
+              </div>
+            }
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.category' | translate }}</label>
+              <select class="form-control custom-input" [(ngModel)]="nuevoProducto.categoria" (ngModelChange)="onCategoriaChange()">
+                <option value="ALIMENTACION">{{ 'productos.category.food' | translate }}</option>
+                <option value="DROGUERIA">{{ 'productos.category.drugstore' | translate }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.defaultUnit' | translate }}</label>
+              <select class="form-control custom-input" [(ngModel)]="nuevoProducto.unidadMedida">
+                <option value="UNIDAD">{{ 'productos.units.unit' | translate }}</option>
+                <option value="KG">{{ 'productos.units.kg' | translate }}</option>
+                <option value="G">{{ 'productos.units.g' | translate }}</option>
+                <option value="L">{{ 'productos.units.l' | translate }}</option>
+                <option value="ML">{{ 'productos.units.ml' | translate }}</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.defaultQuantity' | translate }}</label>
+              <input type="number" min="1" class="form-control custom-input" [(ngModel)]="nuevoProducto.cantidadPorDefecto" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">{{ 'productos.form.expiry' | translate }}</label>
+              <input type="date" class="form-control custom-input" [(ngModel)]="nuevoProducto.fechaCaducidad" />
+            </div>
+          </div>
+
+          <div class="productos-form-actions">
+            <button class="btn btn-primary me-2" (click)="guardarProducto()">
+              {{ editando ? ('productos.actions.update' | translate) : ('productos.actions.save' | translate) }}
+            </button>
+
             <button class="btn btn-secondary" (click)="cancelarEdicion()">
               {{ 'productos.actions.cancel' | translate }}
             </button>
-          }
+          </div>
         </div>
-      </div>
-
-      <div class="productos-summary">
-        <span>{{ 'productos.total' | translate }}: {{ productosFiltrados().length }}</span>
-      </div>
+      }
 
       @if (productosFiltrados().length > 0) {
         <div class="tabla-card">
@@ -149,29 +171,44 @@
                   </td>
 
                   <td [attr.data-label]="'productos.table.unit' | translate">
-                    <select class="form-control custom-input small-input" [(ngModel)]="producto.unidadSeleccionada">
-                      <option value="UNIDAD">{{ 'productos.units.unit' | translate }}</option>
-                      <option value="KG">{{ 'productos.units.kg' | translate }}</option>
-                      <option value="G">{{ 'productos.units.g' | translate }}</option>
-                      <option value="L">{{ 'productos.units.l' | translate }}</option>
-                      <option value="ML">{{ 'productos.units.ml' | translate }}</option>
-                    </select>
+                    {{
+                      producto.unidadMedida === 'KG'
+                        ? ('productos.units.kg' | translate)
+                        : producto.unidadMedida === 'G'
+                          ? ('productos.units.g' | translate)
+                          : producto.unidadMedida === 'L'
+                            ? ('productos.units.l' | translate)
+                            : producto.unidadMedida === 'ML'
+                              ? ('productos.units.ml' | translate)
+                              : ('productos.units.unit' | translate)
+                    }}
                   </td>
 
                   <td [attr.data-label]="'productos.table.actions' | translate">
-                    <div class="acciones-producto">
-                      <button class="btn btn-success btn-sm me-2 mb-2" (click)="anadirADespensa(producto)">
-                        {{ 'productos.actions.addToPantry' | translate }}
+                    <div class="acciones-dropdown">
+                      <button class="btn btn-secondary btn-sm acciones-toggle" (click)="toggleMenuAcciones(producto.id!)">
+                        {{ 'productos.actions.actionsMenu' | translate }}
                       </button>
-                      <button class="btn btn-info btn-sm me-2 mb-2" (click)="anadirACompra(producto)">
-                        {{ 'productos.actions.addToShopping' | translate }}
-                      </button>
-                      <button class="btn btn-warning btn-sm me-2 mb-2" (click)="editarProducto(producto)">
-                        {{ 'productos.actions.edit' | translate }}
-                      </button>
-                      <button class="btn btn-danger btn-sm mb-2" (click)="eliminarProducto(producto.id!)">
-                        {{ 'productos.actions.delete' | translate }}
-                      </button>
+
+                      @if (menuAccionesAbiertoId === producto.id) {
+                        <div class="acciones-menu">
+                          <button class="acciones-menu-item" (click)="anadirADespensa(producto)">
+                            {{ 'productos.actions.addToPantry' | translate }}
+                          </button>
+
+                          <button class="acciones-menu-item" (click)="anadirACompra(producto)">
+                            {{ 'productos.actions.addToShopping' | translate }}
+                          </button>
+
+                          <button class="acciones-menu-item" (click)="editarProducto(producto)">
+                            {{ 'productos.actions.edit' | translate }}
+                          </button>
+
+                          <button class="acciones-menu-item acciones-delete" (click)="eliminarProducto(producto.id!)">
+                            {{ 'productos.actions.delete' | translate }}
+                          </button>
+                        </div>
+                      }
                     </div>
                   </td>
                 </tr>

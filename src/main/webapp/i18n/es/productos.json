@@ -21,7 +21,9 @@
       "location": "Ubicación",
       "healthy": "Letra saludable",
       "category": "Categoría",
-      "expiry": "Fecha caducidad"
+      "expiry": "Fecha caducidad",
+      "defaultUnit": "Unidad por defecto",
+      "defaultQuantity": "Cantidad por defecto"
     },
     "table": {
       "name": "Nombre",
@@ -44,7 +46,11 @@
       "addToPantry": "Añadir a despensa",
       "addToShopping": "Añadir a compra",
       "edit": "Editar",
-      "delete": "Eliminar"
+      "delete": "Eliminar",
+      "newProduct": "Nuevo producto",
+      "hideForm": "Ocultar formulario",
+      "editProduct": "Editar producto",
+      "actionsMenu": "Acciones"
     },
     "units": {
       "unit": "Unidad",

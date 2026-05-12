@@ -27,6 +27,8 @@ export class ProductosComponent implements OnInit {
   mostrarConfirmacion = false;
   mensajeConfirmacion = '';
   accionConfirmada: (() => void) | null = null;
+  mostrarFormulario = false;
+  menuAccionesAbiertoId: number | null = null;
 
   private readonly productosService = inject(ProductosService);
   private readonly itemListaService = inject(ItemListaService);
@@ -48,6 +50,8 @@ export class ProductosComponent implements OnInit {
       letraSaludable: '',
       fechaCaducidad: '',
       categoria: 'ALIMENTACION',
+      unidadMedida: 'UNIDAD',
+      cantidadPorDefecto: 1,
     };
   }
 
@@ -88,8 +92,7 @@ export class ProductosComponent implements OnInit {
       next: productos => {
         this.productos = productos.map(producto => ({
           ...producto,
-          cantidadSeleccionada: producto.cantidadSeleccionada ?? 1,
-          unidadSeleccionada: producto.unidadSeleccionada ?? 'UNIDAD',
+          cantidadSeleccionada: producto.cantidadPorDefecto ?? 1,
         }));
         this.cdr.detectChanges();
       },
@@ -106,6 +109,7 @@ export class ProductosComponent implements OnInit {
         next: () => {
           this.nuevoProducto = this.crearProductoVacio();
           this.editando = false;
+          this.mostrarFormulario = false;
           this.cargarProductos();
           this.mostrarMensaje(this.translateService.instant('productos.messages.updated'));
         },
@@ -118,6 +122,7 @@ export class ProductosComponent implements OnInit {
       this.productosService.createProducto(this.nuevoProducto).subscribe({
         next: () => {
           this.nuevoProducto = this.crearProductoVacio();
+          this.mostrarFormulario = false;
           this.cargarProductos();
           this.mostrarMensaje(this.translateService.instant('productos.messages.created'));
         },
@@ -129,9 +134,19 @@ export class ProductosComponent implements OnInit {
     }
   }
 
+  toggleMenuAcciones(productoId: number): void {
+    this.menuAccionesAbiertoId = this.menuAccionesAbiertoId === productoId ? null : productoId;
+  }
+
+  cerrarMenuAcciones(): void {
+    this.menuAccionesAbiertoId = null;
+  }
+
   editarProducto(producto: IProducto): void {
+    this.cerrarMenuAcciones();
     this.nuevoProducto = { ...producto };
     this.editando = true;
+    this.mostrarFormulario = true;
 
     const formulario = document.getElementById('formulario-producto');
     if (formulario) {
@@ -141,11 +156,22 @@ export class ProductosComponent implements OnInit {
 
   cancelarEdicion(): void {
     this.editando = false;
+    this.mostrarFormulario = false;
     this.nuevoProducto = this.crearProductoVacio();
     this.mostrarMensaje(this.translateService.instant('productos.messages.editCancelled'));
   }
 
+  toggleFormulario(): void {
+    this.mostrarFormulario = !this.mostrarFormulario;
+
+    if (!this.mostrarFormulario) {
+      this.editando = false;
+      this.nuevoProducto = this.crearProductoVacio();
+    }
+  }
+
   eliminarProducto(id: number): void {
+    this.cerrarMenuAcciones();
     this.abrirConfirmacion(this.translateService.instant('productos.messages.deleteConfirm'), () => {
       this.productosService.deleteProducto(id).subscribe({
         next: () => {
@@ -161,10 +187,11 @@ export class ProductosComponent implements OnInit {
   }
 
   anadirADespensa(producto: IProducto): void {
+    this.cerrarMenuAcciones();
     this.itemListaService
       .createItemLista({
-        cantidad: producto.cantidadSeleccionada ?? 1,
-        unidadMedida: producto.unidadSeleccionada ?? 'UNIDAD',
+        cantidad: producto.cantidadSeleccionada ?? producto.cantidadPorDefecto ?? 1,
+        unidadMedida: producto.unidadMedida ?? 'UNIDAD',
         tipoLista: 'DESPENSA',
         producto: { id: producto.id },
       })
@@ -180,10 +207,11 @@ export class ProductosComponent implements OnInit {
   }
 
   anadirACompra(producto: IProducto): void {
+    this.cerrarMenuAcciones();
     this.itemListaService
       .createItemLista({
-        cantidad: producto.cantidadSeleccionada ?? 1,
-        unidadMedida: producto.unidadSeleccionada ?? 'UNIDAD',
+        cantidad: producto.cantidadSeleccionada ?? producto.cantidadPorDefecto ?? 1,
+        unidadMedida: producto.unidadMedida ?? 'UNIDAD',
         tipoLista: 'COMPRA',
         producto: { id: producto.id },
       })

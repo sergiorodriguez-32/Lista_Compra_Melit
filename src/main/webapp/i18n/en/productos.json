@@ -21,7 +21,9 @@
       "location": "Location",
       "healthy": "Health grade",
       "category": "Category",
-      "expiry": "Expiry date"
+      "expiry": "Expiry date",
+      "defaultUnit": "Default unit",
+      "defaultQuantity": "Default quantity"
     },
     "table": {
       "name": "Name",
@@ -44,7 +46,11 @@
       "addToPantry": "Add to pantry",
       "addToShopping": "Add to shopping list",
       "edit": "Edit",
-      "delete": "Delete"
+      "delete": "Delete",
+      "newProduct": "New product",
+      "hideForm": "Hide form",
+      "editProduct": "Edit product",
+      "actionsMenu": "Actions"
     },
     "units": {
       "unit": "Unit",
