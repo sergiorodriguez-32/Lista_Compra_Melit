@@ -3,10 +3,14 @@ export interface ICompraItem {
   cantidad?: number;
   unidadMedida?: string;
   tipoLista?: string;
+
   cantidadARestar?: number;
   cantidadASumar?: number;
+  cantidadAPasar?: number;
+
   mostrarEdicion?: boolean;
   marcadoComoComprado?: boolean;
+
   producto?: {
     id?: number;
     nombre?: string;

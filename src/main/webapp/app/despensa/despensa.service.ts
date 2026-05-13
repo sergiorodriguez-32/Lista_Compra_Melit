@@ -26,7 +26,7 @@ export class DespensaService {
     return this.http.put(`${this.resourceUrl}/${id}/sumar`, { cantidad });
   }
 
-  pasarACompra(id: number) {
-    return this.http.put(`${this.resourceUrl}/${id}/pasar-a-compra`, {});
+  pasarACompra(id: number, cantidad: number) {
+    return this.http.put(`${this.resourceUrl}/${id}/pasar-a-compra`, { cantidad });
   }
 }

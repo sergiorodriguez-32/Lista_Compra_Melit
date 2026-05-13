@@ -38,6 +38,7 @@
               <tr>
                 <th>{{ 'compra.table.checked' | translate }}</th>
                 <th>{{ 'compra.table.name' | translate }}</th>
+                <th>{{ 'compra.table.description' | translate }}</th>
                 <th>{{ 'compra.table.quantity' | translate }}</th>
                 <th>{{ 'compra.table.category' | translate }}</th>
                 <th>{{ 'compra.table.price' | translate }}</th>
@@ -55,6 +56,10 @@
 
                   <td [attr.data-label]="'compra.table.name' | translate">
                     {{ item.producto?.nombre }}
+                  </td>
+
+                  <td [attr.data-label]="'compra.table.description' | translate">
+                    {{ item.producto?.descripcion || ('compra.table.noDescription' | translate) }}
                   </td>
 
                   <td [attr.data-label]="'compra.table.quantity' | translate">
@@ -80,40 +85,60 @@
                   </td>
 
                   <td [attr.data-label]="'compra.table.actions' | translate">
-                    <div class="compra-acciones">
-                      <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
-                        {{ item.mostrarEdicion ? ('compra.actions.close' | translate) : ('compra.actions.edit' | translate) }}
-                      </button>
-                      <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeCompra(item.id!)">
-                        {{ 'compra.actions.remove' | translate }}
+                    <div class="acciones-dropdown">
+                      <button class="btn btn-secondary btn-sm acciones-toggle" (click)="toggleMenuAcciones(item.id!)">
+                        {{ 'compra.actions.actionsMenu' | translate }}
                       </button>
 
-                      @if (item.mostrarEdicion) {
-                        <div class="edit-inline-box">
-                          <div class="mb-2">
-                            <label class="form-label">
-                              <strong>{{ 'compra.edit.addQuantity' | translate }}</strong>
-                            </label>
-                            <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
-                          </div>
-
-                          <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">
-                            {{ 'compra.actions.add' | translate }}
+                      @if (menuAccionesAbiertoId === item.id) {
+                        <div class="acciones-menu">
+                          <button class="acciones-menu-item" (click)="toggleEdicion(item)">
+                            {{ item.mostrarEdicion ? ('compra.actions.close' | translate) : ('compra.actions.edit' | translate) }}
                           </button>
 
-                          <div class="mb-2">
-                            <label class="form-label">
-                              <strong>{{ 'compra.edit.removeQuantity' | translate }}</strong>
-                            </label>
-                            <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
-                          </div>
-
-                          <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">
-                            {{ 'compra.actions.subtract' | translate }}
+                          <button class="acciones-menu-item acciones-delete" (click)="quitarDeCompra(item.id!)">
+                            {{ 'compra.actions.remove' | translate }}
                           </button>
                         </div>
                       }
                     </div>
+
+                    @if (item.mostrarEdicion) {
+                      <div class="edit-inline-box">
+                        <div class="mb-2">
+                          <label class="form-label">
+                            <strong>{{ 'compra.edit.addQuantity' | translate }}</strong>
+                          </label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
+                        </div>
+
+                        <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">
+                          {{ 'compra.actions.add' | translate }}
+                        </button>
+
+                        <div class="mb-2">
+                          <label class="form-label">
+                            <strong>{{ 'compra.edit.removeQuantity' | translate }}</strong>
+                          </label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
+                        </div>
+
+                        <button class="btn btn-warning btn-sm me-2 mb-2" (click)="restarCantidad(item)">
+                          {{ 'compra.actions.subtract' | translate }}
+                        </button>
+
+                        <div class="mb-2">
+                          <label class="form-label">
+                            <strong>{{ 'compra.edit.moveQuantity' | translate }}</strong>
+                          </label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadAPasar" min="1" />
+                        </div>
+
+                        <button class="btn btn-info btn-sm me-2 mb-2" (click)="pasarCantidadADespensa(item)">
+                          {{ 'compra.actions.moveToPantry' | translate }}
+                        </button>
+                      </div>
+                    }
                   </td>
                 </tr>
               }

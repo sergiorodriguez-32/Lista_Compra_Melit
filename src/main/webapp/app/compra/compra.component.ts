@@ -24,6 +24,8 @@ export class CompraComponent implements OnInit {
   mensajeConfirmacion = '';
   accionConfirmada: (() => void) | null = null;
 
+  menuAccionesAbiertoId: number | null = null;
+
   private readonly compraService = inject(CompraService);
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly loginService = inject(LoginService);
@@ -73,6 +75,7 @@ export class CompraComponent implements OnInit {
           ...item,
           cantidadARestar: 1,
           cantidadASumar: 1,
+          cantidadAPasar: 1,
           mostrarEdicion: false,
         }));
         this.cdr.detectChanges();
@@ -84,11 +87,27 @@ export class CompraComponent implements OnInit {
     });
   }
 
+  toggleMenuAcciones(itemId: number): void {
+    this.menuAccionesAbiertoId = this.menuAccionesAbiertoId === itemId ? null : itemId;
+  }
+
+  cerrarMenuAcciones(): void {
+    this.menuAccionesAbiertoId = null;
+  }
+
   toggleEdicion(item: ICompraItem): void {
-    item.mostrarEdicion = !item.mostrarEdicion;
+    this.cerrarMenuAcciones();
+    const abrir = !item.mostrarEdicion;
+
+    this.items.forEach(i => {
+      i.mostrarEdicion = false;
+    });
+
+    item.mostrarEdicion = abrir;
   }
 
   quitarDeCompra(id: number): void {
+    this.cerrarMenuAcciones();
     this.abrirConfirmacion(this.translateService.instant('compra.messages.removeConfirm'), () => {
       this.compraService.deleteItem(id).subscribe({
         next: () => {
@@ -104,14 +123,18 @@ export class CompraComponent implements OnInit {
   }
 
   marcarComoComprado(item: ICompraItem): void {
+    this.cerrarMenuAcciones();
+
     if (!item.id) {
       return;
     }
 
+    const cantidad = item.cantidad ?? 1;
+
     item.marcadoComoComprado = true;
 
     setTimeout(() => {
-      this.compraService.comprarItem(item.id!).subscribe({
+      this.compraService.comprarItem(item.id!, cantidad).subscribe({
         next: () => {
           this.cargarCompra();
           this.mostrarMensaje(
@@ -122,6 +145,41 @@ export class CompraComponent implements OnInit {
         },
         error: (error: unknown) => {
           console.error('ERROR MARCANDO COMO COMPRADO:', error);
+          item.marcadoComoComprado = false;
+          this.cdr.detectChanges();
+          this.mostrarMensaje(this.translateService.instant('compra.messages.moveToPantryError'), 'error');
+        },
+      });
+    }, 350);
+  }
+
+  pasarCantidadADespensa(item: ICompraItem): void {
+    this.cerrarMenuAcciones();
+
+    if (!item.id) {
+      return;
+    }
+
+    const cantidad = item.cantidadAPasar ?? 1;
+
+    if (cantidad <= 0) {
+      return;
+    }
+
+    item.marcadoComoComprado = true;
+
+    setTimeout(() => {
+      this.compraService.comprarItem(item.id!, cantidad).subscribe({
+        next: () => {
+          this.cargarCompra();
+          this.mostrarMensaje(
+            this.translateService.instant('compra.messages.movedToPantry', {
+              name: item.producto?.nombre,
+            }),
+          );
+        },
+        error: (error: unknown) => {
+          console.error('ERROR PASANDO CANTIDAD A DESPENSA:', error);
           item.marcadoComoComprado = false;
           this.cdr.detectChanges();
           this.mostrarMensaje(this.translateService.instant('compra.messages.moveToPantryError'), 'error');

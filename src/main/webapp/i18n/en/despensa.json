@@ -19,11 +19,14 @@
       "price": "Price",
       "healthy": "Healthy",
       "location": "Location",
-      "actions": "Actions"
+      "actions": "Actions",
+      "description": "Description",
+      "noDescription": "No description"
     },
     "edit": {
       "addQuantity": "Quantity to add",
-      "removeQuantity": "Quantity to remove"
+      "removeQuantity": "Quantity to remove",
+      "moveQuantity": "Quantity to move"
     },
     "actions": {
       "edit": "Edit",
@@ -33,7 +36,9 @@
       "add": "Add",
       "subtract": "Subtract",
       "cancel": "Cancel",
-      "confirm": "Confirm"
+      "confirm": "Confirm",
+      "actionsMenu": "Actions",
+      "moveAllToShopping": "Move all quantity"
     },
     "units": {
       "unit": "unit",

@@ -3,10 +3,14 @@ export interface IDespensaItem {
   cantidad?: number;
   unidadMedida?: string;
   tipoLista?: string;
+
   cantidadARestar?: number;
   cantidadASumar?: number;
+  cantidadAPasar?: number;
+
   mostrarEdicion?: boolean;
   marcadoParaCompra?: boolean;
+
   producto?: {
     id?: number;
     nombre?: string;
@@ -16,5 +20,6 @@ export interface IDespensaItem {
     letraSaludable?: string;
     fechaCaducidad?: string;
     categoria?: string;
+    unidadMedida?: string;
   };
 }

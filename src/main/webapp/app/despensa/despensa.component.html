@@ -37,6 +37,7 @@
             <thead>
               <tr>
                 <th>{{ 'despensa.table.name' | translate }}</th>
+                <th>{{ 'despensa.table.description' | translate }}</th>
                 <th>{{ 'despensa.table.quantity' | translate }}</th>
                 <th>{{ 'despensa.table.category' | translate }}</th>
                 <th>{{ 'despensa.table.price' | translate }}</th>
@@ -49,6 +50,10 @@
               @for (item of itemsFiltrados(); track item.id) {
                 <tr [class.tachado]="item.marcadoParaCompra">
                   <td [attr.data-label]="'despensa.table.name' | translate">{{ item.producto?.nombre }}</td>
+
+                  <td [attr.data-label]="'despensa.table.description' | translate">
+                    {{ item.producto?.descripcion || ('despensa.table.noDescription' | translate) }}
+                  </td>
 
                   <td [attr.data-label]="'despensa.table.quantity' | translate">
                     {{ item.cantidad }} {{ formatearUnidad(item.unidadMedida) }}
@@ -73,43 +78,64 @@
                   </td>
 
                   <td [attr.data-label]="'despensa.table.actions' | translate">
-                    <div class="despensa-acciones">
-                      <button class="btn btn-secondary btn-sm me-2 mb-2" (click)="toggleEdicion(item)">
-                        {{ item.mostrarEdicion ? ('despensa.actions.close' | translate) : ('despensa.actions.edit' | translate) }}
-                      </button>
-                      <button class="btn btn-info btn-sm me-2 mb-2" (click)="pasarACompra(item)">
-                        {{ 'despensa.actions.moveToShopping' | translate }}
-                      </button>
-                      <button class="btn btn-danger btn-sm mb-2" (click)="quitarDeDespensa(item.id!)">
-                        {{ 'despensa.actions.remove' | translate }}
+                    <div class="acciones-dropdown">
+                      <button class="btn btn-secondary btn-sm acciones-toggle" (click)="toggleMenuAcciones(item.id!)">
+                        {{ 'despensa.actions.actionsMenu' | translate }}
                       </button>
 
-                      @if (item.mostrarEdicion) {
-                        <div class="edit-inline-box">
-                          <div class="mb-2">
-                            <label class="form-label">
-                              <strong>{{ 'despensa.edit.addQuantity' | translate }}</strong>
-                            </label>
-                            <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
-                          </div>
-
-                          <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">
-                            {{ 'despensa.actions.add' | translate }}
+                      @if (menuAccionesAbiertoId === item.id) {
+                        <div class="acciones-menu">
+                          <button class="acciones-menu-item" (click)="toggleEdicion(item)">
+                            {{ item.mostrarEdicion ? ('despensa.actions.close' | translate) : ('despensa.actions.edit' | translate) }}
                           </button>
 
-                          <div class="mb-2">
-                            <label class="form-label">
-                              <strong>{{ 'despensa.edit.removeQuantity' | translate }}</strong>
-                            </label>
-                            <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
-                          </div>
+                          <button class="acciones-menu-item" (click)="pasarTodaLaCantidadACompra(item)">
+                            {{ 'despensa.actions.moveAllToShopping' | translate }}
+                          </button>
 
-                          <button class="btn btn-warning btn-sm" (click)="restarCantidad(item)">
-                            {{ 'despensa.actions.subtract' | translate }}
+                          <button class="acciones-menu-item acciones-delete" (click)="quitarDeDespensa(item.id!)">
+                            {{ 'despensa.actions.remove' | translate }}
                           </button>
                         </div>
                       }
                     </div>
+
+                    @if (item.mostrarEdicion) {
+                      <div class="edit-inline-box">
+                        <div class="mb-2">
+                          <label class="form-label">
+                            <strong>{{ 'despensa.edit.addQuantity' | translate }}</strong>
+                          </label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadASumar" min="1" />
+                        </div>
+
+                        <button class="btn btn-success btn-sm me-2 mb-2" (click)="sumarCantidad(item)">
+                          {{ 'despensa.actions.add' | translate }}
+                        </button>
+
+                        <div class="mb-2">
+                          <label class="form-label">
+                            <strong>{{ 'despensa.edit.removeQuantity' | translate }}</strong>
+                          </label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadARestar" min="1" />
+                        </div>
+
+                        <button class="btn btn-warning btn-sm me-2 mb-2" (click)="restarCantidad(item)">
+                          {{ 'despensa.actions.subtract' | translate }}
+                        </button>
+
+                        <div class="mb-2">
+                          <label class="form-label">
+                            <strong>{{ 'despensa.edit.moveQuantity' | translate }}</strong>
+                          </label>
+                          <input type="number" class="form-control custom-input" [(ngModel)]="item.cantidadAPasar" min="1" />
+                        </div>
+
+                        <button class="btn btn-info btn-sm me-2 mb-2" (click)="pasarACompra(item)">
+                          {{ 'despensa.actions.moveToShopping' | translate }}
+                        </button>
+                      </div>
+                    }
                   </td>
                 </tr>
               }

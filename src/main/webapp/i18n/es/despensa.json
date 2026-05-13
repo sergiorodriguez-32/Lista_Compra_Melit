@@ -19,11 +19,14 @@
       "price": "Precio",
       "healthy": "Saludable",
       "location": "Ubicación",
-      "actions": "Acciones"
+      "actions": "Acciones",
+      "description": "Descripción",
+      "noDescription": "Sin descripción"
     },
     "edit": {
       "addQuantity": "Cantidad a añadir",
-      "removeQuantity": "Cantidad a quitar"
+      "removeQuantity": "Cantidad a quitar",
+      "moveQuantity": "Cantidad a pasar"
     },
     "actions": {
       "edit": "Modificar",
@@ -33,7 +36,9 @@
       "add": "Sumar",
       "subtract": "Restar",
       "cancel": "Cancelar",
-      "confirm": "Confirmar"
+      "confirm": "Confirmar",
+      "actionsMenu": "Acciones",
+      "moveAllToShopping": "Pasar toda la cantidad"
     },
     "units": {
       "unit": "unidad",

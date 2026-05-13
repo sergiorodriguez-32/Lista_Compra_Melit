@@ -14,8 +14,8 @@ export class CompraService {
     return this.http.get<ICompraItem[]>(this.resourceUrl).pipe(map(items => items.filter(item => item.tipoLista === 'COMPRA')));
   }
 
-  comprarItem(id: number) {
-    return this.http.put(`${this.resourceUrl}/${id}/comprar`, {});
+  comprarItem(id: number, cantidad?: number) {
+    return this.http.put(`${this.resourceUrl}/${id}/comprar`, { cantidad });
   }
 
   deleteItem(id: number): Observable<void> {

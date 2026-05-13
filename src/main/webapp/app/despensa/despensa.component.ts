@@ -24,6 +24,8 @@ export class DespensaComponent implements OnInit {
   mensajeConfirmacion = '';
   accionConfirmada: (() => void) | null = null;
 
+  menuAccionesAbiertoId: number | null = null;
+
   private readonly despensaService: DespensaService = inject(DespensaService);
   private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   private readonly loginService: LoginService = inject(LoginService);
@@ -73,6 +75,7 @@ export class DespensaComponent implements OnInit {
           ...item,
           cantidadARestar: 1,
           cantidadASumar: 1,
+          cantidadAPasar: 1,
           mostrarEdicion: false,
         }));
         this.cdr.detectChanges();
@@ -84,11 +87,27 @@ export class DespensaComponent implements OnInit {
     });
   }
 
+  toggleMenuAcciones(itemId: number): void {
+    this.menuAccionesAbiertoId = this.menuAccionesAbiertoId === itemId ? null : itemId;
+  }
+
+  cerrarMenuAcciones(): void {
+    this.menuAccionesAbiertoId = null;
+  }
+
   toggleEdicion(item: IDespensaItem): void {
-    item.mostrarEdicion = !item.mostrarEdicion;
+    this.cerrarMenuAcciones();
+    const abrir = !item.mostrarEdicion;
+
+    this.items.forEach(i => {
+      i.mostrarEdicion = false;
+    });
+
+    item.mostrarEdicion = abrir;
   }
 
   quitarDeDespensa(id: number): void {
+    this.cerrarMenuAcciones();
     this.abrirConfirmacion(this.translateService.instant('despensa.messages.removeConfirm'), () => {
       this.despensaService.deleteItem(id).subscribe({
         next: () => {
@@ -171,14 +190,22 @@ export class DespensaComponent implements OnInit {
   }
 
   pasarACompra(item: IDespensaItem): void {
+    this.cerrarMenuAcciones();
+
     if (!item.id) {
+      return;
+    }
+
+    const cantidad = item.cantidadAPasar ?? 1;
+
+    if (cantidad <= 0) {
       return;
     }
 
     item.marcadoParaCompra = true;
 
     setTimeout(() => {
-      this.despensaService.pasarACompra(item.id!).subscribe({
+      this.despensaService.pasarACompra(item.id!, cantidad).subscribe({
         next: () => {
           this.cargarDespensa();
           this.mostrarMensaje(
@@ -200,6 +227,41 @@ export class DespensaComponent implements OnInit {
   cerrarSesion(): void {
     this.loginService.logout();
     this.router.navigate(['/']);
+  }
+
+  pasarTodaLaCantidadACompra(item: IDespensaItem): void {
+    this.cerrarMenuAcciones();
+
+    if (!item.id) {
+      return;
+    }
+
+    const cantidad = item.cantidad ?? 1;
+
+    if (cantidad <= 0) {
+      return;
+    }
+
+    item.marcadoParaCompra = true;
+
+    setTimeout(() => {
+      this.despensaService.pasarACompra(item.id!, cantidad).subscribe({
+        next: () => {
+          this.cargarDespensa();
+          this.mostrarMensaje(
+            this.translateService.instant('despensa.messages.movedToShopping', {
+              name: item.producto?.nombre,
+            }),
+          );
+        },
+        error: (error: unknown) => {
+          console.error('ERROR PASANDO TODO A COMPRA:', error);
+          item.marcadoParaCompra = false;
+          this.cdr.detectChanges();
+          this.mostrarMensaje(this.translateService.instant('despensa.messages.moveToShoppingError'), 'error');
+        },
+      });
+    }, 350);
   }
 
   itemsFiltrados(): IDespensaItem[] {

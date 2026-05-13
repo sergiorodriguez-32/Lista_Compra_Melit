@@ -53,7 +53,7 @@ public class ItemListaService {
         return itemListaRepository.save(itemLista);
     }
 
-    public void comprarItem(Long id) {
+    public void comprarItem(Long id, Integer cantidadAMover) {
         String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
 
         ItemLista itemCompra = itemListaRepository
@@ -64,31 +64,52 @@ public class ItemListaService {
             throw new RuntimeException("El item de compra no tiene producto válido");
         }
 
+        int cantidadActual = itemCompra.getCantidad() != null ? itemCompra.getCantidad() : 0;
+        int cantidadMover = cantidadAMover != null ? cantidadAMover : cantidadActual;
+
+        if (cantidadMover <= 0) {
+            throw new RuntimeException("La cantidad a mover debe ser mayor que 0");
+        }
+
+        if (cantidadMover > cantidadActual) {
+            cantidadMover = cantidadActual;
+        }
+
         Optional<ItemLista> itemDespensaExistente = itemListaRepository.findByProductoIdAndTipoListaAndUserLogin(
             itemCompra.getProducto().getId(),
-            com.melit.listacompra.domain.TipoLista.DESPENSA,
+            TipoLista.DESPENSA,
             login
         );
 
         if (itemDespensaExistente.isPresent()) {
             ItemLista itemDespensa = itemDespensaExistente.get();
-            int cantidadActual = itemDespensa.getCantidad() != null ? itemDespensa.getCantidad() : 0;
-            int cantidadNueva = itemCompra.getCantidad() != null ? itemCompra.getCantidad() : 0;
+            int cantidadDestino = itemDespensa.getCantidad() != null ? itemDespensa.getCantidad() : 0;
 
-            itemDespensa.setCantidad(cantidadActual + cantidadNueva);
+            itemDespensa.setCantidad(cantidadDestino + cantidadMover);
+            if (itemCompra.getUnidadMedida() != null) {
+                itemDespensa.setUnidadMedida(itemCompra.getUnidadMedida());
+            }
+
             itemListaRepository.save(itemDespensa);
         } else {
             ItemLista nuevoItemDespensa = new ItemLista();
-            nuevoItemDespensa.setCantidad(itemCompra.getCantidad());
+            nuevoItemDespensa.setCantidad(cantidadMover);
             nuevoItemDespensa.setUnidadMedida(itemCompra.getUnidadMedida());
-            nuevoItemDespensa.setTipoLista(com.melit.listacompra.domain.TipoLista.DESPENSA);
+            nuevoItemDespensa.setTipoLista(TipoLista.DESPENSA);
             nuevoItemDespensa.setProducto(itemCompra.getProducto());
             nuevoItemDespensa.setUser(itemCompra.getUser());
 
             itemListaRepository.save(nuevoItemDespensa);
         }
 
-        itemListaRepository.deleteById(id);
+        int nuevaCantidadOrigen = cantidadActual - cantidadMover;
+
+        if (nuevaCantidadOrigen <= 0) {
+            itemListaRepository.deleteById(id);
+        } else {
+            itemCompra.setCantidad(nuevaCantidadOrigen);
+            itemListaRepository.save(itemCompra);
+        }
     }
 
     public List<ItemLista> findAll() {
@@ -131,7 +152,7 @@ public class ItemListaService {
         return itemListaRepository.save(item);
     }
 
-    public void pasarACompra(Long id) {
+    public void pasarACompra(Long id, Integer cantidadAMover) {
         String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
 
         ItemLista itemDespensa = itemListaRepository
@@ -142,6 +163,17 @@ public class ItemListaService {
             throw new RuntimeException("El item de despensa no tiene producto válido");
         }
 
+        int cantidadActual = itemDespensa.getCantidad() != null ? itemDespensa.getCantidad() : 0;
+        int cantidadMover = cantidadAMover != null ? cantidadAMover : cantidadActual;
+
+        if (cantidadMover <= 0) {
+            throw new RuntimeException("La cantidad a mover debe ser mayor que 0");
+        }
+
+        if (cantidadMover > cantidadActual) {
+            cantidadMover = cantidadActual;
+        }
+
         Optional<ItemLista> itemCompraExistente = itemListaRepository.findByProductoIdAndTipoListaAndUserLogin(
             itemDespensa.getProducto().getId(),
             TipoLista.COMPRA,
@@ -150,14 +182,17 @@ public class ItemListaService {
 
         if (itemCompraExistente.isPresent()) {
             ItemLista itemCompra = itemCompraExistente.get();
-            int cantidadActual = itemCompra.getCantidad() != null ? itemCompra.getCantidad() : 0;
-            int cantidadNueva = itemDespensa.getCantidad() != null ? itemDespensa.getCantidad() : 0;
+            int cantidadDestino = itemCompra.getCantidad() != null ? itemCompra.getCantidad() : 0;
 
-            itemCompra.setCantidad(cantidadActual + cantidadNueva);
+            itemCompra.setCantidad(cantidadDestino + cantidadMover);
+            if (itemDespensa.getUnidadMedida() != null) {
+                itemCompra.setUnidadMedida(itemDespensa.getUnidadMedida());
+            }
+
             itemListaRepository.save(itemCompra);
         } else {
             ItemLista nuevoItemCompra = new ItemLista();
-            nuevoItemCompra.setCantidad(itemDespensa.getCantidad());
+            nuevoItemCompra.setCantidad(cantidadMover);
             nuevoItemCompra.setUnidadMedida(itemDespensa.getUnidadMedida());
             nuevoItemCompra.setTipoLista(TipoLista.COMPRA);
             nuevoItemCompra.setProducto(itemDespensa.getProducto());
@@ -166,6 +201,13 @@ public class ItemListaService {
             itemListaRepository.save(nuevoItemCompra);
         }
 
-        itemListaRepository.deleteById(id);
+        int nuevaCantidadOrigen = cantidadActual - cantidadMover;
+
+        if (nuevaCantidadOrigen <= 0) {
+            itemListaRepository.deleteById(id);
+        } else {
+            itemDespensa.setCantidad(nuevaCantidadOrigen);
+            itemListaRepository.save(itemDespensa);
+        }
     }
 }

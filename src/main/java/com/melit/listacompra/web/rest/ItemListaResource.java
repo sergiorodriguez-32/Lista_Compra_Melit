@@ -2,7 +2,6 @@ package com.melit.listacompra.web.rest;
 
 import com.melit.listacompra.domain.ItemLista;
 import com.melit.listacompra.service.ItemListaService;
-import com.melit.listacompra.web.rest.RestarCantidadRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -34,8 +33,9 @@ public class ItemListaResource {
     }
 
     @PutMapping("/{id}/comprar")
-    public ResponseEntity<Void> comprarItem(@PathVariable Long id) {
-        itemListaService.comprarItem(id);
+    public ResponseEntity<Void> comprarItem(@PathVariable Long id, @RequestBody(required = false) RestarCantidadRequest request) {
+        Integer cantidad = request != null ? request.getCantidad() : null;
+        itemListaService.comprarItem(id, cantidad);
         return ResponseEntity.ok().build();
     }
 
@@ -74,8 +74,9 @@ public class ItemListaResource {
     }
 
     @PutMapping("/{id}/pasar-a-compra")
-    public ResponseEntity<Void> pasarACompra(@PathVariable Long id) {
-        itemListaService.pasarACompra(id);
+    public ResponseEntity<Void> pasarACompra(@PathVariable Long id, @RequestBody(required = false) RestarCantidadRequest request) {
+        Integer cantidad = request != null ? request.getCantidad() : null;
+        itemListaService.pasarACompra(id, cantidad);
         return ResponseEntity.ok().build();
     }
 }
