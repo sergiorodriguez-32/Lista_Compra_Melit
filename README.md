@@ -82,8 +82,8 @@ Un producto del catálogo se añade a la **despensa** (lo que ya tienes) o a la 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://bitbucket.org/practicasxtart/listacompra-melit.git
-cd listacompra-melit
+git clone https://github.com/sergiorodriguez-32/Lista_Compra_Melit.git
+cd Lista_Compra_Melit
 ```
 
 ### 2. Preparar la base de datos
@@ -321,4 +321,4 @@ docker compose -f src/main/docker/sonar.yml up -d
 
 - Documentación de [JHipster 9.0.0](https://www.jhipster.tech/documentation-archive/v9.0.0)
 - [Angular CLI](https://angular.dev/tools/cli) · [Spring Boot](https://spring.io/projects/spring-boot) · [Cypress](https://www.cypress.io/)
-- Repositorio: <https://bitbucket.org/practicasxtart/listacompra-melit>
+- Repositorio: <https://github.com/sergiorodriguez-32/Lista_Compra_Melit>

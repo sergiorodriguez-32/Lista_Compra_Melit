@@ -20,7 +20,6 @@
     "entities": [],
     "feignClient": null,
     "jhipsterVersion": "9.0.0",
-    "jwtSecretKey": "MTFkOTdkNTVjOTY1MWVmMGVmMGY4ODgyODkxZjk3YTJjZDgwZjdkYTIyZTM1Y2Q0M2E4NjU2ODAyZmYxZjdlMDBjNDkwYTJjOGNhY2EwNmQ4N2I1MTdiODUwMGM4YTcyZTMzNTJiOGUzZTYxNDRkMDkxMDBjN2ZmMTgxZjNhYmM=",
     "languages": ["es", "en"],
     "microfrontend": null,
     "microfrontends": [],
