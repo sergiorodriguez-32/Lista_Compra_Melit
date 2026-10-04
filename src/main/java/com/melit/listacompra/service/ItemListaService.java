@@ -36,7 +36,7 @@ public class ItemListaService {
             );
 
             if (existente.isPresent()) {
-                ItemLista itemExistente = existente.get();
+                ItemLista itemExistente = existente.orElseThrow();
                 int cantidadActual = itemExistente.getCantidad() != null ? itemExistente.getCantidad() : 0;
                 int cantidadNueva = itemLista.getCantidad() != null ? itemLista.getCantidad() : 0;
 
@@ -82,7 +82,7 @@ public class ItemListaService {
         );
 
         if (itemDespensaExistente.isPresent()) {
-            ItemLista itemDespensa = itemDespensaExistente.get();
+            ItemLista itemDespensa = itemDespensaExistente.orElseThrow();
             int cantidadDestino = itemDespensa.getCantidad() != null ? itemDespensa.getCantidad() : 0;
 
             itemDespensa.setCantidad(cantidadDestino + cantidadMover);
@@ -181,7 +181,7 @@ public class ItemListaService {
         );
 
         if (itemCompraExistente.isPresent()) {
-            ItemLista itemCompra = itemCompraExistente.get();
+            ItemLista itemCompra = itemCompraExistente.orElseThrow();
             int cantidadDestino = itemCompra.getCantidad() != null ? itemCompra.getCantidad() : 0;
 
             itemCompra.setCantidad(cantidadDestino + cantidadMover);
