@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--
+        Tabla producto: catalogo de productos de cada usuario.
+        Si la tabla ya existe (creada a mano en una base de datos anterior), el cambio se marca como ejecutado sin tocarla.
+    -->
+    <changeSet id="20261004000001-1" author="melit">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="producto"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="producto">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="nombre" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="descripcion" type="varchar(255)"/>
+            <column name="precio" type="decimal(21,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ubicacion" type="varchar(255)"/>
+            <column name="letra_saludable" type="varchar(255)"/>
+            <column name="fecha_caducidad" type="date"/>
+            <column name="categoria" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unidad_medida" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cantidad_por_defecto" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="producto"
+                                 constraintName="fk_producto__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+    </changeSet>
+</databaseChangeLog>

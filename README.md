@@ -105,9 +105,7 @@ GRANT ALL PRIVILEGES ON melit_market.* TO 'melit-market'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
-Al arrancar el backend, **Liquibase crea automáticamente las tablas de usuarios y roles** (`jhi_user`, `jhi_authority`, `jhi_user_authority`) y carga los usuarios de ejemplo.
-
-> ⚠️ **Tablas de productos y listas.** El esquema de Liquibase incluido en el repositorio solo cubre usuarios y roles, y Hibernate está configurado con `ddl-auto: none`. Las tablas `producto` e `item_lista` **no se crean solas**: hay que crearlas una vez antes de usar la aplicación (ver [Modelo de datos](#modelo-de-datos), donde se incluye un script de referencia).
+Al arrancar el backend, **Liquibase crea automáticamente todas las tablas** (usuarios y roles, `producto` e `item_lista`) y carga los usuarios de ejemplo. No hace falta ejecutar ningún script. Si ya habías creado `producto` o `item_lista` a mano en una base de datos anterior, Liquibase las detecta y no las modifica.
 
 > **Docker para MySQL:** `docker compose -f src/main/docker/services.yml up -d` levanta un MySQL, pero crea la base `melit-market` (con guion) con el usuario `root` sin contraseña. Si lo usas, ajusta la URL, el usuario y la contraseña de `application-dev.yml` o crea ahí `melit_market` y el usuario anterior.
 
@@ -199,40 +197,7 @@ jhi_user (1) ───< producto (1) ───< item_lista >─── (1) jhi_us
 
 *Campos obligatorios.*
 
-<details>
-<summary>Script SQL de referencia para crear ambas tablas (generado a partir de las entidades JPA)</summary>
-
-```sql
-USE melit_market;
-
-CREATE TABLE producto (
-    id                   BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    nombre               VARCHAR(255)  NOT NULL,
-    descripcion          VARCHAR(255),
-    precio               DECIMAL(21,2) NOT NULL,
-    ubicacion            VARCHAR(255),
-    letra_saludable      VARCHAR(255),
-    fecha_caducidad      DATE,
-    categoria            VARCHAR(255)  NOT NULL,
-    unidad_medida        VARCHAR(255)  NOT NULL,
-    cantidad_por_defecto INT           NOT NULL,
-    user_id              BIGINT        NOT NULL,
-    CONSTRAINT fk_producto_user FOREIGN KEY (user_id) REFERENCES jhi_user (id)
-);
-
-CREATE TABLE item_lista (
-    id            BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    cantidad      INT          NOT NULL,
-    tipo_lista    VARCHAR(255) NOT NULL,
-    unidad_medida VARCHAR(255) NOT NULL,
-    producto_id   BIGINT       NOT NULL,
-    user_id       BIGINT       NOT NULL,
-    CONSTRAINT fk_item_lista_producto FOREIGN KEY (producto_id) REFERENCES producto (id),
-    CONSTRAINT fk_item_lista_user     FOREIGN KEY (user_id)     REFERENCES jhi_user (id)
-);
-```
-
-</details>
+El esquema está definido en `src/main/resources/config/liquibase/changelog/` (`20261004000001_added_entity_Producto.xml` y `20261004000002_added_entity_ItemLista.xml`).
 
 ## API REST
 
