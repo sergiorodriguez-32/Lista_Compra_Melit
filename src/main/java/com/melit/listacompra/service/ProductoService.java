@@ -7,7 +7,9 @@ import com.melit.listacompra.repository.UserRepository;
 import com.melit.listacompra.security.SecurityUtils;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ProductoService {
@@ -21,25 +23,40 @@ public class ProductoService {
     }
 
     public Producto save(Producto producto) {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+        String login = loginActual();
 
         User user = userRepository.findOneByLogin(login).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Si llega un id, solo se puede modificar un producto que ya sea del usuario autenticado
+        if (producto.getId() != null) {
+            buscarPropio(producto.getId(), login);
+        }
 
         producto.setUser(user);
         return productoRepository.save(producto);
     }
 
     public List<Producto> findAll() {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
-
-        return productoRepository.findByUserLogin(login);
+        return productoRepository.findByUserLogin(loginActual());
     }
 
     public Optional<Producto> findOne(Long id) {
-        return productoRepository.findById(id);
+        return productoRepository.findByIdAndUserLogin(id, loginActual());
     }
 
     public void delete(Long id) {
-        productoRepository.deleteById(id);
+        Producto producto = buscarPropio(id, loginActual());
+        productoRepository.delete(producto);
+    }
+
+    private String loginActual() {
+        return SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+    }
+
+    // Un producto de otro usuario se trata igual que uno inexistente (404), para no revelar que existe
+    private Producto buscarPropio(Long id, String login) {
+        return productoRepository
+            .findByIdAndUserLogin(id, login)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado con id: " + id));
     }
 }
