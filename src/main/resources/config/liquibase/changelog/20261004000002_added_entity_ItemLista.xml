@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--
+        Tabla item_lista: elementos de la despensa y de la lista de compra (campo tipo_lista).
+        Si la tabla ya existe (creada a mano en una base de datos anterior), el cambio se marca como ejecutado sin tocarla.
+    -->
+    <changeSet id="20261004000002-1" author="melit">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="item_lista"/>
+            </not>
+        </preConditions>
+
+        <createTable tableName="item_lista">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="cantidad" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo_lista" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unidad_medida" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="producto_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseColumnNames="producto_id"
+                                 baseTableName="item_lista"
+                                 constraintName="fk_item_lista__producto_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="producto"/>
+
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="item_lista"
+                                 constraintName="fk_item_lista__user_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"/>
+    </changeSet>
+</databaseChangeLog>
