@@ -12,4 +12,6 @@ public interface ItemListaRepository extends JpaRepository<ItemLista, Long> {
     Optional<ItemLista> findByProductoIdAndTipoListaAndUserLogin(Long productoId, TipoLista tipoLista, String login);
 
     List<ItemLista> findByUserLogin(String login);
+
+    Optional<ItemLista> findByIdAndUserLogin(Long id, String login);
 }

@@ -1,30 +1,54 @@
 package com.melit.listacompra.service;
 
 import com.melit.listacompra.domain.ItemLista;
+import com.melit.listacompra.domain.Producto;
 import com.melit.listacompra.domain.TipoLista;
 import com.melit.listacompra.domain.User;
 import com.melit.listacompra.repository.ItemListaRepository;
+import com.melit.listacompra.repository.ProductoRepository;
 import com.melit.listacompra.repository.UserRepository;
 import com.melit.listacompra.security.SecurityUtils;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class ItemListaService {
 
     private final ItemListaRepository itemListaRepository;
+    private final ProductoRepository productoRepository;
     private final UserRepository userRepository;
 
-    public ItemListaService(ItemListaRepository itemListaRepository, UserRepository userRepository) {
+    public ItemListaService(
+        ItemListaRepository itemListaRepository,
+        ProductoRepository productoRepository,
+        UserRepository userRepository
+    ) {
         this.itemListaRepository = itemListaRepository;
+        this.productoRepository = productoRepository;
         this.userRepository = userRepository;
     }
 
     public ItemLista save(ItemLista itemLista) {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+        String login = loginActual();
 
         User user = userRepository.findOneByLogin(login).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        // Si llega un id, solo se puede modificar un elemento que ya sea del usuario autenticado
+        if (itemLista.getId() != null) {
+            buscarPropio(itemLista.getId(), login);
+        }
+
+        // El producto referenciado tiene que ser del usuario autenticado
+        if (itemLista.getProducto() != null && itemLista.getProducto().getId() != null) {
+            Long productoId = itemLista.getProducto().getId();
+            Producto productoPropio = productoRepository
+                .findByIdAndUserLogin(productoId, login)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Producto no encontrado con id: " + productoId));
+            itemLista.setProducto(productoPropio);
+        }
 
         itemLista.setUser(user);
 
@@ -54,11 +78,9 @@ public class ItemListaService {
     }
 
     public void comprarItem(Long id, Integer cantidadAMover) {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+        String login = loginActual();
 
-        ItemLista itemCompra = itemListaRepository
-            .findById(id)
-            .orElseThrow(() -> new RuntimeException("ItemLista no encontrado con id: " + id));
+        ItemLista itemCompra = buscarPropio(id, login);
 
         if (itemCompra.getProducto() == null || itemCompra.getProducto().getId() == null) {
             throw new RuntimeException("El item de compra no tiene producto válido");
@@ -113,21 +135,31 @@ public class ItemListaService {
     }
 
     public List<ItemLista> findAll() {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
-
-        return itemListaRepository.findByUserLogin(login);
+        return itemListaRepository.findByUserLogin(loginActual());
     }
 
     public Optional<ItemLista> findOne(Long id) {
-        return itemListaRepository.findById(id);
+        return itemListaRepository.findByIdAndUserLogin(id, loginActual());
     }
 
     public void delete(Long id) {
-        itemListaRepository.deleteById(id);
+        ItemLista item = buscarPropio(id, loginActual());
+        itemListaRepository.delete(item);
+    }
+
+    private String loginActual() {
+        return SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+    }
+
+    // Un elemento de otro usuario se trata igual que uno inexistente (404), para no revelar que existe
+    private ItemLista buscarPropio(Long id, String login) {
+        return itemListaRepository
+            .findByIdAndUserLogin(id, login)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "ItemLista no encontrado con id: " + id));
     }
 
     public ItemLista restarCantidad(Long id, Integer cantidadARestar) {
-        ItemLista item = itemListaRepository.findById(id).orElseThrow(() -> new RuntimeException("ItemLista no encontrado con id: " + id));
+        ItemLista item = buscarPropio(id, loginActual());
 
         int cantidadActual = item.getCantidad() != null ? item.getCantidad() : 0;
         int resta = cantidadARestar != null ? cantidadARestar : 0;
@@ -143,7 +175,7 @@ public class ItemListaService {
     }
 
     public ItemLista sumarCantidad(Long id, Integer cantidadASumar) {
-        ItemLista item = itemListaRepository.findById(id).orElseThrow(() -> new RuntimeException("ItemLista no encontrado con id: " + id));
+        ItemLista item = buscarPropio(id, loginActual());
 
         int cantidadActual = item.getCantidad() != null ? item.getCantidad() : 0;
         int suma = cantidadASumar != null ? cantidadASumar : 0;
@@ -153,11 +185,9 @@ public class ItemListaService {
     }
 
     public void pasarACompra(Long id, Integer cantidadAMover) {
-        String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("No hay usuario autenticado"));
+        String login = loginActual();
 
-        ItemLista itemDespensa = itemListaRepository
-            .findById(id)
-            .orElseThrow(() -> new RuntimeException("ItemLista no encontrado con id: " + id));
+        ItemLista itemDespensa = buscarPropio(id, login);
 
         if (itemDespensa.getProducto() == null || itemDespensa.getProducto().getId() == null) {
             throw new RuntimeException("El item de despensa no tiene producto válido");
