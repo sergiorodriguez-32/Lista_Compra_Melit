@@ -1,323 +1,324 @@
-# melit-market
+# ListaCompra Melit
 
-This application was generated using JHipster 9.0.0, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v9.0.0](https://www.jhipster.tech/documentation-archive/v9.0.0).
+Aplicación web para **organizar la despensa y la lista de la compra** del hogar. Cada usuario mantiene su propio catálogo de productos, controla lo que tiene en casa y prepara la lista antes de ir a comprar, moviendo cantidades de una lista a otra con un clic.
 
-## Project Structure
+> Nombre técnico del proyecto: `melit-market` · Paquete Java: `com.melit.listacompra` · Idioma de la interfaz: español e inglés.
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better development experience with prettier, commit hooks, scripts and so on.
+---
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that are well known and you can find references in the web.
+## Índice
 
-`/src/*` structure follows default Java structure.
+- [Funcionalidades](#funcionalidades)
+- [Cómo fluyen los productos](#cómo-fluyen-los-productos)
+- [Tecnologías](#tecnologías)
+- [Requisitos previos](#requisitos-previos)
+- [Puesta en marcha](#puesta-en-marcha)
+- [Usuarios de ejemplo](#usuarios-de-ejemplo)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Modelo de datos](#modelo-de-datos)
+- [API REST](#api-rest)
+- [Tests](#tests)
+- [Compilar para producción y Docker](#compilar-para-producción-y-docker)
+- [Más información](#más-información)
 
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch) pattern and action been one of skip (default if omitted) or force. Lines starting with `#` are considered comments and are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
+---
 
-- `npmw` - wrapper to use locally installed npm.
-  JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the traditional `npm` you can configure a Node-less environment to develop or test your application.
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+## Funcionalidades
 
-## Development
+| Sección | Ruta | Qué permite |
+|---|---|---|
+| **Inicio** | `/` | Página de bienvenida con acceso a inicio de sesión y registro. |
+| **Panel** | `/panel` | Menú principal tras iniciar sesión: accesos a Productos, Despensa y Compra, cambio de idioma (ES/EN) y cierre de sesión. |
+| **Productos** | `/productos` | Catálogo personal: crear, editar y eliminar productos; filtrar por categoría; añadir un producto a la despensa o a la compra con la cantidad indicada. |
+| **Despensa** | `/despensa` | Lo que hay en casa: sumar o restar cantidad, quitar un producto y **pasarlo a la lista de compra** (cantidad parcial o total). |
+| **Compra** | `/compra` | Lista de la compra: sumar o restar cantidad, quitar productos, marcar como comprado (**pasa a la despensa**) y ver el **total estimado** en euros. |
+| **Administrar** | `/administrar` | Solo `ROLE_ADMIN`: gestión de usuarios (datos, idioma, activar/desactivar cuenta, roles y eliminación). |
+| **Cuenta** | `/account/*` | Registro, ajustes de perfil, cambio y recuperación de contraseña. |
+| **Administración JHipster** | `/admin/*` | Solo `ROLE_ADMIN`: métricas, salud, configuración y logs de la aplicación. |
 
-### Doing API-First development using openapi-generator-cli
+Cada producto guarda: nombre, descripción, precio, ubicación, letra saludable, fecha de caducidad, categoría (`ALIMENTACION` o `DROGUERIA`), unidad de medida (`UNIDAD`, `KG`, `G`, `L`, `ML`) y cantidad por defecto.
 
-[OpenAPI-Generator](https://openapi-generator.tech) is configured for this application. You can generate API code from the `src/main/resources/swagger/api.yml` definition file by running:
+Las listas son **privadas por usuario**: cada persona solo ve sus propios productos y elementos.
+
+## Cómo fluyen los productos
+
+Un producto del catálogo se añade a la **despensa** (lo que ya tienes) o a la **compra** (lo que necesitas), y las cantidades se mueven entre ambas listas según se gastan o se compran:
+
+| Acción | Desde | Hacia |
+|---|---|---|
+| Añadir a despensa | Productos | Despensa |
+| Añadir a compra | Productos | Compra |
+| Pasar a compra | Despensa | Compra |
+| Marcar como comprado / pasar a despensa | Compra | Despensa |
+
+- Si un producto **ya está** en una lista y se vuelve a añadir, no se duplica: se **suma la cantidad** al elemento existente.
+- Al pasar una cantidad de una lista a otra, si se mueve todo el elemento desaparece de la lista de origen; si se mueve solo una parte, queda el resto.
+- Al restar cantidad hasta llegar a 0 (o menos), el elemento se elimina de la lista.
+
+## Tecnologías
+
+| Capa | Tecnología |
+|---|---|
+| Backend | Java 21, Spring Boot 4.0.3, Spring Security (JWT), Spring Data JPA / Hibernate |
+| Base de datos | MySQL (desarrollo y producción), Liquibase para el esquema de usuarios |
+| Caché | Ehcache |
+| Frontend | Angular 21, TypeScript 5.9, Bootstrap 5 (tema Flatly), ngx-translate (es/en) |
+| Compilación | Maven Wrapper (`mvnw`), npm wrapper (`npmw`), Angular CLI con esbuild |
+| Tests | JUnit / Spring Boot Test + Testcontainers (backend), Vitest (frontend), Cypress (E2E) |
+| Calidad | ESLint, Prettier, Checkstyle, Husky + lint-staged, SonarQube (opcional) |
+| Generado con | [JHipster](https://www.jhipster.tech/) 9.0.0 (aplicación monolítica) |
+
+## Requisitos previos
+
+- **JDK 21**
+- **MySQL 8 o superior** en `localhost:3306` (o Docker, ver más abajo)
+- **Node.js y npm**: no hace falta instalarlos; Maven descarga la versión adecuada (Node v24.14.0) en la primera compilación. Si prefieres usar los tuyos, ejecuta `./npmw` en lugar de `npm`.
+- Docker (opcional): solo para levantar MySQL o la aplicación en contenedores.
+
+> **Windows:** en PowerShell o `cmd` usa `mvnw.cmd` y `npmw.cmd` (o `.\mvnw`). En Git Bash funcionan los comandos `./mvnw` y `./npmw` tal cual.
+
+## Puesta en marcha
+
+### 1. Clonar el repositorio
 
 ```bash
-./mvnw generate-sources
+git clone https://bitbucket.org/practicasxtart/listacompra-melit.git
+cd listacompra-melit
 ```
 
-Then implements the generated delegate classes with `@Service` classes.
+### 2. Preparar la base de datos
 
-To edit the `api.yml` definition file, you can use a tool such as [Swagger-Editor](). Start a local instance of the swagger-editor using docker by running: `docker compose -f src/main/docker/swagger-editor.yml up -d`. The editor will then be reachable at [http://localhost:7742](http://localhost:7742).
+El perfil de desarrollo (`src/main/resources/config/application-dev.yml`) espera esta conexión:
 
-Refer to [Doing API-First development](https://www.jhipster.tech/documentation-archive/v9.0.0/doing-api-first-development/) for more details.
-The build system will install automatically the recommended version of Node and npm.
+| Parámetro | Valor |
+|---|---|
+| URL | `jdbc:mysql://localhost:3306/melit_market` |
+| Usuario | `melit-market` |
+| Contraseña | `1234` |
 
-We provide a wrapper to launch npm.
-You will only need to run this command when dependencies change in [package.json](package.json).
+Crea la base de datos y el usuario en tu MySQL:
+
+```sql
+CREATE DATABASE melit_market CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'melit-market'@'localhost' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON melit_market.* TO 'melit-market'@'localhost';
+FLUSH PRIVILEGES;
+```
+
+Al arrancar el backend, **Liquibase crea automáticamente las tablas de usuarios y roles** (`jhi_user`, `jhi_authority`, `jhi_user_authority`) y carga los usuarios de ejemplo.
+
+> ⚠️ **Tablas de productos y listas.** El esquema de Liquibase incluido en el repositorio solo cubre usuarios y roles, y Hibernate está configurado con `ddl-auto: none`. Las tablas `producto` e `item_lista` **no se crean solas**: hay que crearlas una vez antes de usar la aplicación (ver [Modelo de datos](#modelo-de-datos), donde se incluye un script de referencia).
+
+> **Docker para MySQL:** `docker compose -f src/main/docker/services.yml up -d` levanta un MySQL, pero crea la base `melit-market` (con guion) con el usuario `root` sin contraseña. Si lo usas, ajusta la URL, el usuario y la contraseña de `application-dev.yml` o crea ahí `melit_market` y el usuario anterior.
+
+### 3. Arrancar el backend
 
 ```bash
-./npmw install
+./mvnw
 ```
 
-We use npm scripts and [Angular CLI](https://angular.dev/tools/cli) with esbuild as our build system.
-
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
+El backend queda disponible en <http://localhost:8080> (perfil `dev` por defecto). También puedes usar el script npm:
 
 ```bash
 ./npmw run backend:start
-./npmw run start
 ```
 
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `./npmw update` and `./npmw install` to manage dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `./npmw help update`.
+### 4. Arrancar el frontend (modo desarrollo con recarga automática)
 
-The `./npmw run` command will list all the scripts available to run for this project.
-
-### PWA Support
-
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a PWA is a service worker.
-
-The service worker initialization code is disabled by default. To enable it, uncomment the following code in `src/main/webapp/app/app.config.ts`:
-
-```typescript
-ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
-```
-
-### Managing dependencies
-
-For example, to add [Leaflet](https://leafletjs.com/) library as a runtime dependency of your application, you would run the following command:
+En otra terminal:
 
 ```bash
-./npmw install --save --save-exact leaflet
+./npmw install      # solo la primera vez o si cambian las dependencias
+./npmw start
 ```
 
-To benefit from TypeScript type definitions from [DefinitelyTyped](https://definitelytyped.org/) repository in development, you would run the following command:
+Abre <http://localhost:4200>. El servidor de desarrollo redirige las llamadas a `/api` y `/management` al backend en el puerto 8080.
+
+> Si solo quieres usar la aplicación (sin recarga en caliente), basta con `./mvnw` y abrir <http://localhost:8080>: el backend ya sirve el frontend compilado.
+
+### 5. Iniciar sesión
+
+Usa uno de los [usuarios de ejemplo](#usuarios-de-ejemplo) o crea una cuenta desde **Crear cuenta**.
+
+> En desarrollo el envío de correos está desactivado (`jhipster.mail.enabled: false`), así que las cuentas nuevas no reciben el correo de activación. Un administrador puede activarlas desde **Administrar → Estado de la cuenta**.
+
+## Usuarios de ejemplo
+
+Se cargan con Liquibase (`src/main/resources/config/liquibase/data/`). Son los usuarios por defecto de JHipster, **solo para desarrollo**:
+
+| Usuario | Contraseña | Roles |
+|---|---|---|
+| `admin` | `admin` | `ROLE_ADMIN`, `ROLE_USER` |
+| `user` | `user` | `ROLE_USER` |
+
+> Cambia estas credenciales (y la clave JWT, la contraseña de la base de datos y el resto de secretos) antes de desplegar en cualquier entorno real.
+
+## Estructura del proyecto
+
+```
+listacompra-melit/
+├── pom.xml                         # Build del backend (Maven) y perfiles dev/prod
+├── package.json · angular.json     # Build del frontend (npm / Angular CLI)
+├── src/
+│   ├── main/
+│   │   ├── java/com/melit/listacompra/
+│   │   │   ├── domain/             # Entidades: Producto, ItemLista, User, Authority y enums
+│   │   │   ├── repository/         # Repositorios Spring Data JPA
+│   │   │   ├── service/            # Lógica de negocio (ProductoService, ItemListaService...)
+│   │   │   ├── web/rest/           # Controladores REST
+│   │   │   ├── security/           # Autenticación JWT y roles
+│   │   │   └── config/             # Configuración de Spring
+│   │   ├── resources/
+│   │   │   ├── config/             # application*.yml y Liquibase
+│   │   │   └── swagger/api.yml     # Definición OpenAPI
+│   │   ├── webapp/app/
+│   │   │   ├── productos/          # Pantalla de catálogo de productos
+│   │   │   ├── despensa/           # Pantalla de despensa
+│   │   │   ├── compra/             # Pantalla de lista de compra
+│   │   │   ├── panel/              # Menú principal
+│   │   │   ├── administrar/        # Gestión de usuarios (admin)
+│   │   │   ├── home/ · login/ · account/ · admin/ · layouts/ · shared/
+│   │   │   └── ...
+│   │   ├── webapp/i18n/{es,en}/    # Traducciones de la interfaz
+│   │   └── docker/                 # Docker Compose (MySQL, app, monitorización, Sonar...)
+│   └── test/
+│       ├── java/                   # Tests del backend
+│       └── javascript/cypress/     # Tests E2E
+└── README.md
+```
+
+## Modelo de datos
+
+```
+jhi_user (1) ───< producto (1) ───< item_lista >─── (1) jhi_user
+```
+
+**`Producto`**: `id`, `nombre`*, `descripcion`, `precio`*, `ubicacion`, `letra_saludable`, `fecha_caducidad`, `categoria`* (`ALIMENTACION` · `DROGUERIA`), `unidad_medida`* (`UNIDAD` · `KG` · `G` · `L` · `ML`), `cantidad_por_defecto`*, `user_id`*.
+
+**`ItemLista`**: `id`, `cantidad`*, `tipo_lista`* (`DESPENSA` · `COMPRA`), `unidad_medida`*, `producto_id`*, `user_id`*.
+
+*Campos obligatorios.*
+
+<details>
+<summary>Script SQL de referencia para crear ambas tablas (generado a partir de las entidades JPA)</summary>
+
+```sql
+USE melit_market;
+
+CREATE TABLE producto (
+    id                   BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nombre               VARCHAR(255)  NOT NULL,
+    descripcion          VARCHAR(255),
+    precio               DECIMAL(21,2) NOT NULL,
+    ubicacion            VARCHAR(255),
+    letra_saludable      VARCHAR(255),
+    fecha_caducidad      DATE,
+    categoria            VARCHAR(255)  NOT NULL,
+    unidad_medida        VARCHAR(255)  NOT NULL,
+    cantidad_por_defecto INT           NOT NULL,
+    user_id              BIGINT        NOT NULL,
+    CONSTRAINT fk_producto_user FOREIGN KEY (user_id) REFERENCES jhi_user (id)
+);
+
+CREATE TABLE item_lista (
+    id            BIGINT       NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    cantidad      INT          NOT NULL,
+    tipo_lista    VARCHAR(255) NOT NULL,
+    unidad_medida VARCHAR(255) NOT NULL,
+    producto_id   BIGINT       NOT NULL,
+    user_id       BIGINT       NOT NULL,
+    CONSTRAINT fk_item_lista_producto FOREIGN KEY (producto_id) REFERENCES producto (id),
+    CONSTRAINT fk_item_lista_user     FOREIGN KEY (user_id)     REFERENCES jhi_user (id)
+);
+```
+
+</details>
+
+## API REST
+
+Todas las rutas (salvo autenticación y registro) requieren el token JWT en la cabecera `Authorization: Bearer <token>`. El token se obtiene con `POST /api/authenticate`.
+
+### Productos · `/api/productos`
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/api/productos` | Lista los productos del usuario autenticado |
+| `GET` | `/api/productos/{id}` | Obtiene un producto |
+| `POST` | `/api/productos` | Crea un producto |
+| `PUT` | `/api/productos/{id}` | Actualiza un producto |
+| `DELETE` | `/api/productos/{id}` | Elimina un producto |
+
+### Elementos de lista · `/api/item-listas`
+
+Un `ItemLista` pertenece a la lista `DESPENSA` o `COMPRA` según su campo `tipoLista`.
+
+| Método | Ruta | Descripción |
+|---|---|---|
+| `GET` | `/api/item-listas` | Lista los elementos del usuario (despensa y compra) |
+| `GET` | `/api/item-listas/{id}` | Obtiene un elemento |
+| `POST` | `/api/item-listas` | Añade un elemento; si el producto ya está en esa lista, suma la cantidad |
+| `PUT` | `/api/item-listas/{id}` | Actualiza un elemento |
+| `DELETE` | `/api/item-listas/{id}` | Elimina un elemento |
+| `PUT` | `/api/item-listas/{id}/sumar` | Suma `cantidad` (cuerpo: `{ "cantidad": 2 }`) |
+| `PUT` | `/api/item-listas/{id}/restar` | Resta `cantidad`; si llega a 0 elimina el elemento (responde `204`) |
+| `PUT` | `/api/item-listas/{id}/pasar-a-compra` | Mueve cantidad de despensa a compra (sin cuerpo: mueve todo) |
+| `PUT` | `/api/item-listas/{id}/comprar` | Mueve cantidad de compra a despensa (sin cuerpo: mueve todo) |
+
+### Cuenta y administración
+
+| Ruta | Descripción |
+|---|---|
+| `POST /api/authenticate` | Inicio de sesión, devuelve el token JWT |
+| `POST /api/register` | Registro de usuario |
+| `GET/POST /api/account` | Consultar y actualizar la cuenta propia |
+| `/api/admin/users` | Gestión de usuarios (solo `ROLE_ADMIN`) |
+| `/management/health` | Estado de la aplicación |
+
+La documentación interactiva OpenAPI está disponible con el perfil `api-docs` (por ejemplo, el de la imagen Docker) en `/swagger-ui/`.
+
+## Tests
 
 ```bash
-./npmw install --save-dev --save-exact @types/leaflet
+./mvnw verify          # tests del backend
+./npmw test            # tests unitarios del frontend (Vitest) + lint
+./npmw run lint        # solo ESLint
 ```
 
-Then you would import the JS and CSS files specified in library's installation instructions so that [esbuild][] knows about them:
-Edit [src/main/webapp/app/app.config.ts](src/main/webapp/app/app.config.ts) file:
-
-```typescript
-import 'leaflet/dist/leaflet.js';
-```
-
-Edit [src/main/webapp/content/scss/vendor.scss](src/main/webapp/content/scss/vendor.scss) file:
-
-```typescript
-@import 'leaflet/dist/leaflet.css';
-```
-
-Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
-
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development](https://www.jhipster.tech/development/).
-
-### Using Angular CLI
-
-You can also use [Angular CLI](https://angular.dev/tools/cli) to generate some custom client code.
-
-For example, the following command:
+**Tests E2E con Cypress:** arranca el backend (`./npmw run app:start`) y, en otra terminal:
 
 ```bash
-ng generate component my-component
+./npmw run e2e
 ```
 
-will generate few files:
+Se pueden indicar las credenciales con las variables de entorno `CYPRESS_E2E_USERNAME` y `CYPRESS_E2E_PASSWORD`.
 
-```bash
-create src/main/webapp/app/my-component/my-component.html
-create src/main/webapp/app/my-component/my-component.ts
-update src/main/webapp/app/app.config.ts
-```
+## Compilar para producción y Docker
 
-## Building for production
-
-### Packaging as jar
-
-To build the final jar and optimize the melit-market application for production, run:
+**Jar ejecutable:**
 
 ```bash
 ./mvnw -Pprod clean verify
-```
-
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references these new files.
-To ensure everything worked, run:
-
-```bash
 java -jar target/*.jar
 ```
 
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
+La aplicación queda en <http://localhost:8080>. El perfil `prod` usa MySQL en `localhost:3306` con la base `melit-market`; las credenciales se pueden sobrescribir con variables de entorno de Spring (`SPRING_DATASOURCE_URL`, `SPRING_DATASOURCE_USERNAME`, `SPRING_DATASOURCE_PASSWORD`).
 
-Refer to [Using JHipster in production][] for more details.
-
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
+**Imagen Docker** (con Jib) y despliegue con Docker Compose:
 
 ```bash
-./mvnw -Pprod,war clean verify
-```
-
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center server (accessible on http://localhost:7419) with:
-
-```bash
-docker compose -f src/main/docker/jhipster-control-center.yml up
-```
-
-## Testing
-
-### Spring Boot tests
-
-To launch your application's tests, run:
-
-```bash
-./mvnw verify
-```
-
-### Client tests
-
-Unit tests are run by Vitest. They're located near components and can be run with:
-
-```bash
-./npmw test
-```
-
-#### E2E tests
-
-UI end-to-end tests are powered by [Cypress][]. They're located in [src/test/javascript/cypress/](src/test/javascript/cypress/)
-and can be run by starting Spring Boot in one terminal (`./npmw run app:start`) and running the tests (`./npmw run e2e`) in a second one.
-
-Before running Cypress tests, it's possible to specify user credentials by overriding the `CYPRESS_E2E_USERNAME` and `CYPRESS_E2E_PASSWORD` environment variables.
-
-```bash
-export CYPRESS_E2E_USERNAME="<your-username>"
-export CYPRESS_E2E_PASSWORD="<your-password>"
-```
-
-See Cypress documentation for setting OS [environment variables](https://docs.cypress.io/app/references/environment-variables#Setting) to learn more.
-
-#### Lighthouse audits
-
-You can execute automated [Lighthouse audits](https://developer.chrome.com/docs/lighthouse/overview) with [cypress-audit](https://github.com/mfrachet/cypress-audit) by running `./npmw run e2e:cypress:audits`.
-
-You should only run the audits when your application is packaged with the production profile.
-
-The Lighthouse report is created in `target/cypress/lhreport.html`.
-
-### E2E Webapp Code Coverage
-
-When using Cypress, you can generate code coverage report by running your dev server with instrumented code:
-
-Start your backend without compiling frontend:
-
-```bash
-./npmw run backend:start
-```
-
-Start your Cypress end to end testing:
-
-```bash
-./npmw run e2e --configuration coverage
-```
-
-The coverage report is generated under `target//cypress-coverage` folder.
-
-## Others
-
-### Code quality using Sonar
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-```bash
-docker compose -f src/main/docker/sonar.yml up -d
-```
-
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml) for out of the box experience while trying out SonarQube, for real use cases turn it back on.
-
-You can run a Sonar analysis with using the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven plugin.
-
-Then, run a Sonar analysis:
-
-```bash
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties are loaded from the sonar-project.properties file.
-
-```bash
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```bash
-sonar.login=admin
-sonar.password=admin
-```
-
-For more information, refer to the [Code quality page][].
-
-### Docker Compose support
-
-JHipster generates a number of Docker Compose configuration files in the [src/main/docker/](src/main/docker/) folder to launch required third party services.
-
-For example, to start required services in Docker containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml up -d
-```
-
-To stop and remove the containers, run:
-
-```bash
-docker compose -f src/main/docker/services.yml down
-```
-
-[Spring Docker Compose Integration](https://docs.spring.io/spring-boot/reference/features/dev-services.html) is enabled by default. It's possible to disable it in `application.yml`:
-
-```yaml
-spring:
-  ...
-  docker:
-    compose:
-      enabled: false
-```
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a Docker image of your app by running:
-
-```bash
-npm run java:docker
-```
-
-Or build an arm64 Docker image when using an arm64 processor OS, i.e., Apple Silicon chips (M\*), running:
-
-```bash
-npm run java:docker:arm64
-```
-
-Then run:
-
-```bash
+./npmw run java:docker
 docker compose -f src/main/docker/app.yml up -d
 ```
 
-For more information refer to [Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.0.0/docker-compose/), this page also contains information on the Docker Compose sub-generator (`jhipster docker-compose`), which is able to generate Docker configurations for one or several JHipster applications.
+**Calidad de código con SonarQube** (opcional):
 
-## Continuous Integration (optional)
+```bash
+docker compose -f src/main/docker/sonar.yml up -d
+./mvnw -Pprod clean verify sonar:sonar
+```
 
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.0.0/setting-up-ci/) page for more information.
+## Más información
 
-## References
-
-- [JHipster Homepage and latest documentation](https://www.jhipster.tech/)
-- [JHipster 9.0.0 archive](https://www.jhipster.tech/documentation-archive/v9.0.0)
-- [Using JHipster in development](https://www.jhipster.tech/documentation-archive/v9.0.0/development/)
-- [Using Docker and Docker-Compose](https://www.jhipster.tech/documentation-archive/v9.0.0/docker-compose)
-- [Using JHipster in production](https://www.jhipster.tech/documentation-archive/v9.0.0/production/)
-- [Running tests page](https://www.jhipster.tech/documentation-archive/v9.0.0/running-tests/)
-- [Code quality page](https://www.jhipster.tech/documentation-archive/v9.0.0/code-quality/)
-- [Setting up Continuous Integration](https://www.jhipster.tech/documentation-archive/v9.0.0/setting-up-ci/)
-- [Node.js](https://nodejs.org/)
-- [NPM](https://www.npmjs.com/)
-- [OpenAPI-Generator](https://openapi-generator.tech)
-- [Swagger-Editor](https://editor.swagger.io)
-- [Doing API-First development](https://www.jhipster.tech/documentation-archive/v9.0.0/doing-api-first-development/)
-- [BrowserSync](https://www.browsersync.io/)
-- [Jest](https://jestjs.io)
-- [Leaflet](https://leafletjs.com/)
-- [DefinitelyTyped](https://definitelytyped.org/)
-- [Angular CLI](https://angular.dev/tools/cli)
-- [Cypress](https://www.cypress.io/)
+- Documentación de [JHipster 9.0.0](https://www.jhipster.tech/documentation-archive/v9.0.0)
+- [Angular CLI](https://angular.dev/tools/cli) · [Spring Boot](https://spring.io/projects/spring-boot) · [Cypress](https://www.cypress.io/)
+- Repositorio: <https://bitbucket.org/practicasxtart/listacompra-melit>
