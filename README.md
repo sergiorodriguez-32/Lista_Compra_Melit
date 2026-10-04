@@ -13,6 +13,7 @@ Aplicación web para **organizar la despensa y la lista de la compra** del hogar
 - [Tecnologías](#tecnologías)
 - [Requisitos previos](#requisitos-previos)
 - [Puesta en marcha](#puesta-en-marcha)
+- [Arrancar con Docker](#arrancar-con-docker)
 - [Usuarios de ejemplo](#usuarios-de-ejemplo)
 - [Estructura del proyecto](#estructura-del-proyecto)
 - [Modelo de datos](#modelo-de-datos)
@@ -25,16 +26,16 @@ Aplicación web para **organizar la despensa y la lista de la compra** del hogar
 
 ## Funcionalidades
 
-| Sección | Ruta | Qué permite |
-|---|---|---|
-| **Inicio** | `/` | Página de bienvenida con acceso a inicio de sesión y registro. |
-| **Panel** | `/panel` | Menú principal tras iniciar sesión: accesos a Productos, Despensa y Compra, cambio de idioma (ES/EN) y cierre de sesión. |
-| **Productos** | `/productos` | Catálogo personal: crear, editar y eliminar productos; filtrar por categoría; añadir un producto a la despensa o a la compra con la cantidad indicada. |
-| **Despensa** | `/despensa` | Lo que hay en casa: sumar o restar cantidad, quitar un producto y **pasarlo a la lista de compra** (cantidad parcial o total). |
-| **Compra** | `/compra` | Lista de la compra: sumar o restar cantidad, quitar productos, marcar como comprado (**pasa a la despensa**) y ver el **total estimado** en euros. |
-| **Administrar** | `/administrar` | Solo `ROLE_ADMIN`: gestión de usuarios (datos, idioma, activar/desactivar cuenta, roles y eliminación). |
-| **Cuenta** | `/account/*` | Registro, ajustes de perfil, cambio y recuperación de contraseña. |
-| **Administración JHipster** | `/admin/*` | Solo `ROLE_ADMIN`: métricas, salud, configuración y logs de la aplicación. |
+| Sección                     | Ruta           | Qué permite                                                                                                                                            |
+| --------------------------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Inicio**                  | `/`            | Página de bienvenida con acceso a inicio de sesión y registro.                                                                                         |
+| **Panel**                   | `/panel`       | Menú principal tras iniciar sesión: accesos a Productos, Despensa y Compra, cambio de idioma (ES/EN) y cierre de sesión.                               |
+| **Productos**               | `/productos`   | Catálogo personal: crear, editar y eliminar productos; filtrar por categoría; añadir un producto a la despensa o a la compra con la cantidad indicada. |
+| **Despensa**                | `/despensa`    | Lo que hay en casa: sumar o restar cantidad, quitar un producto y **pasarlo a la lista de compra** (cantidad parcial o total).                         |
+| **Compra**                  | `/compra`      | Lista de la compra: sumar o restar cantidad, quitar productos, marcar como comprado (**pasa a la despensa**) y ver el **total estimado** en euros.     |
+| **Administrar**             | `/administrar` | Solo `ROLE_ADMIN`: gestión de usuarios (datos, idioma, activar/desactivar cuenta, roles y eliminación).                                                |
+| **Cuenta**                  | `/account/*`   | Registro, ajustes de perfil, cambio y recuperación de contraseña.                                                                                      |
+| **Administración JHipster** | `/admin/*`     | Solo `ROLE_ADMIN`: métricas, salud, configuración y logs de la aplicación.                                                                             |
 
 Cada producto guarda: nombre, descripción, precio, ubicación, letra saludable, fecha de caducidad, categoría (`ALIMENTACION` o `DROGUERIA`), unidad de medida (`UNIDAD`, `KG`, `G`, `L`, `ML`) y cantidad por defecto.
 
@@ -44,12 +45,12 @@ Las listas son **privadas por usuario**: cada persona solo ve sus propios produc
 
 Un producto del catálogo se añade a la **despensa** (lo que ya tienes) o a la **compra** (lo que necesitas), y las cantidades se mueven entre ambas listas según se gastan o se compran:
 
-| Acción | Desde | Hacia |
-|---|---|---|
-| Añadir a despensa | Productos | Despensa |
-| Añadir a compra | Productos | Compra |
-| Pasar a compra | Despensa | Compra |
-| Marcar como comprado / pasar a despensa | Compra | Despensa |
+| Acción                                  | Desde     | Hacia    |
+| --------------------------------------- | --------- | -------- |
+| Añadir a despensa                       | Productos | Despensa |
+| Añadir a compra                         | Productos | Compra   |
+| Pasar a compra                          | Despensa  | Compra   |
+| Marcar como comprado / pasar a despensa | Compra    | Despensa |
 
 - Si un producto **ya está** en una lista y se vuelve a añadir, no se duplica: se **suma la cantidad** al elemento existente.
 - Al pasar una cantidad de una lista a otra, si se mueve todo el elemento desaparece de la lista de origen; si se mueve solo una parte, queda el resto.
@@ -57,16 +58,16 @@ Un producto del catálogo se añade a la **despensa** (lo que ya tienes) o a la 
 
 ## Tecnologías
 
-| Capa | Tecnología |
-|---|---|
-| Backend | Java 21, Spring Boot 4.0.3, Spring Security (JWT), Spring Data JPA / Hibernate |
-| Base de datos | MySQL (desarrollo y producción), Liquibase para el esquema de usuarios |
-| Caché | Ehcache |
-| Frontend | Angular 21, TypeScript 5.9, Bootstrap 5 (tema Flatly), ngx-translate (es/en) |
-| Compilación | Maven Wrapper (`mvnw`), npm wrapper (`npmw`), Angular CLI con esbuild |
-| Tests | JUnit / Spring Boot Test + Testcontainers (backend), Vitest (frontend), Cypress (E2E) |
-| Calidad | ESLint, Prettier, Checkstyle, Husky + lint-staged, SonarQube (opcional) |
-| Generado con | [JHipster](https://www.jhipster.tech/) 9.0.0 (aplicación monolítica) |
+| Capa          | Tecnología                                                                            |
+| ------------- | ------------------------------------------------------------------------------------- |
+| Backend       | Java 21, Spring Boot 4.0.3, Spring Security (JWT), Spring Data JPA / Hibernate        |
+| Base de datos | MySQL (desarrollo y producción), Liquibase para el esquema de usuarios                |
+| Caché         | Ehcache                                                                               |
+| Frontend      | Angular 21, TypeScript 5.9, Bootstrap 5 (tema Flatly), ngx-translate (es/en)          |
+| Compilación   | Maven Wrapper (`mvnw`), npm wrapper (`npmw`), Angular CLI con esbuild                 |
+| Tests         | JUnit / Spring Boot Test + Testcontainers (backend), Vitest (frontend), Cypress (E2E) |
+| Calidad       | ESLint, Prettier, Checkstyle, Husky + lint-staged, SonarQube (opcional)               |
+| Generado con  | [JHipster](https://www.jhipster.tech/) 9.0.0 (aplicación monolítica)                  |
 
 ## Requisitos previos
 
@@ -90,11 +91,11 @@ cd Lista_Compra_Melit
 
 El perfil de desarrollo (`src/main/resources/config/application-dev.yml`) espera esta conexión:
 
-| Parámetro | Valor |
-|---|---|
-| URL | `jdbc:mysql://localhost:3306/melit_market` |
-| Usuario | `melit-market` |
-| Contraseña | `1234` |
+| Parámetro  | Valor                                      |
+| ---------- | ------------------------------------------ |
+| URL        | `jdbc:mysql://localhost:3306/melit_market` |
+| Usuario    | `melit-market`                             |
+| Contraseña | `1234`                                     |
 
 Crea la base de datos y el usuario en tu MySQL:
 
@@ -140,14 +141,62 @@ Usa uno de los [usuarios de ejemplo](#usuarios-de-ejemplo) o crea una cuenta des
 
 > En desarrollo el envío de correos está desactivado (`jhipster.mail.enabled: false`), así que las cuentas nuevas no reciben el correo de activación. Un administrador puede activarlas desde **Administrar → Estado de la cuenta**.
 
+## Arrancar con Docker
+
+Alternativa sin instalar Java ni MySQL: la aplicación y la base de datos corren en contenedores. Solo necesitas **Docker Desktop** abierto.
+
+**1. Crear el archivo `.env` con la clave JWT.** El perfil de producción no trae ninguna clave: hay que facilitarla (y no se sube al repositorio). Copia el ejemplo y rellena `JHIPSTER_JWT_SECRET` con una cadena base64 de al menos 64 bytes:
+
+```bash
+cp .env.example .env
+```
+
+Para generar la clave en PowerShell:
+
+```powershell
+$b = New-Object byte[] 64; [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b); [Convert]::ToBase64String($b)
+```
+
+O con OpenSSL (Git Bash, Linux o macOS):
+
+```bash
+openssl rand -base64 64 | tr -d '
+'
+```
+
+**2. Construir la imagen de la aplicación** (la primera vez tarda unos minutos):
+
+```bash
+./mvnw -ntp verify -DskipTests -Pprod jib:dockerBuild
+```
+
+**3. Levantar la aplicación y MySQL:**
+
+```bash
+docker compose --env-file .env -f src/main/docker/app.yml up -d
+```
+
+**4. Comprobar y usar.** Cuando `docker compose --env-file .env -f src/main/docker/app.yml ps` muestre la aplicación como `healthy`, abre <http://localhost:8080>.
+
+**Parar y volver a arrancar** sin perder los datos:
+
+```bash
+docker compose --env-file .env -f src/main/docker/app.yml stop
+docker compose --env-file .env -f src/main/docker/app.yml start
+```
+
+> No uses `docker compose ... down`: elimina los contenedores y, como el MySQL no tiene un volumen para los datos, se perderían los productos y listas guardados.
+
+> Este arranque usa el perfil `prod` con los [usuarios de ejemplo](#usuarios-de-ejemplo) (`admin` / `admin`). Úsalo solo en local y no lo expongas a internet sin cambiar esas credenciales.
+
 ## Usuarios de ejemplo
 
 Se cargan con Liquibase (`src/main/resources/config/liquibase/data/`). Son los usuarios por defecto de JHipster, **solo para desarrollo**:
 
-| Usuario | Contraseña | Roles |
-|---|---|---|
-| `admin` | `admin` | `ROLE_ADMIN`, `ROLE_USER` |
-| `user` | `user` | `ROLE_USER` |
+| Usuario | Contraseña | Roles                     |
+| ------- | ---------- | ------------------------- |
+| `admin` | `admin`    | `ROLE_ADMIN`, `ROLE_USER` |
+| `user`  | `user`     | `ROLE_USER`               |
 
 > Cambia estas credenciales (y la clave JWT, la contraseña de la base de datos y el resto de secretos) antes de desplegar en cualquier entorno real.
 
@@ -191,11 +240,11 @@ listacompra-melit/
 jhi_user (1) ───< producto (1) ───< item_lista >─── (1) jhi_user
 ```
 
-**`Producto`**: `id`, `nombre`*, `descripcion`, `precio`*, `ubicacion`, `letra_saludable`, `fecha_caducidad`, `categoria`* (`ALIMENTACION` · `DROGUERIA`), `unidad_medida`* (`UNIDAD` · `KG` · `G` · `L` · `ML`), `cantidad_por_defecto`*, `user_id`*.
+**`Producto`**: `id`, `nombre`_, `descripcion`, `precio`_, `ubicacion`, `letra_saludable`, `fecha_caducidad`, `categoria`_ (`ALIMENTACION` · `DROGUERIA`), `unidad_medida`_ (`UNIDAD` · `KG` · `G` · `L` · `ML`), `cantidad_por_defecto`_, `user_id`_.
 
-**`ItemLista`**: `id`, `cantidad`*, `tipo_lista`* (`DESPENSA` · `COMPRA`), `unidad_medida`*, `producto_id`*, `user_id`*.
+**`ItemLista`**: `id`, `cantidad`_, `tipo_lista`_ (`DESPENSA` · `COMPRA`), `unidad_medida`_, `producto_id`_, `user_id`\*.
 
-*Campos obligatorios.*
+_Campos obligatorios._
 
 El esquema está definido en `src/main/resources/config/liquibase/changelog/` (`20261004000001_added_entity_Producto.xml` y `20261004000002_added_entity_ItemLista.xml`).
 
@@ -205,39 +254,39 @@ Todas las rutas (salvo autenticación y registro) requieren el token JWT en la c
 
 ### Productos · `/api/productos`
 
-| Método | Ruta | Descripción |
-|---|---|---|
-| `GET` | `/api/productos` | Lista los productos del usuario autenticado |
-| `GET` | `/api/productos/{id}` | Obtiene un producto |
-| `POST` | `/api/productos` | Crea un producto |
-| `PUT` | `/api/productos/{id}` | Actualiza un producto |
-| `DELETE` | `/api/productos/{id}` | Elimina un producto |
+| Método   | Ruta                  | Descripción                                 |
+| -------- | --------------------- | ------------------------------------------- |
+| `GET`    | `/api/productos`      | Lista los productos del usuario autenticado |
+| `GET`    | `/api/productos/{id}` | Obtiene un producto                         |
+| `POST`   | `/api/productos`      | Crea un producto                            |
+| `PUT`    | `/api/productos/{id}` | Actualiza un producto                       |
+| `DELETE` | `/api/productos/{id}` | Elimina un producto                         |
 
 ### Elementos de lista · `/api/item-listas`
 
 Un `ItemLista` pertenece a la lista `DESPENSA` o `COMPRA` según su campo `tipoLista`.
 
-| Método | Ruta | Descripción |
-|---|---|---|
-| `GET` | `/api/item-listas` | Lista los elementos del usuario (despensa y compra) |
-| `GET` | `/api/item-listas/{id}` | Obtiene un elemento |
-| `POST` | `/api/item-listas` | Añade un elemento; si el producto ya está en esa lista, suma la cantidad |
-| `PUT` | `/api/item-listas/{id}` | Actualiza un elemento |
-| `DELETE` | `/api/item-listas/{id}` | Elimina un elemento |
-| `PUT` | `/api/item-listas/{id}/sumar` | Suma `cantidad` (cuerpo: `{ "cantidad": 2 }`) |
-| `PUT` | `/api/item-listas/{id}/restar` | Resta `cantidad`; si llega a 0 elimina el elemento (responde `204`) |
-| `PUT` | `/api/item-listas/{id}/pasar-a-compra` | Mueve cantidad de despensa a compra (sin cuerpo: mueve todo) |
-| `PUT` | `/api/item-listas/{id}/comprar` | Mueve cantidad de compra a despensa (sin cuerpo: mueve todo) |
+| Método   | Ruta                                   | Descripción                                                              |
+| -------- | -------------------------------------- | ------------------------------------------------------------------------ |
+| `GET`    | `/api/item-listas`                     | Lista los elementos del usuario (despensa y compra)                      |
+| `GET`    | `/api/item-listas/{id}`                | Obtiene un elemento                                                      |
+| `POST`   | `/api/item-listas`                     | Añade un elemento; si el producto ya está en esa lista, suma la cantidad |
+| `PUT`    | `/api/item-listas/{id}`                | Actualiza un elemento                                                    |
+| `DELETE` | `/api/item-listas/{id}`                | Elimina un elemento                                                      |
+| `PUT`    | `/api/item-listas/{id}/sumar`          | Suma `cantidad` (cuerpo: `{ "cantidad": 2 }`)                            |
+| `PUT`    | `/api/item-listas/{id}/restar`         | Resta `cantidad`; si llega a 0 elimina el elemento (responde `204`)      |
+| `PUT`    | `/api/item-listas/{id}/pasar-a-compra` | Mueve cantidad de despensa a compra (sin cuerpo: mueve todo)             |
+| `PUT`    | `/api/item-listas/{id}/comprar`        | Mueve cantidad de compra a despensa (sin cuerpo: mueve todo)             |
 
 ### Cuenta y administración
 
-| Ruta | Descripción |
-|---|---|
+| Ruta                     | Descripción                             |
+| ------------------------ | --------------------------------------- |
 | `POST /api/authenticate` | Inicio de sesión, devuelve el token JWT |
-| `POST /api/register` | Registro de usuario |
-| `GET/POST /api/account` | Consultar y actualizar la cuenta propia |
-| `/api/admin/users` | Gestión de usuarios (solo `ROLE_ADMIN`) |
-| `/management/health` | Estado de la aplicación |
+| `POST /api/register`     | Registro de usuario                     |
+| `GET/POST /api/account`  | Consultar y actualizar la cuenta propia |
+| `/api/admin/users`       | Gestión de usuarios (solo `ROLE_ADMIN`) |
+| `/management/health`     | Estado de la aplicación                 |
 
 La documentación interactiva OpenAPI está disponible con el perfil `api-docs` (por ejemplo, el de la imagen Docker) en `/swagger-ui/`.
 
